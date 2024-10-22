@@ -3,12 +3,12 @@ import { DashboardSidebar } from "@/components/sidebars/dashboard-sidebar/dashbo
 
 export default async function DashboardLayout({ children }) {
   return (
-    <>
+    <div>
       <DashboardNavbar />
       <div className="flex gap-4">
         <DashboardSidebar />
         <main className="w-full">{children}</main>
       </div>
-    </>
+    </div>
   );
 }

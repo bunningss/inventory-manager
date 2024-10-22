@@ -1,8 +1,9 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, ShoppingBag } from "lucide-react";
 
 const Icons = {
   arrowDown: ChevronDown,
   arrowUp: ChevronUp,
+  cart: ShoppingBag,
   order: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" {...props}>
       <path
