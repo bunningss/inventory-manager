@@ -3,6 +3,8 @@ import {
   CheckCheck,
   ChevronDown,
   ChevronUp,
+  Heart,
+  Menu,
   Minus,
   Plus,
   Search,
@@ -20,6 +22,8 @@ const Icons = {
   plus: Plus,
   minus: Minus,
   delete: Trash,
+  menu: Menu,
+  heart: Heart,
   shoppingBasket: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" {...props}>
       <path

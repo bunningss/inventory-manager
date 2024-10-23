@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { Button } from "../ui/button";
 import { Container } from "../container";
 import { Logo } from "../logo";
@@ -26,7 +25,7 @@ export const Navbar = () => {
               menu
             </Button>
             <div className="hidden md:flex gap-4 items-center">
-              <Button icon="cart" variant="outline">
+              <Button icon="heart" variant="outline">
                 <span>0</span>
               </Button>
 
