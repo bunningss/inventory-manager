@@ -13,24 +13,22 @@ export const Navbar = () => {
           <Logo />
 
           <div className="flex items-center gap-4">
-            {/* <Button
+            <Button
               variant="outline"
               size="icon"
               icon="search"
               className="rounded-full"
             >
               <span className="sr-only">search</span>
-            </Button> */}
+            </Button>
 
             <Button icon="menu" className="md:hidden">
               menu
             </Button>
             <div className="hidden md:flex gap-4 items-center">
-              <Link href="/wishlist" passHref>
-                <Button icon="cart" variant="outline">
-                  <span>0</span>
-                </Button>
-              </Link>
+              <Button icon="cart" variant="outline">
+                <span>0</span>
+              </Button>
 
               <ThemeToggle />
             </div>
