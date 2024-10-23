@@ -34,15 +34,15 @@ export function User({ userData }) {
         <DropdownMenuSeparator />
         {(!userData || userData?.error) && (
           <>
-            <Link passHref href="/login" className="w-full">
+            <Link passHref href="/sign-in" className="w-full">
               <DropdownMenuItem>
                 <span>login</span>
                 <Icon icon="login2" size={22} />
               </DropdownMenuItem>
             </Link>
-            <Link passHref href="/register" className="w-full">
+            <Link passHref href="/sign-up" className="w-full">
               <DropdownMenuItem>
-                <span>sign up</span>
+                <span>create account</span>
                 <Icon icon="register" size={22} />
               </DropdownMenuItem>
             </Link>
