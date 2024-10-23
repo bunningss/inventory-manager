@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { Container } from "../container";
 import { Logo } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
+import { User } from "../user";
 
 export const Navbar = () => {
   return (
@@ -29,6 +30,7 @@ export const Navbar = () => {
                 <span>0</span>
               </Button>
 
+              <User />
               <ThemeToggle />
             </div>
           </div>
