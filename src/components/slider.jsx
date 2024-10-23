@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import banner1 from "@/assets/b1.png";
+import banner2 from "@/assets/b2.png";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
@@ -9,16 +11,14 @@ export function Slider() {
 
   const sliderItems = [
     {
-      image:
-        "https://raw.githubusercontent.com/glimmrz/algomart/refs/heads/master/src/assets/banner-images/main-banner-1.png?token=GHSAT0AAAAAACZMAZI54P4Z6CKA7ACSOOSYZYYRKBQ",
+      image: banner1,
       subtitle: "pure cotton",
       text: "explore the all new summer collection",
       buttonLabel: "browse shop",
       buttonIcon: "arrowRight",
     },
     {
-      image:
-        "https://raw.githubusercontent.com/glimmrz/algomart/refs/heads/master/src/assets/banner-images/main-banner-2.png?token=GHSAT0AAAAAACZMAZI5K4GHDFTRPCFJAZMKZYYRLAA",
+      image: banner2,
       subtitle: "organic vegetables",
       text: "everyday health with organic vegetables.",
       buttonLabel: "shop now",
