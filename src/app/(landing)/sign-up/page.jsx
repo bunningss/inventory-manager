@@ -1,16 +1,16 @@
 import { AuthWrapper } from "@/components/auth/auth-wrapper";
-import { LoginForm } from "@/components/auth/login-form";
+import { RegisterForm } from "@/components/auth/register-form";
 
 export function metadata() {
   return {
-    title: "Login",
+    title: "Register",
   };
 }
 
 export default async function Page() {
   return (
     <AuthWrapper>
-      <LoginForm />
+      <RegisterForm />
     </AuthWrapper>
   );
 }
