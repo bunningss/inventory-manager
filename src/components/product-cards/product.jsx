@@ -12,19 +12,40 @@ import {
 import { Badge } from "../ui/badge";
 import { RatingStars } from "../rating-stars";
 import { CalculatePrice } from "./calculate-price";
-import { useCheckCart, useEcommerce } from "@/utils/helpers";
+import { useCheckCart, useCheckWishlist, useEcommerce } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 
 export const Product = ({ product }) => {
   const router = useRouter();
   const isInCart = useCheckCart(product);
-  const { addToCart } = useEcommerce();
+  const isInWishlist = useCheckWishlist(product);
+  const { addToCart, addToWishlist, removeFromWishlist } = useEcommerce();
 
   return (
     <Link href={`/product/${product.slug}`} passHref>
       <Card className="group border-transparent dark:border-secondary cursor-pointer">
         <CardContent className="relative pb-2">
           <div className="absolute top-2 left-0 flex items-center justify-between w-full px-2 z-[1]">
+            <Button
+              size="icon"
+              icon={isInWishlist ? "heartCross" : "heart"}
+              variant="outline"
+              className="rounded-full"
+              onClick={
+                !isInWishlist
+                  ? (e) => {
+                      e.preventDefault();
+                      addToWishlist(product);
+                    }
+                  : (e) => {
+                      e.preventDefault();
+                      removeFromWishlist(product?._id, product?.title);
+                    }
+              }
+            >
+              <span className="sr-only">add to wishlist</span>
+            </Button>
+
             {product?.status && <Badge>{product.status}</Badge>}
           </div>
 

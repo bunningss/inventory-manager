@@ -32,7 +32,7 @@ export const Navbar = () => {
             <div className="hidden md:flex gap-4 items-center">
               <Link href="/wishlist" passHref>
                 <Button icon="heart" variant="outline">
-                  <span>{wishlist.wishlistItems.length}</span>
+                  <span>{wishlist?.wishlistItems?.length}</span>
                 </Button>
               </Link>
 
