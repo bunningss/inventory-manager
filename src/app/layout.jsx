@@ -1,6 +1,6 @@
 import "./globals.css";
 import { font } from "@/lib/fonts";
-import { ThemeProvider } from "@/components/providers/theme-provide";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
