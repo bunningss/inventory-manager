@@ -1,5 +1,6 @@
 import { CartIndicator } from "@/components/cart/cart-indicator";
 import { Navbar } from "@/components/navbars/navbar";
+import { CartSidebar } from "@/components/sidebars/cart-sidebar";
 
 export default async function LandingLayout({ children }) {
   return (
@@ -7,6 +8,7 @@ export default async function LandingLayout({ children }) {
       <Navbar />
       <main>{children}</main>
       <CartIndicator />
+      <CartSidebar />
     </div>
   );
 }

@@ -6,7 +6,7 @@ export function Logo() {
   return (
     <Link href="/">
       <figure className="h-[50px] w-[150px]">
-        <Image src="" alt="" />
+        {/* <Image src={logo} alt="zeris" /> */}
       </figure>
     </Link>
   );

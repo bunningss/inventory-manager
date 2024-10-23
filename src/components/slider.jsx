@@ -79,6 +79,7 @@ export default function Slider() {
                   className="object-cover object-right lg:object-center  xl:object-right"
                   fill
                   sizes="(max-width: 768px) 500px, 50vw"
+                  priority
                 />
               </figure>
             </div>

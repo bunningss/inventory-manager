@@ -7,13 +7,9 @@ export function CartIndicator() {
   const { onOpen } = useCartSidebar();
   const { total, cartItems } = useCart();
 
-  const handleViewCart = () => {
-    onOpen();
-  };
-
   return (
     <div
-      onClick={handleViewCart}
+      onClick={onOpen}
       role="button"
       className="hidden md:block fixed top-0 bottom-0 right-0 m-auto h-fit z-10 bg-card border border-muted rounded-md cursor-pointer overflow-hidden shadow-active"
     >
