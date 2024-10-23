@@ -1,3 +1,4 @@
+import { CartIndicator } from "@/components/cart/cart-indicator";
 import { Navbar } from "@/components/navbars/navbar";
 
 export default async function LandingLayout({ children }) {
@@ -5,6 +6,7 @@ export default async function LandingLayout({ children }) {
     <div>
       <Navbar />
       <main>{children}</main>
+      <CartIndicator />
     </div>
   );
 }

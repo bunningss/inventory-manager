@@ -3,6 +3,7 @@ import { Product } from "@/components/product-cards/product";
 import { ProductView } from "@/components/product-view";
 import { PromoSlider } from "@/components/promo-slider";
 import { ProductviewSkeleton } from "@/components/skeletons/product-view-skeleton";
+import Slider from "@/components/slider";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
@@ -22,6 +23,8 @@ const ProductList = async ({ query }) => {
 export default async function Home() {
   return (
     <Container>
+      <Slider />
+
       {/* Popular Products */}
       <ProductView
         title="popular picks"

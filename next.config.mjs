@@ -8,6 +8,9 @@ const nextConfig = {
       {
         hostname: "zeris.vercel.app",
       },
+      {
+        hostname: "raw.githubusercontent.com",
+      },
     ],
   },
 };
