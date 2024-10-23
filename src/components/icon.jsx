@@ -1,8 +1,15 @@
-import { ChevronDown, ChevronUp, Search, ShoppingBag } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+  Search,
+  ShoppingBag,
+} from "lucide-react";
 
 const Icons = {
   arrowDown: ChevronDown,
   arrowUp: ChevronUp,
+  arrowRight: ArrowRight,
   cart: ShoppingBag,
   search: Search,
   order: (props) => (

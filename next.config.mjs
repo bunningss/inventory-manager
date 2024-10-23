@@ -5,6 +5,9 @@ const nextConfig = {
       {
         hostname: "fakestoreapi.com",
       },
+      {
+        hostname: "zeris.vercel.app",
+      },
     ],
   },
 };
