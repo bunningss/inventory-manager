@@ -17,7 +17,7 @@ export function CartIndicator() {
         <Icon icon="shoppingBasket" size={32} />
         <span className="text-xs uppercase">{cartItems.length} items</span>
       </div>
-      <div className="bg-primary dark:bg-primary-foreground px-2 py-1">
+      <div className="bg-foreground px-2 py-1">
         <span className="text-xs uppercase text-accent">
           {(total / 100).toFixed(2)} TK
         </span>
