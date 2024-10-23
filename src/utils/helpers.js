@@ -1,4 +1,5 @@
 import { useCart } from "@/hooks/use-cart";
+import { useWishlist } from "@/hooks/use-wishlist";
 import { useMemo } from "react";
 
 export function factorCartPrice(discount_price, regular_price) {
@@ -7,6 +8,7 @@ export function factorCartPrice(discount_price, regular_price) {
   return discount_price;
 }
 
+// Check item in wishlist
 export function useCheckCart(product) {
   const { cartItems } = useCart();
 
@@ -18,8 +20,21 @@ export function useCheckCart(product) {
   return foundItem;
 }
 
+// Check item in wishlist
+export function useCheckWishlist(product) {
+  const { wishlistItems } = useWishlist();
+
+  const foundItem = useMemo(() => {
+    return wishlistItems?.find((item) => item?._id === product?._id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wishlistItems.length]);
+
+  return foundItem;
+}
+
 export function useEcommerce() {
   const { onAdd, onRemove, onIncrease, onDecrease } = useCart();
+  const wishlist = useWishlist();
 
   function addToCart(product) {
     onAdd({
@@ -40,5 +55,20 @@ export function useEcommerce() {
     onDecrease(id, title);
   }
 
-  return { addToCart, removeFromCart, increaseQuantity, decreaseQuantity };
+  function addToWishlist(product) {
+    wishlist.onAdd(product);
+  }
+
+  function removeFromWishlist(id, title) {
+    wishlist.onRemove(id, title);
+  }
+
+  return {
+    addToCart,
+    removeFromCart,
+    increaseQuantity,
+    decreaseQuantity,
+    addToWishlist,
+    removeFromWishlist,
+  };
 }

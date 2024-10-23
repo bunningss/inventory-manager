@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "../ui/button";
-import { useCheckCart, useEcommerce } from "@/utils/helpers";
+import { useCheckCart, useCheckWishlist, useEcommerce } from "@/utils/helpers";
 import { QuantityControl } from "../cart/quantity-control";
 
 export function ProductActions({ currentProduct }) {
   const isInCart = useCheckCart(currentProduct);
-  const { addToCart } = useEcommerce();
+  const isInWishlist = useCheckWishlist(currentProduct);
+  const { addToCart, addToWishlist, removeFromWishlist } = useEcommerce();
 
   return (
     <div className="grid gap-2 md:grid-cols-2">
@@ -27,10 +28,16 @@ export function ProductActions({ currentProduct }) {
       )}
       <Button
         aria-label="add product to wishlist"
-        icon="heart"
+        icon={!isInWishlist ? "heart" : "heartCross"}
         variant="outline"
+        onClick={
+          !isInWishlist
+            ? () => addToWishlist(currentProduct)
+            : () =>
+                removeFromWishlist(currentProduct?._id, currentProduct?.title)
+        }
       >
-        add to wishlist
+        {!isInWishlist ? "add to wishlist" : "remove from wishlist"}
       </Button>
     </div>
   );
