@@ -50,9 +50,9 @@ const formSchema = z.object({
   }),
 });
 
-export function CheckoutForm({ referrer }) {
+export function CheckoutForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [couponCode, setCouponCode] = useState(referrer);
+  const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(null);
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const { cartItems, total, onClear } = useCart();
@@ -115,7 +115,7 @@ export function CheckoutForm({ referrer }) {
     setIsLoading(true);
 
     try {
-      if (!couponCode) {
+      if (!couponCode.trim()) {
         return warningNotification("Please enter valid a coupon code.");
       }
 
@@ -133,13 +133,6 @@ export function CheckoutForm({ referrer }) {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (referrer) {
-      handleCoupon();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [referrer]);
 
   return (
     <div>
