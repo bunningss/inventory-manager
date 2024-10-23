@@ -1,17 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useCart } from "@/hooks/use-cart";
 import { QuantityControl } from "./quantity-control";
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
+import { useEcommerce } from "@/utils/helpers";
 
 export function CartItem({ item }) {
-  const cart = useCart();
-
-  const handleRemoveFromCart = () => {
-    cart.onRemove(item._id, item.title);
-  };
+  const { removeFromCart } = useEcommerce();
 
   return (
     <Card className="shadow-transparent hover:shadow-transparent">
@@ -39,7 +35,7 @@ export function CartItem({ item }) {
           />
 
           <Button
-            onClick={handleRemoveFromCart}
+            onClick={() => removeFromCart(item)}
             className="rounded-full absolute top-0 bottom-0 right-0 m-auto"
             icon="delete"
             variant="destructive"

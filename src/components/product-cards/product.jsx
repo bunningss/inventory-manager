@@ -12,12 +12,13 @@ import {
 import { Badge } from "../ui/badge";
 import { RatingStars } from "../rating-stars";
 import { CalculatePrice } from "./calculate-price";
-import { useCheckCart } from "@/utils/helpers";
+import { useCheckCart, useEcommerce } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 
 export const Product = ({ product }) => {
   const router = useRouter();
   const isInCart = useCheckCart(product);
+  const { addToCart } = useEcommerce();
 
   return (
     <Link href={`/product/${product.slug}`} passHref>
@@ -70,7 +71,7 @@ export const Product = ({ product }) => {
             variant={!isInCart ? "outline" : "default"}
             onClick={(e) => {
               e.preventDefault();
-              handleAddToCart(product);
+              addToCart(product);
             }}
           >
             <span>add</span>

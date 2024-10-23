@@ -1,15 +1,15 @@
 "use client";
-import { useCart } from "@/hooks/use-cart";
 import { Button } from "../ui/button";
+import { useEcommerce } from "@/utils/helpers";
 
 export function QuantityControl({ id, title, quantity }) {
-  const cart = useCart();
+  const { increaseQuantity, decreaseQuantity } = useEcommerce();
 
   return (
     <div className="w-fit rounded-md flex items-center gap-4">
-      <Button icon="plus" onClick={() => cart.onIncrease(id)} />
+      <Button icon="plus" onClick={() => increaseQuantity(id)} />
       <span className="font-bold text-base">{quantity}</span>
-      <Button icon="minus" onClick={() => cart.onDecrease(id, title)} />
+      <Button icon="minus" onClick={() => decreaseQuantity(id, title)} />
     </div>
   );
 }

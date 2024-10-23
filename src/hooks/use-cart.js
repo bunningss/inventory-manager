@@ -128,7 +128,7 @@ export const useCart = create(
           }),
       }),
       {
-        name: "ilm-cart",
+        name: "ze-cart",
         storage: createJSONStorage(() => localStorage),
       }
     )
