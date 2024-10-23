@@ -1,15 +1,20 @@
 "use client";
 import { Button } from "../ui/button";
-import { useCheckCart } from "@/utils/helpers";
+import { useCheckCart, useEcommerce } from "@/utils/helpers";
 import { QuantityControl } from "../cart/quantity-control";
 
 export function ProductActions({ currentProduct }) {
   const isInCart = useCheckCart(currentProduct);
+  const { addToCart } = useEcommerce();
 
   return (
     <div className="grid gap-2 md:grid-cols-2">
       {!isInCart && (
-        <Button aria-label="add product to shopping cart" icon="shoppingBag">
+        <Button
+          aria-label="add product to shopping cart"
+          icon="shoppingBag"
+          onClick={() => addToCart(currentProduct)}
+        >
           add to cart
         </Button>
       )}

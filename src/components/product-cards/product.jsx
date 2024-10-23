@@ -53,7 +53,7 @@ export const Product = ({ product }) => {
                 e.preventDefault();
                 router.push(`/shop?brand=${product?.brand}`);
               }}
-              className="text-primary"
+              className="text-primary font-bold underline"
             >
               {product?.brand}
             </span>
