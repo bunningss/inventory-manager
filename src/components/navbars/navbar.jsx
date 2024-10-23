@@ -1,13 +1,13 @@
 "use client";
+import Link from "next/link";
 import { Button } from "../ui/button";
 import { Container } from "../container";
 import { Logo } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
 import { User } from "../user";
 import { useWishlist } from "@/hooks/use-wishlist";
-import Link from "next/link";
 
-export const Navbar = () => {
+export const Navbar = ({ userData }) => {
   const wishlist = useWishlist();
 
   return (
@@ -36,7 +36,7 @@ export const Navbar = () => {
                 </Button>
               </Link>
 
-              <User />
+              <User userData={userData} />
               <ThemeToggle />
             </div>
           </div>
