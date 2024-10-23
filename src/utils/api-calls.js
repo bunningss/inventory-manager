@@ -3,7 +3,7 @@
 import { getCookie } from "./cookie";
 
 export async function postData(url, data) {
-  const token = await getCookie("ilm-session");
+  const token = await getCookie("ze-session");
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
     method: "POST",
@@ -28,7 +28,7 @@ export async function postData(url, data) {
 }
 
 export async function getData(url, revalidate = 600) {
-  const token = await getCookie("ilm-session");
+  const token = await getCookie("ze-session");
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
     method: "GET",
@@ -54,7 +54,7 @@ export async function getData(url, revalidate = 600) {
 }
 
 export async function putData(url, data) {
-  const token = await getCookie("ilm-session");
+  const token = await getCookie("ze-session");
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
     method: "PUT",
@@ -80,7 +80,7 @@ export async function putData(url, data) {
 }
 
 export async function deleteData(url, data) {
-  const token = await getCookie("ilm-session");
+  const token = await getCookie("ze-session");
 
   const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
     method: "DELETE",
