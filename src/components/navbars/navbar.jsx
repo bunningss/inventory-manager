@@ -5,6 +5,7 @@ import { Logo } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
 import { User } from "../user";
 import { useWishlist } from "@/hooks/use-wishlist";
+import Link from "next/link";
 
 export const Navbar = () => {
   const wishlist = useWishlist();
@@ -29,9 +30,11 @@ export const Navbar = () => {
               menu
             </Button>
             <div className="hidden md:flex gap-4 items-center">
-              <Button icon="heart" variant="outline">
-                <span>{wishlist.wishlistItems.length}</span>
-              </Button>
+              <Link href="/wishlist" passHref>
+                <Button icon="heart" variant="outline">
+                  <span>{wishlist.wishlistItems.length}</span>
+                </Button>
+              </Link>
 
               <User />
               <ThemeToggle />
