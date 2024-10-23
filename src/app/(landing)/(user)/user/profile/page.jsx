@@ -3,7 +3,6 @@ import { Heading } from "@/components/heading";
 import { Icon } from "@/components/icon";
 import { UpdateProfile } from "@/components/modals/update-profile";
 import { ProfileSkeleton } from "@/components/skeletons/profile-skeleton";
-import { TotalCard } from "@/components/total-card";
 import { getData } from "@/utils/api-calls";
 import { getSession } from "@/utils/auth";
 import { Suspense } from "react";
@@ -71,16 +70,6 @@ async function ProfileData() {
             }
           />
           <DataCell
-            dataName="bKash number"
-            dataValue={
-              res.response?.payload?.bkash
-                ? res.response?.payload?.bkash
-                : "-----"
-            }
-          />
-        </div>
-        <div className="pt-2 pb-2 pl-0 pr-0 flex flex-col gap-x-0 gap-y-4 md:gap-y-8">
-          <DataCell
             dataName="coupon code"
             dataValue={
               res.response?.payload?.code?.code
@@ -88,7 +77,6 @@ async function ProfileData() {
                 : "-----"
             }
           />
-          <DataCell dataName="password" dataValue="*******" />
         </div>
       </div>
     </>
