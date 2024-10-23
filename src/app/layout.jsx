@@ -1,6 +1,7 @@
 import "./globals.css";
 import { font } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/providers/theme-provide";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
   title: "Next app",
@@ -18,6 +19,7 @@ export default async function RootLayout({ children }) {
           disableTransitionOnChange
         >
           {children}
+          <Toaster richColors position="top-right" />
         </ThemeProvider>
       </body>
     </html>
