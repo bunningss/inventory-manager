@@ -62,6 +62,14 @@ export function CheckoutForm() {
     resolver: zodResolver(formSchema),
   });
 
+  useEffect(() => {
+    const charge = form.watch("city");
+    if (charge) {
+      setDeliveryCharge(charge);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.watch("city")]);
+
   const handleSubmit = async (data) => {
     setIsLoading(true);
 
