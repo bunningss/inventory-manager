@@ -8,6 +8,10 @@ export function factorCartPrice(discount_price, regular_price) {
   return discount_price;
 }
 
+export function formatParams(params) {
+  return params.replace(/-/g, " ");
+}
+
 // Check item in wishlist
 export function useCheckCart(product) {
   const { cartItems } = useCart();
