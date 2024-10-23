@@ -3,17 +3,17 @@ import { Product } from "@/components/product-cards/product";
 import { ProductView } from "@/components/product-view";
 import { PromoSlider } from "@/components/promo-slider";
 import { ProductviewSkeleton } from "@/components/skeletons/product-view-skeleton";
-import Slider from "@/components/slider";
+import { Slider } from "@/components/slider";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 // component for product lists
 const ProductList = async ({ query }) => {
-  const res = await getData(`products?limit=8`);
+  const res = await getData(`products?${query}&limit=8`);
 
   return (
     <>
-      {res.response?.map((product, index) => (
+      {res.response.payload?.map((product, index) => (
         <Product key={index} product={product} />
       ))}
     </>

@@ -3,7 +3,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "fakestoreapi.com",
+        hostname: "res.cloudinary.com",
       },
       {
         hostname: "zeris.vercel.app",

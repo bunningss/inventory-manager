@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
-export default function Slider() {
+export function Slider() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const sliderItems = [
