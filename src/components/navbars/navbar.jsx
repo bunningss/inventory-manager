@@ -6,9 +6,11 @@ import { Logo } from "../logo";
 import { ThemeToggle } from "../theme-toggle";
 import { User } from "../user";
 import { useWishlist } from "@/hooks/use-wishlist";
+import { useMenuSidebar } from "@/hooks/controllers";
 
 export const Navbar = ({ userData }) => {
   const wishlist = useWishlist();
+  const menuSidebar = useMenuSidebar();
 
   return (
     <nav className="shadow-regular md:shadow-none md:border-b border-muted sticky top-0 z-20 bg-background h-16">
@@ -26,7 +28,11 @@ export const Navbar = ({ userData }) => {
               <span className="sr-only">search</span>
             </Button>
 
-            <Button icon="menu" className="md:hidden">
+            <Button
+              icon="menu"
+              className="md:hidden"
+              onClick={menuSidebar.onOpen}
+            >
               menu
             </Button>
             <div className="hidden md:flex gap-4 items-center">
