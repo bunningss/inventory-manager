@@ -13,7 +13,11 @@ async function DashboardData() {
   const summaryData = [
     {
       dataKey: "total sales",
-      dataValue: `৳ ${res.response.payload?.totalEarnings / 100}`,
+      dataValue: `৳ ${
+        (res.response.payload?.totalEarnings +
+          res.response.payload?.totalSales) /
+        100
+      }`,
       icon: "total",
     },
     {
@@ -24,9 +28,9 @@ async function DashboardData() {
     {
       dataKey: "total revenue",
       dataValue: `৳ ${
-        (res.response.payload?.totalEarnings -
-          (res.response.payload?.partnerEarnings +
-            res.response.payload?.totalExpenses)) /
+        (res.response.payload?.totalEarnings +
+          res.response.payload?.totalSales -
+          res.response.payload?.totalExpenses) /
         100
       }`,
       icon: "total",
@@ -36,7 +40,11 @@ async function DashboardData() {
   const CurrentMonthData = [
     {
       dataKey: "total sales",
-      dataValue: `৳ ${res.response.payload?.currentMonthTotalEarnings / 100}`,
+      dataValue: `৳ ${
+        (res.response.payload?.currentMonthTotalEarnings +
+          res.response.payload?.currentMonthTotalSales) /
+        100
+      }`,
       icon: "total",
     },
     {
@@ -62,7 +70,8 @@ async function DashboardData() {
     {
       dataKey: "revenue this month",
       dataValue: `৳ ${
-        (res.response.payload?.currentMonthTotalEarnings -
+        (res.response.payload?.currentMonthTotalEarnings +
+          res.response.payload?.currentMonthTotalSales -
           res.response.payload?.currentMonthTotalExpenses) /
         100
       }`,

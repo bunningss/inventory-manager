@@ -4,6 +4,7 @@ import Expense from "@/lib/models/Expense";
 import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
+import Sale from "@/lib/models/Sale";
 
 const ORDER_STATUSES = {
   DELIVERED: "delivered",
@@ -32,13 +33,15 @@ export async function GET(request) {
       orders,
       products,
       expenses,
+      sales,
       currentMonthExpenses,
       currentMonthOrders,
+      currentMonthSales,
     ] = await Promise.all([
       Order.find().sort({ createdAt: -1 }),
       Product.find().sort({ sold: -1 }).limit(6),
       Expense.find(),
-
+      Sale.find(),
       Expense.find({
         createdAt: {
           $gte: startOfMonth,
@@ -51,11 +54,22 @@ export async function GET(request) {
           $lt: endOfMonth,
         },
       }),
+      Sale.find({
+        createdAt: {
+          $gte: startOfMonth,
+          $lt: endOfMonth,
+        },
+      }),
     ]);
 
     const totalExpenses = expenses.reduce((a, c) => a + c.amount, 0);
+    const totalSales = sales.reduce((a, c) => a + c.amount, 0);
 
     const currentMonthTotalExpenses = currentMonthExpenses.reduce(
+      (a, c) => a + c.amount,
+      0
+    );
+    const currentMonthTotalSales = currentMonthSales.reduce(
       (a, c) => a + c.amount,
       0
     );
@@ -95,13 +109,6 @@ export async function GET(request) {
     let currentMonthTotalEarnings = 0;
     let currentMonthPartnerEarnings = 0;
 
-    // const currentMonthOrders = await Order.find({
-    //   createdAt: {
-    //     $gte: startOfMonth,
-    //     $lt: endOfMonth,
-    //   },
-    // });
-
     const currentMonthOrderCounts = {
       currentMonthTotalOrders: currentMonthOrders.length,
       currentMonthPendingOrders: 0,
@@ -134,6 +141,7 @@ export async function GET(request) {
       {
         msg: "Data Found",
         payload: {
+          totalSales,
           totalEarnings,
           partnerEarnings,
           ...orderCounts,
@@ -141,6 +149,7 @@ export async function GET(request) {
           recentOrders,
           products,
           totalExpenses,
+          currentMonthTotalSales,
           currentMonthTotalExpenses,
           currentMonthTotalEarnings,
           currentMonthPartnerEarnings,

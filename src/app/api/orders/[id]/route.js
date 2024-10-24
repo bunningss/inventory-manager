@@ -16,9 +16,10 @@ export async function GET(request, { params }) {
     const { id } = params;
     await connectDb();
 
-    order = await Order.findOne({ orderId: id })
-      .populate({ path: "couponCode", select: "code" })
-      .populate({ path: "comissionTo", select: "name" });
+    order = await Order.findOne({ orderId: id }).populate({
+      path: "couponCode",
+      select: "code",
+    });
 
     if (!order)
       return NextResponse.json({ msg: "No data found." }, { status: 400 });
