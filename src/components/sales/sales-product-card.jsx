@@ -31,6 +31,12 @@ export function SalesProductCard({ product }) {
             <CardTitle className="capitalize font-bold text-base">
               {product?.title}
             </CardTitle>
+            <span>
+              Stock:{" "}
+              <b>
+                <em>{product?.stock}</em>
+              </b>
+            </span>
             <CalculatePrice
               price={product?.price}
               discountedPrice={product?.discountedPrice}
