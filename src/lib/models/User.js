@@ -73,59 +73,6 @@ const userSchema = new mongoose.Schema(
         ref: "order",
       },
     ],
-    code: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "coupon",
-      required: false,
-      default: null,
-    },
-    generatedCode: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "coupon",
-      default: null,
-      required: false,
-    },
-    bkash: {
-      type: String,
-      required: false,
-      default: null,
-    },
-    cancelledComission: {
-      type: Number,
-      required: false,
-      default: 0,
-      min: 0,
-    },
-    pendingComission: {
-      type: Number,
-      required: false,
-      default: 0,
-      min: 0,
-    },
-    availableComission: {
-      type: Number,
-      required: false,
-      default: 0,
-      min: 0,
-    },
-    pendingWithdrawal: {
-      type: Number,
-      required: false,
-      default: 0,
-      min: 0,
-    },
-    withdrawnComission: {
-      type: Number,
-      required: false,
-      default: 0,
-      min: 0,
-    },
-    withdrawalRequests: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "withdrawal",
-      },
-    ],
   },
   {
     timestamps: true,

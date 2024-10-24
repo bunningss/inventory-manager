@@ -76,10 +76,6 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    totalAfterComission: {
-      type: Number,
-      required: true,
-    },
     sellerTotal: {
       type: Number,
       required: true,
@@ -147,16 +143,6 @@ const orderSchema = new mongoose.Schema(
     couponCode: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "coupon",
-    },
-    comission: {
-      type: Number,
-      required: false,
-      defalut: 0,
-    },
-    comissionTo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: false,
     },
     paymentMethod: {
       type: String,
