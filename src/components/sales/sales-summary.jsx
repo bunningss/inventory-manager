@@ -27,7 +27,7 @@ export function SalesSummary() {
         return errorNotification(res.response.msg);
       }
 
-      router.refresh();
+      router.push(`/dashboard/sales/${res.response.payload._id}`);
       onClear();
       successNotification(res.response.msg);
     } catch (err) {

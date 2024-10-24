@@ -38,7 +38,7 @@ export async function POST(request) {
     await session.commitTransaction();
 
     return NextResponse.json(
-      { msg: "Data saved successfully." },
+      { msg: "Data saved successfully.", payload: newSale },
       { status: 200 }
     );
   } catch (err) {
