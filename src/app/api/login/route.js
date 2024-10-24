@@ -1,7 +1,5 @@
 import bcrypt from "bcrypt";
 import User from "@/lib/models/User";
-import Address from "@/lib/models/Address";
-import Coupon from "@/lib/models/Coupon";
 import { SignJWT } from "jose";
 import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
@@ -12,10 +10,10 @@ export async function POST(req) {
 
     let { email, password } = await req.json();
 
-    let userExist = await User.findOne({ email })
-      .populate("addresses")
-      .populate("generatedCode")
-      .collation({ locale: "en", strength: 2 });
+    let userExist = await User.findOne({ email }).collation({
+      locale: "en",
+      strength: 2,
+    });
 
     if (!userExist)
       return NextResponse.json(

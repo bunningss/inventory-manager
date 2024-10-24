@@ -1,7 +1,6 @@
 import Order from "@/lib/models/Order";
 import Product from "@/lib/models/Product";
 import Expense from "@/lib/models/Expense";
-import Withdrawal from "@/lib/models/Withdraw";
 import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
@@ -29,44 +28,17 @@ export async function GET(request) {
     const endOfMonth = new Date(startOfMonth);
     endOfMonth.setMonth(startOfMonth.getMonth() + 1);
 
-    // const orders = await Order.find().sort({ createdAt: -1 });
-    // const products = await Product.find().sort({ sold: -1 }).limit(6);
-    // const expenses = await Expense.find();
-    // const withdrawals = await Withdrawal.find({ status: "paid" });
-    // const cancelledWithdrawals = await Withdrawal.find({ status: "cancelled" });
-    // const withdrawalsThisMonth = await Withdrawal.find({
-    //   status: "paid",
-    //   createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-    // });
-    // const cancelledWithdrawalsThisMonth = await Withdrawal.find({
-    //   status: "cancelled",
-    //   createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-    // });
-
     const [
       orders,
       products,
       expenses,
-      withdrawals,
-      cancelledWithdrawals,
-      withdrawalsThisMonth,
-      cancelledWithdrawalsThisMonth,
       currentMonthExpenses,
       currentMonthOrders,
     ] = await Promise.all([
       Order.find().sort({ createdAt: -1 }),
       Product.find().sort({ sold: -1 }).limit(6),
       Expense.find(),
-      Withdrawal.find({ status: "paid" }),
-      Withdrawal.find({ status: "cancelled" }),
-      Withdrawal.find({
-        status: "paid",
-        createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-      }),
-      Withdrawal.find({
-        status: "cancelled",
-        createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-      }),
+
       Expense.find({
         createdAt: {
           $gte: startOfMonth,
@@ -81,18 +53,6 @@ export async function GET(request) {
       }),
     ]);
 
-    // Total expenses for the entire collection
-    const totalCancelledWithdrawals = cancelledWithdrawals.reduce(
-      (a, c) => a + c.amount,
-      0
-    );
-    const totalPaidWithdrawals = withdrawals.reduce((a, c) => a + c.amount, 0);
-    const totalCancelledWithdrawalsThisMonth =
-      cancelledWithdrawalsThisMonth.reduce((a, c) => a + c.amount, 0);
-    const totalPaidWithdrawalsThisMonth = withdrawalsThisMonth.reduce(
-      (a, c) => a + c.amount,
-      0
-    );
     const totalExpenses = expenses.reduce((a, c) => a + c.amount, 0);
 
     // Current month expenses calculation
@@ -192,10 +152,6 @@ export async function GET(request) {
           currentMonthTotalExpenses,
           currentMonthTotalEarnings,
           currentMonthPartnerEarnings,
-          totalPaidWithdrawals,
-          totalPaidWithdrawalsThisMonth,
-          totalCancelledWithdrawals,
-          totalCancelledWithdrawalsThisMonth,
         },
       },
       { status: 200 }
