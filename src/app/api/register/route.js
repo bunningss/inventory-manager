@@ -1,11 +1,7 @@
 import User from "@/lib/models/User";
 import bcrypt from "bcrypt";
-import mongoose from "mongoose";
-import Coupon from "@/lib/models/Coupon";
 import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
-import { sendWelcomeMail } from "@/utils/send-email";
-import { generateRandomString } from "@/utils/helpers";
 
 export async function POST(req) {
   try {
@@ -48,51 +44,12 @@ export async function POST(req) {
       withdrawnComission: 0,
     });
 
-    // Start a session for the transaction
-    const session = await mongoose.startSession();
-    session.startTransaction();
+    await newUser.save();
 
-    try {
-      // Save the new user
-      await newUser.save({ session });
-
-      let generatedCode;
-      // Generate coupon code until a unique one found
-      do {
-        generatedCode = generateRandomString(11);
-      } while (await Coupon.findOne({ code: generatedCode }));
-
-      // Create auto code
-      const autoCode = new Coupon({
-        code: generatedCode,
-        user: newUser._id,
-        discount: 5,
-        comission: 10,
-      });
-
-      await autoCode.save({ session });
-
-      // Update the user with the generated code
-      newUser.generatedCode = autoCode._id;
-      await newUser.save({ session });
-
-      // Commit the transaction
-      await session.commitTransaction();
-
-      // Send welcome mail
-      await sendWelcomeMail(newUser.name, "Welcome to Ilham", newUser.email);
-
-      return NextResponse.json(
-        { msg: "Account created successfully." },
-        { status: 200 }
-      );
-    } catch (err) {
-      // Rollback the transaction in case of an error
-      await session.abortTransaction();
-      return NextResponse.json({ msg: err.message }, { status: 500 });
-    } finally {
-      session.endSession();
-    }
+    return NextResponse.json(
+      { msg: "Account created successfully." },
+      { status: 200 }
+    );
   } catch (err) {
     return NextResponse.json({ msg: err.message }, { status: 400 });
   }

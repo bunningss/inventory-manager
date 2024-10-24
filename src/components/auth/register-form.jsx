@@ -56,7 +56,7 @@ export function RegisterForm() {
         return errorNotification(res.response.msg);
       }
 
-      router.push("/login");
+      router.push("/sign-in");
       successNotification(res.response.msg);
     } catch (err) {
       errorNotification(err.message);

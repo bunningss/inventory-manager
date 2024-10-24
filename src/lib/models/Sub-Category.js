@@ -23,7 +23,7 @@ const subCategorySchema = new mongoose.Schema(
     },
     color: {
       type: String,
-      required: [true, "Please provide a color."],
+      required: [false, "Please provide a color."],
       trim: true,
       minlength: [3, "Color must be at least 3 characters."],
       maxlength: [7, "Color must be at most 6 characters."],

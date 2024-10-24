@@ -29,7 +29,7 @@ const formSchema = z.object({
   boxType: z.string().optional(),
   color: z.string().optional(),
   material: z.string().optional(),
-  featured: z.boolean().optional(),
+  featured: z.string().optional(),
   brand: z.string().min(1, "Brand is required"),
   tags: z.string().optional(),
   seoTags: z.string().optional(),
@@ -57,7 +57,7 @@ export function AddProduct({ categories }) {
       boxType: "",
       color: "",
       material: "",
-      featured: false,
+      featured: "false",
       brand: "",
       tags: "",
       seoTags: "",
@@ -278,8 +278,6 @@ export function AddProduct({ categories }) {
               { name: "yes", value: true },
               { name: "no", value: false },
             ]}
-            keyName="name"
-            keyValue="value"
             name="featured"
           />
           <FormInput

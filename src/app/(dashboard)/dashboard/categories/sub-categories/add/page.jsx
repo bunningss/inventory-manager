@@ -3,7 +3,7 @@ import { AddSubCategory } from "@/components/dashboard/forms/add-sub-category";
 import { getData } from "@/utils/api-calls";
 
 export default async function Page() {
-  const res = await getData("categories");
+  const res = await getData("categories", 0);
 
   return (
     <>

@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
-import { connectDb } from "@/lib/db/connectDb";
 import User from "@/lib/models/User";
+import bcrypt from "bcrypt";
 import Coupon from "@/lib/models/Coupon";
-import Address from "@/lib/models/Address";
 import Order from "@/lib/models/Order";
 import Category from "@/lib/models/Category";
+import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
 
 // Get one user
 export async function GET(request, { params }) {
@@ -23,13 +22,6 @@ export async function GET(request, { params }) {
     await connectDb();
 
     const userData = await User.findById(user.payload._id)
-      .populate({
-        path: "code",
-        select: "-_id -user -__v",
-      })
-      .populate({
-        path: "addresses",
-      })
       .populate({
         path: "orders",
         select:
