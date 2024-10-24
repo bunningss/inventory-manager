@@ -7,7 +7,7 @@ export default async function DashboardLayout({ children }) {
       <DashboardNavbar />
       <div className="flex gap-4">
         <DashboardSidebar />
-        <main className="w-full">{children}</main>
+        <main className="w-full pr-2">{children}</main>
       </div>
     </div>
   );

@@ -9,6 +9,12 @@ const sidebarItems = [
     children: [],
   },
   {
+    label: "sales",
+    href: "/dashboard/sales",
+    icon: "sales",
+    children: [],
+  },
+  {
     label: "product",
     href: "",
     icon: "product",
