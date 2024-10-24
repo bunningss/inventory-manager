@@ -6,11 +6,11 @@ export function CouponCard({ coupon }) {
   return (
     <Card title={coupon?.code}>
       <CardContent className="flex items-center gap-2 p-1 md:p-1">
-        <div className="bg-slate-100 px-1">
+        <div className="bg-slate-100 dark:bg-primary-foreground px-1">
           <Icon icon="coupon" size={80} />
         </div>
         <div className="py-0 px-1 w-full flex flex-col gap-1">
-          <CardTitle className="font-bold text-base">
+          <CardTitle className="font-bold text-base uppercase">
             {coupon?.code}
             <span
               className={

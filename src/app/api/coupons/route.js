@@ -7,8 +7,8 @@ import { NextResponse } from "next/server";
 // Add new code
 export async function POST(request) {
   try {
-    const isVerified = await verifyToken(request);
-    if (isVerified.error)
+    const user = await verifyToken(request);
+    if (user.payload?.role?.toLowerCase() !== "admin")
       return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
 
     await connectDb();
@@ -26,52 +26,12 @@ export async function POST(request) {
         { status: 400 }
       );
 
-    const userId =
-      isVerified.payload?.role?.toLowerCase() === "admin"
-        ? body.user
-        : isVerified.payload?._id;
-
-    const userWithCode = await User.findById(userId);
-    if (userWithCode.code)
-      return NextResponse.json(
-        {
-          msg: "User already have a code. Please contact support.",
-        },
-        { status: 400 }
-      );
-
-    const discount =
-      isVerified.payload?.role?.toLowerCase() === "admin"
-        ? body.discount
-          ? body.discount
-          : 10
-        : 10;
-    const comission =
-      isVerified.payload?.role?.toLowerCase() === "admin"
-        ? body.comission
-          ? body.comission
-          : 10
-        : 10;
-
     const newCoupon = new Coupon({
-      ...body,
       code: body.code,
-      user: userId,
-      discount: discount,
-      comission: comission,
+      discount: body.discount,
     });
 
     await newCoupon.save();
-    // Update user code
-    await User.findByIdAndUpdate(
-      userId,
-      {
-        code: newCoupon._id,
-      },
-      {
-        new: true,
-      }
-    );
 
     return NextResponse.json(
       { msg: `Code ${body.code.toUpperCase()} added successfully.` },
