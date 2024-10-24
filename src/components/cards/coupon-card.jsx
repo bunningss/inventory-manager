@@ -22,20 +22,13 @@ export function CouponCard({ coupon }) {
           </CardTitle>
           <span>{coupon?.user?.name}</span>
           <div className="flex items-center justify-between">
-            <div className="space-x-4">
-              <span>
-                Comission:{" "}
-                <span className="font-semibold text-primary">
-                  {coupon?.comission}%
-                </span>
+            <span>
+              Discount:{" "}
+              <span className="font-bold text-primary">
+                {coupon?.discount}%
               </span>
-              <span>
-                Discount:{" "}
-                <span className="font-semibold text-primary">
-                  {coupon?.discount}%
-                </span>
-              </span>
-            </div>
+            </span>
+
             <div className="space-x-2">
               <Button size="icon" className="rounded-full" icon="edit" />
               <Button

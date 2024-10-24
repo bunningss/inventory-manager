@@ -17,31 +17,6 @@ async function DashboardData() {
       icon: "total",
     },
     {
-      dataKey: "partner revenue",
-      dataValue: `৳ ${res.response.payload?.partnerEarnings / 100}`,
-      icon: "total",
-    },
-    {
-      dataKey: "paid partner revenue",
-      dataValue: `৳ ${res.response.payload?.totalPaidWithdrawals / 100}`,
-      icon: "total",
-    },
-    {
-      dataKey: "unpaid partner revenue",
-      dataValue: `৳ ${
-        (res.response.payload?.partnerEarnings -
-          (res.response.payload?.totalPaidWithdrawals +
-            res.response.payload?.totalCancelledWithdrawals)) /
-        100
-      }`,
-      icon: "total",
-    },
-    {
-      dataKey: "cancelled partner revenue",
-      dataValue: `৳ ${res.response.payload?.totalCancelledWithdrawals / 100}`,
-      icon: "total",
-    },
-    {
       dataKey: "total expense",
       dataValue: `৳ ${res.response.payload?.totalExpenses / 100}`,
       icon: "total",
@@ -80,35 +55,6 @@ async function DashboardData() {
       icon: "total",
     },
     {
-      dataKey: "partner revenue",
-      dataValue: `৳ ${res.response.payload?.currentMonthPartnerEarnings / 100}`,
-      icon: "total",
-    },
-    {
-      dataKey: "paid partner revenue",
-      dataValue: `৳ ${
-        res.response.payload?.totalPaidWithdrawalsThisMonth / 100
-      }`,
-      icon: "total",
-    },
-    {
-      dataKey: "unpaid partner revenue",
-      dataValue: `৳ ${
-        (res.response.payload?.currentMonthPartnerEarnings -
-          (res.response.payload?.totalPaidWithdrawalsThisMonth +
-            res.response.payload?.totalCancelledWithdrawalsThisMonth)) /
-        100
-      }`,
-      icon: "total",
-    },
-    {
-      dataKey: "cancelled partner revenue",
-      dataValue: `৳ ${
-        res.response.payload?.totalCancelledWithdrawalsThisMonth / 100
-      }`,
-      icon: "total",
-    },
-    {
       dataKey: "total expense",
       dataValue: `৳ ${res.response.payload?.currentMonthTotalExpenses / 100}`,
       icon: "total",
@@ -117,8 +63,7 @@ async function DashboardData() {
       dataKey: "revenue this month",
       dataValue: `৳ ${
         (res.response.payload?.currentMonthTotalEarnings -
-          (res.response.payload?.currentMonthTotalExpenses +
-            res.response.payload?.totalPaidWithdrawalsThisMonth)) /
+          res.response.payload?.currentMonthTotalExpenses) /
         100
       }`,
       icon: "total",

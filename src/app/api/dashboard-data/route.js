@@ -55,14 +55,6 @@ export async function GET(request) {
 
     const totalExpenses = expenses.reduce((a, c) => a + c.amount, 0);
 
-    // Current month expenses calculation
-    // const currentMonthExpenses = await Expense.find({
-    //   createdAt: {
-    //     $gte: startOfMonth,
-    //     $lt: endOfMonth,
-    //   },
-    // });
-
     const currentMonthTotalExpenses = currentMonthExpenses.reduce(
       (a, c) => a + c.amount,
       0
