@@ -48,3 +48,24 @@ export async function POST(request) {
     session.endSession();
   }
 }
+
+// Get all sales
+export async function GET(request) {
+  try {
+    const user = await verifyToken(request);
+    if (user.payload?.role?.toLowerCase() !== "admin") {
+      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+    }
+
+    await connectDb();
+
+    const sales = await Sale.find().sort({ createdAt: -1 });
+
+    return NextResponse.json(
+      { msg: "Data found.", payload: sales },
+      { status: 200 }
+    );
+  } catch (err) {
+    return NextResponse.json({ msg: err.message }, { status: 400 });
+  }
+}

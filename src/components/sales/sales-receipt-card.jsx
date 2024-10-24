@@ -13,9 +13,9 @@ export default function SalesReceiptCard({ item }) {
       </figure>
       <div className="w-full flex flex-col justify-between">
         <div className="flex justify-between items-center">
-          <h6 className="text-sm font-bold">{item?.title}</h6>
+          <h6 className="text-sm font-bold capitalize">{item?.title}</h6>
           <h6 className="text-sm font-bold">
-            ৳{(item?.price / 100).toFixed(2)}
+            ৳{((item?.price * item?.quantity) / 100).toFixed(2)}
           </h6>
         </div>
         <span className="text-sm text-muted-foreground">

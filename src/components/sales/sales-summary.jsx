@@ -45,7 +45,7 @@ export function SalesSummary() {
           <SalesSummaryCard key={index} product={product} />
         ))}
       </div>
-      <Heading>Order Total: ৳ {total / 100}</Heading>
+      <Heading>Total: ৳ {total / 100}</Heading>
       <Button loading={isLoading} disabled={isLoading} onClick={handleSubmit}>
         Save
       </Button>

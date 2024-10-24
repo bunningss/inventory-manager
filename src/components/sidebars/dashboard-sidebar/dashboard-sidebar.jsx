@@ -1,4 +1,3 @@
-import { Container } from "@/components/container";
 import { DashboardSidebarItem } from "./dashboard-sidebar-item";
 
 const sidebarItems = [
@@ -12,6 +11,12 @@ const sidebarItems = [
     label: "sales",
     href: "/dashboard/sales",
     icon: "sales",
+    children: [],
+  },
+  {
+    label: "sales reports",
+    href: "/dashboard/sales-reports",
+    icon: "reports",
     children: [],
   },
   {

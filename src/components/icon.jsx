@@ -32,6 +32,40 @@ const Icons = {
   edit: Edit,
   details: Eye,
   close: X,
+  reports: (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" {...props}>
+      <path
+        d="M23.5 95a6.508 6.508 0 0 1-6.5-6.5v-73c0-3.584 2.916-6.5 6.5-6.5h41c1.78 0 2.278 1.707 3.5 3l19.219 18.03A6.471 6.471 0 0 1 89 34.5v54c0 3.584-2.916 6.5-6.5 6.5h-59z"
+        opacity={0.35}
+      />
+      <path
+        fill="#f2f2f2"
+        d="M21.5 93a6.508 6.508 0 0 1-6.5-6.5v-73C15 9.916 17.916 7 21.5 7h41c1.78 0 3.502.742 4.724 2.035L85.219 28.03A6.471 6.471 0 0 1 87 32.5v54c0 3.584-2.916 6.5-6.5 6.5h-59z"
+      />
+      <path fill="#d9eeff" d="M21 87V13h40l20 21v53H21z" />
+      <path
+        fill="#70bfff"
+        d="M62 15v16a2 2 0 0 0 2 2h16l-1-2.653-15-15.5L62 15z"
+      />
+      <circle cx={51} cy={55} r={17} fill="#70bfff" />
+      <path
+        fill="none"
+        stroke="#40396e"
+        strokeLinejoin="round"
+        strokeMiterlimit={10}
+        strokeWidth={3}
+        d="M21.5 13.5h41l18 19v54h-59z"
+      />
+      <path
+        fill="#ffc571"
+        d="M51.067 38.003v16.961h16.931c-.019-9.349-7.585-16.924-16.931-16.961z"
+      />
+      <path
+        fill="#ff7575"
+        d="M68 55v-.008l-16.932-.028 7.54 15.223C64.172 67.394 68 61.651 68 55z"
+      />
+    </svg>
+  ),
   shop: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" {...props}>
       <path
