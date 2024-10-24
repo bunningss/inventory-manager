@@ -3,6 +3,7 @@
 import { useSales } from "@/hooks/use-sales";
 import { SalesSummaryCard } from "./sales-summary-card";
 import { Heading } from "../heading";
+import { Button } from "../ui/button";
 
 export function SalesSummary() {
   const { salesItems, total } = useSales();
@@ -16,6 +17,7 @@ export function SalesSummary() {
         ))}
       </div>
       <Heading>Order Total: ৳ {total / 100}</Heading>
+      <Button>Save</Button>
     </div>
   );
 }

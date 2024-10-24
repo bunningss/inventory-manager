@@ -1,8 +1,12 @@
+"use client";
 import Image from "next/image";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
+import { useSales } from "@/hooks/use-sales";
 
 export function SalesSummaryCard({ product }) {
+  const { onRemove } = useSales();
+
   return (
     <Card title={product?.title}>
       <CardContent className="flex items-center gap-2 p-1 md:p-1">
@@ -28,6 +32,7 @@ export function SalesSummaryCard({ product }) {
               icon="close"
               className="rounded-full"
               variant="destructive"
+              onClick={() => onRemove(product._id)}
             />
           </div>
         </div>

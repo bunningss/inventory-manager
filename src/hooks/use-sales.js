@@ -42,7 +42,7 @@ export const useSales = create((set) => ({
         };
       }
     }),
-  onRemove: (id, title) =>
+  onRemove: (id) =>
     set((state) => {
       const existingItem = state.salesItems.find((item) => item._id === id);
 
