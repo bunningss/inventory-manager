@@ -36,6 +36,7 @@ export function AddCoupon({ users }) {
       }
       successNotification(res.response.msg);
       router.push("/dashboard/coupons");
+      router.refresh();
     } catch (err) {
       errorNotification(err.message);
     } finally {
@@ -63,7 +64,7 @@ export function AddCoupon({ users }) {
 
           <FormInput
             form={form}
-            label="user discount"
+            label="discount"
             placeholder="e.g. 10"
             name="discount"
           />
