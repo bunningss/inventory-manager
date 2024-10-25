@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function SalesReceiptCard({ item }) {
+export function SalesReceiptCard({ item }) {
   return (
     <div className="flex space-x-2 border-b border-input">
       <figure className="relative h-16 w-16 rounded-md overflow-hidden">
@@ -21,7 +21,9 @@ export default function SalesReceiptCard({ item }) {
         <span className="text-sm text-muted-foreground">
           ৳{(item?.price / 100).toFixed(2)} x {item?.quantity}
         </span>
-        <span className="text-sm text-muted-foreground">Jul 14, 2024</span>
+        <span className="capitalize text-sm text-muted-foreground">
+          {item?.brand}
+        </span>
       </div>
     </div>
   );
