@@ -19,14 +19,17 @@ export const Navbar = ({ userData }) => {
           <Logo />
 
           <div className="flex items-center gap-4">
-            <Button
+            {/* <Button
               variant="outline"
               size="icon"
               icon="search"
               className="rounded-full"
             >
               <span className="sr-only">search</span>
-            </Button>
+            </Button> */}
+            <div className="md:hidden">
+              <ThemeToggle />
+            </div>
 
             <Button
               icon="menu"
