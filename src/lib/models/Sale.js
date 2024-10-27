@@ -6,6 +6,11 @@ const saleSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    saleId: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     products: [
       {
         _id: {

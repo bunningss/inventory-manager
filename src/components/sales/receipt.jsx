@@ -15,7 +15,7 @@ export function Receipt({ data }) {
       <div className="print:px-6 print:pt-6" ref={contentRef}>
         <Block
           title="Purchase receipt"
-          headerContent={<p className="hidden print:block">{data?._id}</p>}
+          headerContent={<p className="hidden print:block">{data?.saleId}</p>}
         >
           <Heading className="text-center mb-8 underline hidden print:block">
             My Shop

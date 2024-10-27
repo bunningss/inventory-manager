@@ -65,6 +65,10 @@ export function SalesReportsFilters() {
         <Button onClick={handleThisWeek}>This Week</Button>
         <Button onClick={handleThisMonth}>This Month</Button>
         <Button onClick={handleThisYear}>This Year</Button>
+        <Button onClick={() => {}}>All</Button>
+        <Button onClick={handleToday} icon="delete" variant="destructive">
+          clear
+        </Button>
       </div>
       <DatePickerWithRange />
     </div>

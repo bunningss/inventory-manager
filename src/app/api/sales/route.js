@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
+import { generateRandomString } from "@/utils/helpers";
 
 export async function POST(request) {
   const session = await mongoose.startSession();
@@ -40,7 +41,13 @@ export async function POST(request) {
         );
     }
 
-    const newSale = new Sale({ ...body, paymentMethod: "cash" });
+    let saleId;
+    // Generate order id until a unique one found
+    do {
+      saleId = generateRandomString(13);
+    } while (await Sale.findOne({ saleId: saleId }));
+
+    const newSale = new Sale({ ...body, paymentMethod: "cash", saleId });
     await newSale.save({ session });
 
     for (const product of body.products) {
@@ -114,7 +121,7 @@ export async function GET(request) {
     await connectDb();
 
     const [allSales, sales] = await Promise.all([
-      Sale.find().sort({ createdAt: -1 }).select("amount -_id"),
+      Sale.find().sort({ createdAt: -1 }),
       Sale.find(dateFilter).sort({ createdAt: -1 }),
     ]);
 
