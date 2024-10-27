@@ -154,6 +154,17 @@ async function DashboardData() {
           <Empty message="looks like there's no data to display." />
         )}
       </Block>
+      {/* Low in stock */}
+      <Block title="Low in stock">
+        <CardView>
+          {res.response.payload.lowStock?.map((product, index) => (
+            <ProductCard key={index} product={product} />
+          ))}
+        </CardView>
+        {res.response.payload.lowStock?.length === 0 && (
+          <Empty message="looks like there's no data to display." />
+        )}
+      </Block>
     </div>
   );
 }

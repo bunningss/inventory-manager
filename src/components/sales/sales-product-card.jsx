@@ -49,11 +49,11 @@ export function SalesProductCard({ product }) {
 
           <div className="grid grid-cols-2 gap-2 mb-1 mt-2">
             <Input
-              placeholder="price"
+              placeholder="Price"
               onChange={(e) => setProductPrice(e.target.value)}
             />
             <Input
-              placeholder="quantity"
+              placeholder="Quantity"
               onChange={(e) => setProductQuantity(e.target.value)}
             />
           </div>

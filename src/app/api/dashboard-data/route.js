@@ -1,10 +1,10 @@
 import Order from "@/lib/models/Order";
 import Product from "@/lib/models/Product";
 import Expense from "@/lib/models/Expense";
+import Sale from "@/lib/models/Sale";
 import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
-import Sale from "@/lib/models/Sale";
 
 const ORDER_STATUSES = {
   DELIVERED: "delivered",
@@ -30,6 +30,7 @@ export async function GET(request) {
     endOfMonth.setMonth(startOfMonth.getMonth() + 1);
 
     const [
+      lowStock,
       orders,
       products,
       expenses,
@@ -38,8 +39,9 @@ export async function GET(request) {
       currentMonthOrders,
       currentMonthSales,
     ] = await Promise.all([
+      Product.find().sort({ stock: 1 }).limit(10),
       Order.find().sort({ createdAt: -1 }),
-      Product.find().sort({ sold: -1 }).limit(6),
+      Product.find().sort({ sold: -1 }).limit(10),
       Expense.find(),
       Sale.find(),
       Expense.find({
@@ -141,6 +143,7 @@ export async function GET(request) {
       {
         msg: "Data Found",
         payload: {
+          lowStock,
           totalSales,
           totalEarnings,
           partnerEarnings,

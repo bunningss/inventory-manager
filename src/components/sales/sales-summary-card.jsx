@@ -10,7 +10,7 @@ export function SalesSummaryCard({ product }) {
   return (
     <Card title={product?.title}>
       <CardContent className="flex items-center gap-2 p-1 md:p-1">
-        <figure className="relative h-[50px] w-[60px]">
+        <figure className="relative h-[50px] w-[100px]">
           <Image
             src={product?.images[0] ? product.images[0] : ""}
             alt={product?.title}
