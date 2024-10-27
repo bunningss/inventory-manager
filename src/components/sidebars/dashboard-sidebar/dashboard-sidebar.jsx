@@ -8,7 +8,7 @@ const sidebarItems = [
     children: [],
   },
   {
-    label: "sales",
+    label: "new sale",
     href: "/dashboard/sales",
     icon: "sales",
     children: [],
