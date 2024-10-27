@@ -146,7 +146,10 @@ async function DashboardData() {
         </div>
       </Block>
       {/* Recent Orders */}
-      <Block title="recent orders" headerContent={<HeaderContent />}>
+      <Block
+        title="recent orders"
+        headerContent={<HeaderContent url="/dashboard/orders" />}
+      >
         <CardView>
           {res.response.payload.recentOrders?.map((order, index) => (
             <OrderCard key={index} order={order} />
