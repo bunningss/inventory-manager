@@ -19,12 +19,22 @@ export function ProductCard({ product, disabled }) {
           />
         </figure>
         <div className="py-0 px-1 w-full flex flex-col gap-1">
-          <CardTitle className="capitalize font-bold text-base">
+          <CardTitle className="capitalize text-base">
             {product?.title}
           </CardTitle>
           <div className="flex gap-2">
-            <span>Stock: {product?.stock}</span>
-            <span>Sales: {product?.sold}</span>
+            <span>
+              Stock:{" "}
+              <b>
+                <em>{product?.stock}</em>
+              </b>
+            </span>
+            <span>
+              Sales:{" "}
+              <b>
+                <em>{product?.sold}</em>
+              </b>
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <CalculatePrice

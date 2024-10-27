@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/cards/product-card";
 import { Empty } from "@/components/empty";
 import { TotalCard } from "@/components/total-card";
 import { getData } from "@/utils/api-calls";
+import Link from "next/link";
 import { Suspense } from "react";
 
 async function DashboardData() {
@@ -102,10 +103,21 @@ async function DashboardData() {
     },
   ];
 
+  const HeaderContent = ({ url }) => {
+    return (
+      <Link
+        href={url ? url : ""}
+        className="capitalize font-bold text-primary underline decoration-wavy"
+      >
+        view all
+      </Link>
+    );
+  };
+
   return (
     <div className="grid gap-8">
       {/* Total Summary */}
-      <Block title="summary">
+      <Block title="summary" headerContent={<HeaderContent />}>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-4">
           {summaryData.map((data, index) => (
             <TotalCard key={index} data={data} />
@@ -117,6 +129,7 @@ async function DashboardData() {
         title={`${new Date().toLocaleString("default", {
           month: "long",
         })} ${new Date().getFullYear()}`}
+        headerContent={<HeaderContent />}
       >
         <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-4">
           {CurrentMonthData.map((data, index) => (
@@ -133,7 +146,7 @@ async function DashboardData() {
         </div>
       </Block>
       {/* Recent Orders */}
-      <Block title="recent orders">
+      <Block title="recent orders" headerContent={<HeaderContent />}>
         <CardView>
           {res.response.payload.recentOrders?.map((order, index) => (
             <OrderCard key={index} order={order} />
@@ -144,7 +157,17 @@ async function DashboardData() {
         )}
       </Block>
       {/* Popular Products */}
-      <Block title="Most sold products">
+      <Block
+        title="Most sold products"
+        headerContent={
+          <HeaderContent
+            url={{
+              pathname: "/dashboard/products",
+              query: { sortBySold: "true" },
+            }}
+          />
+        }
+      >
         <CardView>
           {res.response.payload.products?.map((product, index) => (
             <ProductCard key={index} product={product} />
@@ -155,7 +178,17 @@ async function DashboardData() {
         )}
       </Block>
       {/* Low in stock */}
-      <Block title="Low in stock">
+      <Block
+        title="Low in stock"
+        headerContent={
+          <HeaderContent
+            url={{
+              pathname: "/dashboard/products",
+              query: { sortByStock: "true" },
+            }}
+          />
+        }
+      >
         <CardView>
           {res.response.payload.lowStock?.map((product, index) => (
             <ProductCard key={index} product={product} />

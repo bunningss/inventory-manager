@@ -12,6 +12,7 @@ export async function GET(request) {
   const subCategory = reqUrl.searchParams.get("sub");
   const featured = reqUrl.searchParams.get("featured");
   const sortBySold = reqUrl.searchParams.get("sortBySold");
+  const sortByStock = reqUrl.searchParams.get("sortByStock");
   const limit = parseInt(reqUrl.searchParams.get("limit")) || 10;
 
   try {
@@ -53,6 +54,11 @@ export async function GET(request) {
     // Sort by most sold items
     if (sortBySold === "true") {
       sort.sold = -1;
+    }
+
+    // Sort by low stock items
+    if (sortByStock === "true") {
+      sort.stock = 1;
     }
 
     const productsQuery = Product.find(query)

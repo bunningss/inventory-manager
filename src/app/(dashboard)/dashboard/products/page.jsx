@@ -4,8 +4,9 @@ import { ProductCard } from "@/components/cards/product-card";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
-async function Products() {
-  const res = await getData("products", 0);
+async function Products({ searchParams }) {
+  const queryString = new URLSearchParams(searchParams).toString();
+  const res = await getData(`products?${queryString ? queryString : ""}`, 0);
 
   return (
     <CardView>
@@ -16,11 +17,11 @@ async function Products() {
   );
 }
 
-export default async function Page() {
+export default async function Page({ searchParams }) {
   return (
     <Suspense fallback={<p>loading...</p>}>
       <Block title="all products">
-        <Products />
+        <Products searchParams={searchParams} />
       </Block>
     </Suspense>
   );
