@@ -19,6 +19,27 @@ export async function POST(request) {
 
     const body = await request.json();
 
+    if (body.amount <= 0)
+      return NextResponse.json(
+        { msg: "Invalid sale amount." },
+        { status: 400 }
+      );
+
+    for (const product of body.products) {
+      const dbProduct = await Product.findById(product._id);
+      if (!dbProduct)
+        return NextResponse.json(
+          { msg: "Invalid product selected." },
+          { status: 400 }
+        );
+
+      if (product.quantity > dbProduct.stock)
+        return NextResponse.json(
+          { msg: `${dbProduct.title} out of stock.` },
+          { status: 400 }
+        );
+    }
+
     const newSale = new Sale({ ...body, paymentMethod: "cash" });
     await newSale.save({ session });
 

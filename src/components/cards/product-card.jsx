@@ -23,7 +23,7 @@ export function ProductCard({ product, disabled }) {
             {product?.title}
           </CardTitle>
           <div className="flex gap-2">
-            {product?.stock && <span>Stock: {product?.stock}</span>}
+            <span>Stock: {product?.stock}</span>
             <span>Sales: {product?.sold}</span>
           </div>
           <div className="flex items-center justify-between">
