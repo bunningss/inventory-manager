@@ -17,7 +17,7 @@ export function SalesReportCard({ item }) {
           <span>
             {new Date(item?.createdAt).toDateString()}{" "}
             <b>
-              <em>{item?.orderId}</em>
+              <em>{item?._id}</em>
             </b>
           </span>
           <div className="flex items-center justify-between">
