@@ -15,7 +15,9 @@ const sidebarItems = [
   },
   {
     label: "sales reports",
-    href: "/dashboard/sales-reports",
+    href: `/dashboard/sales-reports?from=${new Date(
+      Date.now()
+    ).toDateString()}&to=${new Date(Date.now()).toDateString()}`,
     icon: "reports",
     children: [],
   },

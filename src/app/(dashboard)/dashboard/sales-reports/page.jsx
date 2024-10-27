@@ -21,7 +21,7 @@ export default async function Page({ searchParams }) {
       </CardView>
       <span>
         Total between {new Date(searchParams.from).toDateString()} and{" "}
-        {new Date(searchParams.to).toDateString()}:{" "}
+        {new Date(searchParams.to).toDateString()}: ৳
         {res.response.payload?.total / 100}
       </span>
     </Block>
