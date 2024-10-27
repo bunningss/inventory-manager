@@ -22,7 +22,7 @@ export async function POST(request) {
 
     if (body.amount <= 0)
       return NextResponse.json(
-        { msg: "Invalid sale amount." },
+        { msg: "Invalid amount. Please select some items." },
         { status: 400 }
       );
 

@@ -10,8 +10,8 @@ export function CalculatePrice({ discountedPrice, price, className }) {
       )}
       <span
         className={`text-xs md:text-sm text-muted-foreground font-bold line-through ${
-          discountedPrice > price ||
-          (!discountedPrice && "!text-sm !text-inherit !no-underline")
+          (discountedPrice >= price || !discountedPrice) &&
+          "!text-sm !text-inherit !no-underline"
         }`}
       >
         ৳{(price / 100).toFixed(2)}
