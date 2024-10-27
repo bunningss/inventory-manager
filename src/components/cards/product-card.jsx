@@ -43,6 +43,7 @@ export function ProductCard({ product, disabled }) {
               className="flex-col md:flex-row"
             />
             <div className="space-x-2">
+              <Button icon="plus" size="icon" className="rounded-full" w />
               {!disabled && (
                 <Link href={`/dashboard/products/${product?.slug}`} passHref>
                   <Button size="icon" className="rounded-full" icon="edit" />

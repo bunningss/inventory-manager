@@ -55,7 +55,7 @@ export function DeleteItem({ _id, requestUrl }) {
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>delete item</DialogTitle>
+          <DialogTitle className="capitalize">delete item</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-2">

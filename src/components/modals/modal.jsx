@@ -35,7 +35,7 @@ export function Modal({
       <DialogContent className="sm:max-w-[425px]">
         {(title || description) && (
           <DialogHeader>
-            {title && <DialogTitle>{title}</DialogTitle>}
+            {title && <DialogTitle className="capitalize">{title}</DialogTitle>}
             {description && (
               <DialogDescription>{description}</DialogDescription>
             )}
