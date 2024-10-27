@@ -3,8 +3,6 @@
 import React from "react";
 import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { DateRange } from "react-day-picker";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -16,15 +14,14 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 
 export function DatePickerWithRange({ className }) {
-  const [date, setDate] = React.useState({
-    from: new Date(Date.now()),
-    to: addDays(new Date(Date.now()), 0),
-  });
+  const [date, setDate] = React.useState({});
   const router = useRouter();
   const pathname = usePathname();
 
   const handleClick = () => {
-    router.push(`${pathname}?from=${date.from}&to=${date.to}`);
+    router.push(
+      `${pathname}?from=${date.from?.toISOString()}&to=${date.to?.toISOString()}`
+    );
   };
 
   return (
@@ -43,11 +40,11 @@ export function DatePickerWithRange({ className }) {
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, "dd-MM-yyyy")} -{" "}
+                  {format(date.to, "dd-MM-yyyy")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "dd-MM-yyyy")
               )
             ) : (
               <span>Pick a date</span>
@@ -61,7 +58,7 @@ export function DatePickerWithRange({ className }) {
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
+            numberOfMonths={6}
           />
         </PopoverContent>
       </Popover>

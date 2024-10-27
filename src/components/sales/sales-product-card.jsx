@@ -15,7 +15,10 @@ export function SalesProductCard({ product }) {
   const [productQuantity, setProductQuantity] = useState(null);
 
   return (
-    <Card title={product?.title}>
+    <Card
+      title={product?.title}
+      className={`${product?.stock <= 0 ? "border-2 border-destructive" : ""}`}
+    >
       <CardContent className="flex items-center gap-2 p-1 md:p-1">
         <figure className="relative h-[100px] w-[120px]">
           <Image
@@ -57,6 +60,7 @@ export function SalesProductCard({ product }) {
           <Button
             className=""
             icon="plus"
+            disabled={product?.stock <= 0}
             onClick={() =>
               onAdd({
                 ...product,

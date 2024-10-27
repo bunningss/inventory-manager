@@ -1,6 +1,6 @@
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
-import { DatePickerWithRange } from "@/components/date-range-picker";
+import { SalesReportsFilters } from "@/components/sales-reports-filters";
 import { SalesReportCard } from "@/components/sales/sales-report-card";
 import { getData } from "@/utils/api-calls";
 
@@ -12,17 +12,25 @@ export default async function Page({ searchParams }) {
 
   return (
     <Block title="previous sales">
-      {/* Filter */}
-      <DatePickerWithRange />
+      <SalesReportsFilters />
       <CardView>
         {res.response.payload?.sales?.map((item, index) => (
           <SalesReportCard key={index} item={item} />
         ))}
       </CardView>
-      <span>
-        Total between {new Date(searchParams.from).toDateString()} and{" "}
-        {new Date(searchParams.to).toDateString()}: ৳
-        {res.response.payload?.total / 100}
+      <span className="block text-muted-foreground mt-4">
+        Total between{" "}
+        <span className="text-primary">
+          {new Date(searchParams.from).toDateString()}
+        </span>{" "}
+        and{" "}
+        <span className="text-primary">
+          {new Date(searchParams.to).toDateString()}
+        </span>
+        :{" "}
+        <b className="text-primary">
+          <em>৳{res.response.payload?.total / 100}</em>
+        </b>
       </span>
     </Block>
   );
