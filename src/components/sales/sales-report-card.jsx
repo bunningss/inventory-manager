@@ -10,12 +10,14 @@ export function SalesReportCard({ item }) {
         <div className="px-1">
           <Icon icon="reports" size={80} />
         </div>
-        <div className="py-0 px-1 w-full flex flex-col gap-1">
-          <CardTitle className="capitalize font-bold text-base">
-            {item?.name}
+        <div className="py-0 px-1 w-full">
+          <CardTitle className="capitalize text-base flex justify-between">
+            {item?.customerName && <span>{item?.customerName}</span>}
+            <span className="font-normal">
+              {new Date(item?.createdAt).toDateString()}
+            </span>
           </CardTitle>
           <span>
-            {new Date(item?.createdAt).toDateString()}{" "}
             <b>
               <em>{item?.saleId}</em>
             </b>

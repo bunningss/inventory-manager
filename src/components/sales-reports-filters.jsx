@@ -120,11 +120,11 @@ export function SalesReportsFilters() {
                 value: null,
               },
               {
-                name: "Due",
+                name: "Due / বকেয়া",
                 value: "due",
               },
               {
-                name: "amount",
+                name: "amount / টাকার পরিমাণ",
                 value: "amount",
               },
             ]}

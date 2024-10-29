@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { addDays, format } from "date-fns";
+import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,17 +11,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { errorNotification } from "@/utils/toast";
 
 export function DatePickerWithRange({ className }) {
   const [date, setDate] = React.useState({});
   const router = useRouter();
+  const searchParams = useSearchParams();
   const pathname = usePathname();
 
   const handleClick = () => {
-    router.push(
-      `${pathname}?from=${date.from?.toISOString()}&to=${date.to?.toISOString()}`
-    );
+    if (!date.to || !date.from) return errorNotification("Please select date.");
+
+    const params = new URLSearchParams(searchParams);
+    params.set("from", date.from?.toISOString());
+    params.set("to", date.to?.toISOString());
+
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
