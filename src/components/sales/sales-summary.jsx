@@ -11,9 +11,16 @@ import { z } from "zod";
 import { FormInput } from "../form/form-input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 const formSchema = z.object({
   paid: z.string().optional().nullable(),
+  customerName: z.string().optional().nullable(),
 });
 
 export function SalesSummary() {
@@ -25,6 +32,7 @@ export function SalesSummary() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       paid: "",
+      customerName: "",
     },
   });
 
@@ -36,6 +44,7 @@ export function SalesSummary() {
         amount: total,
         products: salesItems,
         paid: data.paid,
+        customerName: data.customerName,
       });
 
       if (res.error) {
@@ -68,8 +77,25 @@ export function SalesSummary() {
         disabled={isLoading}
       >
         <Heading>Total: ৳ {total / 100}</Heading>
+
         {salesItems?.length > 0 && (
-          <FormInput form={form} placeholder="Paid" label="paid" name="paid" />
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>Due / বাকি</AccordionTrigger>
+              <AccordionContent className="space-y-2">
+                <FormInput
+                  form={form}
+                  placeholder="Customer Name / গ্রাহকের নাম"
+                  name="customerName"
+                />
+                <FormInput
+                  form={form}
+                  placeholder="Paid / প্রদান করা হয়েছে"
+                  name="paid"
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         )}
       </FormModal>
     </div>
