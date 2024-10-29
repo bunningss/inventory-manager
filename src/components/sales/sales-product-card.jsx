@@ -2,17 +2,40 @@
 
 import Image from "next/image";
 import { CalculatePrice } from "@/components/product-cards/calculate-price";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useSales } from "@/hooks/use-sales";
 import { factorCartPrice } from "@/utils/helpers";
-import { useState } from "react";
-import { Input } from "../ui/input";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormModal } from "../form/form-modal";
+import { FormInput } from "../form/form-input";
+
+const formSchema = z.object({
+  price: z.string().optional().nullable(),
+  quantity: z.string().optional().nullable(),
+});
 
 export function SalesProductCard({ product }) {
   const { onAdd } = useSales();
-  const [productPrice, setProductPrice] = useState(null);
-  const [productQuantity, setProductQuantity] = useState(null);
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      price: "",
+      quantity: "",
+    },
+  });
+
+  const handleSubmit = (data) => {
+    onAdd({
+      ...product,
+      quantity: data.quantity ? data.quantity * 1 : 1,
+      price: data.price
+        ? data.price * 100
+        : factorCartPrice(product?.discountedPrice, product?.price),
+    });
+  };
 
   return (
     <Card
@@ -47,30 +70,17 @@ export function SalesProductCard({ product }) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2 mb-1 mt-2">
-            <Input
-              placeholder="Price"
-              onChange={(e) => setProductPrice(e.target.value)}
-            />
-            <Input
-              placeholder="Quantity"
-              onChange={(e) => setProductQuantity(e.target.value)}
-            />
-          </div>
-          <Button
-            className=""
-            icon="plus"
+          <FormModal
+            form={form}
+            formLabel="add item"
+            onSubmit={handleSubmit}
             disabled={product?.stock <= 0}
-            onClick={() =>
-              onAdd({
-                ...product,
-                quantity: productQuantity ? productQuantity * 1 : 1,
-                price: productPrice
-                  ? productPrice * 100
-                  : factorCartPrice(product?.discountedPrice, product?.price),
-              })
-            }
-          />
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <FormInput form={form} placeholder="Price" name="price" />
+              <FormInput form={form} placeholder="Quantity" name="quantity" />
+            </div>
+          </FormModal>
         </div>
       </CardContent>
     </Card>
