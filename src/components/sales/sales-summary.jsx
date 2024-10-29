@@ -69,7 +69,7 @@ export function SalesSummary() {
       >
         <Heading>Total: ৳ {total / 100}</Heading>
         {salesItems?.length > 0 && (
-          <FormInput form={form} placeholder="Paid" label="paid" />
+          <FormInput form={form} placeholder="Paid" label="paid" name="paid" />
         )}
       </FormModal>
     </div>

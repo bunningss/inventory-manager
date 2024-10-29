@@ -6,6 +6,14 @@ const saleSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    paid: {
+      type: Number,
+      required: true,
+    },
+    due: {
+      type: Number,
+      required: true,
+    },
     saleId: {
       type: String,
       unique: true,

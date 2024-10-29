@@ -30,11 +30,23 @@ export function Receipt({ data }) {
                 ৳{(data?.amount / 100).toFixed(2)}
               </span>
             </div>
+            <div className="py-4 flex justify-between border-b border-b-input">
+              <span className="text-sm text-muted-foreground">PAID</span>
+              <span className="text-sm font-bold">
+                ৳{(data?.paid / 100).toFixed(2)}
+              </span>
+            </div>
+            <div className="py-4 flex justify-between border-b border-b-input">
+              <span className="text-sm text-muted-foreground">DUE</span>
+              <span className="text-sm font-bold">
+                ৳{((data?.amount - data?.paid) / 100).toFixed(2)}
+              </span>
+            </div>
           </div>
           <span className="mt-6 hidden print:block text-muted-foreground text-center">
             Software solution provided by{" "}
             <b>
-              <em>ZERIS Technologies</em>
+              <em>SILVER RAIN Technologies</em>
             </b>
           </span>
         </Block>

@@ -47,7 +47,24 @@ export async function POST(request) {
       saleId = generateRandomString(13);
     } while (await Sale.findOne({ saleId: saleId }));
 
-    const newSale = new Sale({ ...body, paymentMethod: "cash", saleId });
+    let paid;
+    let due;
+
+    if (body.paid) {
+      paid = body.paid * 100;
+      due = body.amount - body.paid * 100;
+    } else {
+      paid = body.amount;
+      due = 0;
+    }
+
+    const newSale = new Sale({
+      ...body,
+      paymentMethod: "cash",
+      saleId,
+      paid,
+      due,
+    });
     await newSale.save({ session });
 
     for (const product of body.products) {
