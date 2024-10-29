@@ -2,19 +2,19 @@ import { DashboardSidebarItem } from "./dashboard-sidebar-item";
 
 const sidebarItems = [
   {
-    label: "dashboard",
+    label: "dashboard / ড্যাশবোর্ড",
     href: "/dashboard",
     icon: "dashboard",
     children: [],
   },
   {
-    label: "new sale",
+    label: "new sale / বিক্রি",
     href: "/dashboard/sales",
     icon: "sales",
     children: [],
   },
   {
-    label: "sales reports",
+    label: "sales reports / বিক্রি রিপোর্ট",
     href: `/dashboard/sales-reports?from=${
       new Date(Date.now()).toISOString()?.split("T")[0]
     }&to=${new Date(Date.now()).toISOString()?.split("T")[0]}`,
@@ -22,7 +22,7 @@ const sidebarItems = [
     children: [],
   },
   {
-    label: "product",
+    label: "product / পণ্য",
     href: "",
     icon: "product",
     children: [
@@ -39,7 +39,7 @@ const sidebarItems = [
     ],
   },
   {
-    label: "category",
+    label: "category / ক্যাটাগরি",
     href: "",
     icon: "category",
     children: [
@@ -66,7 +66,7 @@ const sidebarItems = [
     ],
   },
   {
-    label: "expenses",
+    label: "expenses / খরচ",
     href: "",
     icon: "expense",
     children: [
@@ -83,7 +83,7 @@ const sidebarItems = [
     ],
   },
   {
-    label: "orders",
+    label: "orders / অর্ডার",
     href: "",
     icon: "order",
     children: [
@@ -100,7 +100,7 @@ const sidebarItems = [
     ],
   },
   {
-    label: "users",
+    label: "users / ব্যবহারকারী",
     href: "",
     icon: "user",
     children: [
@@ -117,7 +117,7 @@ const sidebarItems = [
     ],
   },
   {
-    label: "coupon code",
+    label: "coupon code / কুপন কোড",
     href: "",
     icon: "coupon",
     children: [

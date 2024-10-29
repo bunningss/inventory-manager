@@ -1,11 +1,12 @@
+import Link from "next/link";
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
 import { OrderCard } from "@/components/cards/order-card";
 import { ProductCard } from "@/components/cards/product-card";
 import { Empty } from "@/components/empty";
+import { Loading } from "@/components/loading";
 import { TotalCard } from "@/components/total-card";
 import { getData } from "@/utils/api-calls";
-import Link from "next/link";
 import { Suspense } from "react";
 
 async function DashboardData() {
@@ -13,7 +14,7 @@ async function DashboardData() {
 
   const summaryData = [
     {
-      dataKey: "total sales",
+      dataKey: "total sales / মোট বিক্রয়",
       dataValue: `৳ ${
         (res.response.payload?.totalEarnings +
           res.response.payload?.totalSales) /
@@ -22,12 +23,12 @@ async function DashboardData() {
       icon: "total",
     },
     {
-      dataKey: "total expense",
+      dataKey: "total expense / মোট খরচ",
       dataValue: `৳ ${res.response.payload?.totalExpenses / 100}`,
       icon: "total",
     },
     {
-      dataKey: "total revenue",
+      dataKey: "total revenue / মোট লাভ",
       dataValue: `৳ ${
         (res.response.payload?.totalEarnings +
           res.response.payload?.totalSales -
@@ -40,7 +41,7 @@ async function DashboardData() {
 
   const CurrentMonthData = [
     {
-      dataKey: "total sales",
+      dataKey: "total sales / মোট বিক্রয়",
       dataValue: `৳ ${
         (res.response.payload?.currentMonthTotalEarnings +
           res.response.payload?.currentMonthTotalSales) /
@@ -49,27 +50,27 @@ async function DashboardData() {
       icon: "total",
     },
     {
-      dataKey: "total orders",
+      dataKey: "total orders / মোট অর্ডার",
       dataValue: `${res.response.payload?.currentMonthTotalOrders}`,
       icon: "total",
     },
     {
-      dataKey: "completed orders",
+      dataKey: "completed orders / সম্পূর্ণ",
       dataValue: `${res.response.payload?.currentMonthCompletedOrders}`,
       icon: "total",
     },
     {
-      dataKey: "cancelled orders",
+      dataKey: "cancelled orders / বাতিল",
       dataValue: `${res.response.payload?.currentMonthCancelledOrders}`,
       icon: "total",
     },
     {
-      dataKey: "total expense",
+      dataKey: "total expense / মোট খরচ",
       dataValue: `৳ ${res.response.payload?.currentMonthTotalExpenses / 100}`,
       icon: "total",
     },
     {
-      dataKey: "revenue this month",
+      dataKey: "revenue / আয়",
       dataValue: `৳ ${
         (res.response.payload?.currentMonthTotalEarnings +
           res.response.payload?.currentMonthTotalSales -
@@ -207,7 +208,7 @@ async function DashboardData() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<Loading />}>
       <DashboardData />
     </Suspense>
   );

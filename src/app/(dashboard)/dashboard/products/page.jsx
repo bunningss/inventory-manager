@@ -1,6 +1,7 @@
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
 import { ProductCard } from "@/components/cards/product-card";
+import { Loading } from "@/components/loading";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
@@ -19,7 +20,7 @@ async function Products({ searchParams }) {
 
 export default async function Page({ searchParams }) {
   return (
-    <Suspense fallback={<p>loading...</p>}>
+    <Suspense fallback={<Loading />}>
       <Block title="all products">
         <Products searchParams={searchParams} />
       </Block>

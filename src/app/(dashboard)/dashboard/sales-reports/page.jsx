@@ -1,12 +1,14 @@
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
 import { Empty } from "@/components/empty";
+import { Loading } from "@/components/loading";
 import { SalesReportsFilters } from "@/components/sales-reports-filters";
 import { SalesReportCard } from "@/components/sales/sales-report-card";
 import { SalesResportTable } from "@/components/sales/sales-report-table";
 import { getData } from "@/utils/api-calls";
+import { Suspense } from "react";
 
-export default async function Page({ searchParams }) {
+async function Reports({ searchParams }) {
   const { from, to, sortBy, searchKey } = searchParams;
 
   // prepare query string
@@ -20,27 +22,8 @@ export default async function Page({ searchParams }) {
   // Fetch data with query parameters
   const res = await getData(`sales?${queryParams}`, 0);
 
-  const headerContent = (
-    <span className="block text-muted-foreground mt-4">
-      From{" "}
-      <span className="text-primary">
-        {new Date(searchParams.from).toDateString()}
-      </span>{" "}
-      to{" "}
-      <span className="text-primary">
-        {new Date(searchParams.to).toDateString()}
-      </span>
-      :{" "}
-      <b className="text-primary">
-        <em>৳{res.response.payload?.total / 100}</em>
-      </b>
-    </span>
-  );
-
   return (
-    <Block title="previous sales" headerContent={headerContent}>
-      <SalesReportsFilters />
-      {/* <SalesResportTable data={res.response.payload?.sales} /> */}
+    <>
       {res.response.payload?.sales?.length > 0 && (
         <CardView className="mt-4">
           {res.response.payload?.sales?.map((item, index) => (
@@ -55,6 +38,35 @@ export default async function Page({ searchParams }) {
           className="bg-background mt-4"
         />
       )}
+    </>
+  );
+}
+
+export default async function Page({ searchParams }) {
+  const headerContent = (
+    <span className="block text-muted-foreground mt-4">
+      From{" "}
+      <span className="text-primary">
+        {new Date(searchParams.from).toDateString()}
+      </span>{" "}
+      to{" "}
+      <span className="text-primary">
+        {new Date(searchParams.to).toDateString()}
+      </span>
+      :{" "}
+      <b className="text-primary">
+        {/* <em>৳{res.response.payload?.total / 100}</em> */}
+      </b>
+    </span>
+  );
+
+  return (
+    <Block title="previous sales" headerContent={headerContent}>
+      <SalesReportsFilters />
+      {/* <SalesResportTable data={res.response.payload?.sales} /> */}
+      <Suspense fallback={<Loading />}>
+        <Reports searchParams={searchParams} />
+      </Suspense>
     </Block>
   );
 }

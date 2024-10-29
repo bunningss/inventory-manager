@@ -1,6 +1,7 @@
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
 import { UserCard } from "@/components/cards/user-card";
+import { Loading } from "@/components/loading";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
@@ -18,7 +19,7 @@ async function Users() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<Loading />}>
       <Block title="users">
         <Users />
       </Block>

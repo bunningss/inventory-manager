@@ -82,15 +82,17 @@ export function SalesSummary() {
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
               <AccordionTrigger>Due / বাকি</AccordionTrigger>
-              <AccordionContent className="space-y-2">
+              <AccordionContent className="space-y-4">
                 <FormInput
                   form={form}
                   placeholder="Customer Name / গ্রাহকের নাম"
+                  label="Customer Name / গ্রাহকের নাম"
                   name="customerName"
                 />
                 <FormInput
                   form={form}
                   placeholder="Paid / প্রদান করা হয়েছে"
+                  label="Paid / প্রদান করা হয়েছে"
                   name="paid"
                 />
               </AccordionContent>

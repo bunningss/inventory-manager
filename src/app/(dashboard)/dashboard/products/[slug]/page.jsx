@@ -1,5 +1,6 @@
 import { Block } from "@/components/block";
 import { EditProduct } from "@/components/dashboard/forms/edit-product";
+import { Loading } from "@/components/loading";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
@@ -23,7 +24,7 @@ export default function Page({ params }) {
       <Block title="edit product"></Block>
 
       <div className="mt-8">
-        <Suspense fallback={<p>Loading...</p>}>
+        <Suspense fallback={<Loading />}>
           <EditForm params={params.slug} />
         </Suspense>
       </div>

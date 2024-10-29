@@ -1,5 +1,6 @@
 import { Block } from "@/components/block";
 import { OrderCard } from "@/components/cards/order-card";
+import { Loading } from "@/components/loading";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
@@ -20,7 +21,7 @@ export default async function Page() {
     <>
       <Block title="orders">
         <div className="grid grid-cols-2 gap-4">
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense fallback={<Loading />}>
             <Orders />
           </Suspense>
         </div>
