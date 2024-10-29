@@ -118,11 +118,14 @@ export async function GET(request) {
     if (user.payload?.role?.toLowerCase() !== "admin") {
       return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
     }
+
     const reqUrl = new URL(request.url);
     let from = reqUrl.searchParams.get("from");
     let to = reqUrl.searchParams.get("to");
+    let sortBy = reqUrl.searchParams.get("sortBy") || "createdAt";
+    let searchKey = reqUrl.searchParams.get("searchKey");
 
-    const dateFilter = {};
+    const filter = {};
 
     // Get today's date for filtering
     const startOfDay = new Date();
@@ -136,28 +139,30 @@ export async function GET(request) {
       const toDate = new Date(to);
       fromDate.setHours(0, 0, 0, 0);
       toDate.setHours(23, 59, 59, 999);
-      dateFilter.createdAt = { $gte: fromDate, $lte: toDate };
-    } else if (from && !to) {
-      const fromDate = new Date(from);
-      fromDate.setHours(0, 0, 0, 0);
-      const nextDay = new Date(fromDate);
-      nextDay.setDate(nextDay.getDate() + 1);
-      dateFilter.createdAt = { $gte: fromDate, $lt: nextDay };
-    } else if (to && !from) {
-      const toDate = new Date(to);
-      toDate.setHours(23, 59, 59, 999);
-      dateFilter.createdAt = { $lte: toDate };
+      filter.createdAt = { $gte: fromDate, $lte: toDate };
     } else {
       // If neither from nor to is provided, filter for today's sales
-      dateFilter.createdAt = { $gte: startOfDay, $lte: endOfDay };
+      filter.createdAt = { $gte: startOfDay, $lte: endOfDay };
+    }
+
+    // Add due filter if sortBy is 'due'
+    if (sortBy === "due") {
+      filter.due = { $gt: 0 };
+    }
+
+    // Add search filter if searchKey is provided
+    if (searchKey) {
+      filter.saleId = { $regex: searchKey, $options: "i" }; // Case-insensitive search
     }
 
     await connectDb();
 
-    const [allSales, sales] = await Promise.all([
-      Sale.find().sort({ createdAt: -1 }),
-      Sale.find(dateFilter).sort({ createdAt: -1 }),
-    ]);
+    const allSales = await Sale.find().sort({ createdAt: -1 });
+
+    // Determine sort order
+    const sortOrder = sortBy === "amount" || sortBy === "due" ? -1 : -1;
+
+    const sales = await Sale.find(filter).sort({ [sortBy]: sortOrder });
 
     const alltimeTotal = allSales.reduce((a, c) => a + c.amount, 0);
     const total = sales.reduce((a, c) => a + c.amount, 0);
@@ -167,7 +172,6 @@ export async function GET(request) {
       { status: 200 }
     );
   } catch (err) {
-    console.log(err);
     return NextResponse.json({ msg: err.message }, { status: 400 });
   }
 }

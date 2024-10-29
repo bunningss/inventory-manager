@@ -1,16 +1,23 @@
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
 import { SalesReportsFilters } from "@/components/sales-reports-filters";
-import { SalesCards } from "@/components/sales/sales-cards";
 import { SalesReportCard } from "@/components/sales/sales-report-card";
 import { SalesResportTable } from "@/components/sales/sales-report-table";
 import { getData } from "@/utils/api-calls";
 
 export default async function Page({ searchParams }) {
-  const res = await getData(
-    `sales?from=${searchParams.from}&to=${searchParams.to}`,
-    0
-  );
+  const { from, to, sortBy, searchKey } = searchParams;
+
+  // prepare query string
+  const queryParams = new URLSearchParams({
+    ...(from && { from }),
+    ...(to && { to }),
+    ...(sortBy && { sortBy }),
+    ...(searchKey && { searchKey }),
+  }).toString();
+
+  // Fetch data with query parameters
+  const res = await getData(`sales?${queryParams}`, 0);
 
   const headerContent = (
     <span className="block text-muted-foreground mt-4">
@@ -33,7 +40,11 @@ export default async function Page({ searchParams }) {
     <Block title="previous sales" headerContent={headerContent}>
       <SalesReportsFilters />
       {/* <SalesResportTable data={res.response.payload?.sales} /> */}
-      <SalesCards data={res.response.payload?.sales} />
+      <CardView className="mt-4">
+        {res.response.payload?.sales?.map((item, index) => (
+          <SalesReportCard key={item._id || index} item={item} />
+        ))}
+      </CardView>
     </Block>
   );
 }

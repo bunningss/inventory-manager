@@ -12,8 +12,8 @@ export function Receipt({ data }) {
 
   const headerContent = (
     <div>
-      {data?.customerName && <p>{data?.customerName}</p>}
-      <p className="hidden print:block">{data?.saleId}</p>
+      {data?.customerName && <p className="font-bold">{data?.customerName}</p>}
+      <p className="font-bold">{data?.saleId}</p>
     </div>
   );
 
