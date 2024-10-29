@@ -39,6 +39,23 @@ export async function POST(request) {
           { msg: `${dbProduct.title} out of stock.` },
           { status: 400 }
         );
+
+      let saleProductPrice =
+        product.discountedPrice <= product.price
+          ? product.discountedPrice
+          : product.price;
+      let dbProductPrice =
+        dbProduct.discountedPrice <= dbProduct.price
+          ? dbProduct.discountedPrice
+          : dbProduct.price;
+
+      if (saleProductPrice !== dbProductPrice)
+        return NextResponse.json(
+          {
+            msg: `Price mismatch for ${product.title}. Remove the product from cart and add again.`,
+          },
+          { status: 400 }
+        );
     }
 
     let saleId;

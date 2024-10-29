@@ -24,11 +24,11 @@ export async function POST(request) {
       const dbProduct = await Product.findById(product._id);
 
       let cartProductPrice =
-        product.discountedPrice < product.price
+        product.discountedPrice <= product.price
           ? product.discountedPrice
           : product.price;
       let dbProductPrice =
-        dbProduct.discountedPrice < dbProduct.price
+        dbProduct.discountedPrice <= dbProduct.price
           ? dbProduct.discountedPrice
           : dbProduct.price;
 
