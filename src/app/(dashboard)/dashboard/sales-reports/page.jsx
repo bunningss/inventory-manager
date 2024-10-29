@@ -1,5 +1,6 @@
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
+import { Empty } from "@/components/empty";
 import { SalesReportsFilters } from "@/components/sales-reports-filters";
 import { SalesReportCard } from "@/components/sales/sales-report-card";
 import { SalesResportTable } from "@/components/sales/sales-report-table";
@@ -40,11 +41,20 @@ export default async function Page({ searchParams }) {
     <Block title="previous sales" headerContent={headerContent}>
       <SalesReportsFilters />
       {/* <SalesResportTable data={res.response.payload?.sales} /> */}
-      <CardView className="mt-4">
-        {res.response.payload?.sales?.map((item, index) => (
-          <SalesReportCard key={item._id || index} item={item} />
-        ))}
-      </CardView>
+      {res.response.payload?.sales?.length > 0 && (
+        <CardView className="mt-4">
+          {res.response.payload?.sales?.map((item, index) => (
+            <SalesReportCard key={item._id || index} item={item} />
+          ))}
+        </CardView>
+      )}
+
+      {res.response.payload?.sales?.length <= 0 && (
+        <Empty
+          message="No data found. / কোন তথ্য পাওয়া যায়নি"
+          className="bg-background mt-4"
+        />
+      )}
     </Block>
   );
 }
