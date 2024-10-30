@@ -105,7 +105,7 @@ export function SalesReportsTableItem({ item }) {
       </td>
       <td className="py-2 border border-muted-foreground space-x-4 print:hidden">
         <UpdateSalesReport data={item} />
-        <Link href={`/dashboard/sales/${item?._id}`}>
+        <Link href={`/dashboard/sales-reports/${item?._id}`}>
           <Button size="icon" className="rounded-full" icon="details" />
         </Link>
       </td>
