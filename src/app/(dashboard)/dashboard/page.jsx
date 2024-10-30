@@ -132,11 +132,11 @@ async function DashboardData() {
         })} ${new Date().getFullYear()}`}
         headerContent={<HeaderContent />}
       >
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-4">
+        <CardView className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4">
           {CurrentMonthData.map((data, index) => (
             <TotalCard key={index} data={data} />
           ))}
-        </div>
+        </CardView>
       </Block>
       {/* Order Status */}
       <Block title="order summary">
@@ -172,13 +172,13 @@ async function DashboardData() {
           />
         }
       >
-        <CardView>
+        <CardView className="md:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
           {res.response.payload.products?.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}
         </CardView>
-        {res.response.payload.products?.length === 0 && (
-          <Empty message="looks like there's no data to display." />
+        {res.response.payload.products?.length <= 0 && (
+          <Empty message="There's no data to display." />
         )}
       </Block>
       {/* Low in stock */}
@@ -193,7 +193,7 @@ async function DashboardData() {
           />
         }
       >
-        <CardView>
+        <CardView className="md:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
           {res.response.payload.lowStock?.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}

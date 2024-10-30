@@ -10,7 +10,7 @@ async function Products({ searchParams }) {
   const res = await getData(`products?${queryString ? queryString : ""}`, 0);
 
   return (
-    <CardView>
+    <CardView className="md:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
       {res.response.payload?.map((product, index) => (
         <ProductCard key={index} product={product} />
       ))}
