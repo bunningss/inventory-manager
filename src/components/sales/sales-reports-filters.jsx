@@ -157,7 +157,10 @@ export function SalesReportsFilters() {
             Clear
           </Button>
         </div>
-        <DatePickerWithRange setActiveFilter={setActiveFilter} />
+        <DatePickerWithRange
+          setActiveFilter={setActiveFilter}
+          activeFilter={activeFilter}
+        />
       </div>
       <FormModal form={form} formLabel="search" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">

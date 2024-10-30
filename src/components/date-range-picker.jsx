@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,11 +14,21 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { errorNotification } from "@/utils/toast";
 
-export function DatePickerWithRange({ className, setActiveFilter }) {
-  const [date, setDate] = React.useState({});
+export function DatePickerWithRange({
+  className,
+  setActiveFilter,
+  activeFilter,
+}) {
+  const [date, setDate] = useState({});
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (activeFilter !== "custom") {
+      setDate({});
+    }
+  }, [activeFilter]);
 
   const handleClick = () => {
     if (!date.to || !date.from) return errorNotification("Please select date.");
