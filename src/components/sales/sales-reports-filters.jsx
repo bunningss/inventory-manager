@@ -1,14 +1,15 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { DatePickerWithRange } from "./date-range-picker";
-import { Button } from "./ui/button";
-import { FormModal } from "./form/form-modal";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormInput } from "./form/form-input";
-import { FormSelect } from "./form/form-select";
+import { DatePickerWithRange } from "../date-range-picker";
+import { Button } from "../ui/button";
+import { FormModal } from "../form/form-modal";
+import { FormInput } from "../form/form-input";
+import { FormSelect } from "../form/form-select";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   searchKey: z.string().optional().nullable(),
@@ -16,6 +17,7 @@ const formSchema = z.object({
 });
 
 export function SalesReportsFilters() {
+  const [resetKey, setResetKey] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -27,6 +29,11 @@ export function SalesReportsFilters() {
       sortBy: "",
     },
   });
+
+  useEffect(() => {
+    const sortBy = searchParams.get("sortBy") || "";
+    form.setValue("sortBy", sortBy);
+  }, [searchParams, form]);
 
   const formatDate = (date) => {
     return date.toISOString()?.split("T")[0];
@@ -53,6 +60,14 @@ export function SalesReportsFilters() {
     const params = new URLSearchParams();
     params.set("from", new Date().toISOString());
     params.set("to", new Date().toISOString());
+
+    form.reset({
+      searchKey: "",
+      sortBy: "",
+    });
+
+    setResetKey((prevKey) => prevKey + 1);
+
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -111,6 +126,7 @@ export function SalesReportsFilters() {
         <div className="grid grid-cols-2 gap-4">
           <FormInput form={form} name="searchKey" placeholder="Order ID" />
           <FormSelect
+            key={resetKey}
             form={form}
             name="sortBy"
             placeholder="Sort by"

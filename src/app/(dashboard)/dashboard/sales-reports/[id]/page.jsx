@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { Loading } from "@/components/loading";
 
 async function Receipts({ id }) {
-  const res = await getData(`sales/${id}`);
+  const res = await getData(`sales/${id}`, 0);
   return <Receipt data={res.response.payload} />;
 }
 

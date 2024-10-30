@@ -1,7 +1,7 @@
 import { Block } from "@/components/block";
 import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
-import { SalesReportsFilters } from "@/components/sales-reports-filters";
+import { SalesReportsFilters } from "@/components/sales/sales-reports-filters";
 import { SalesReportsTable } from "@/components/sales/sales-reports-table";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
@@ -57,7 +57,6 @@ export default async function Page({ searchParams }) {
   return (
     <Block title="previous sales" headerContent={headerContent}>
       <SalesReportsFilters />
-      {/* <SalesResportTable data={res.response.payload?.sales} /> */}
       <Suspense fallback={<Loading className="mt-4 py-8" />}>
         <Reports searchParams={searchParams} />
       </Suspense>
