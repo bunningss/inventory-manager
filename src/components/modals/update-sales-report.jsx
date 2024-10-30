@@ -82,14 +82,20 @@ export function UpdateSalesReport({ data }) {
       >
         <FormInput form={form} label="customer name" name="customerName" />
         <FormInput form={form} label="phone number" name="customerNumber" />
-        <div className="border-b border-input flex items-center justify-between">
-          <span>{`Due / বাকি - ৳${data?.paid / 100}`}</span>
+        <div className="border-b border-input flex items-center justify-between pb-1">
+          <span>{`Paid / পরিশোধ - ৳${data?.paid / 100}`}</span>
           <span>{`Due / বাকি - ৳${data?.due / 100}`}</span>
         </div>
 
-        <FormInput form={form} label="amount" name="newAmount" />
+        <FormInput
+          form={form}
+          label="amount"
+          name="newAmount"
+          disabled={data?.due <= 0}
+        />
         <FormCheckbox
           form={form}
+          disabled={data?.due <= 0}
           name="clear"
           label="Full Paid / সম্পূর্ণ অর্থ প্রদান"
         />
