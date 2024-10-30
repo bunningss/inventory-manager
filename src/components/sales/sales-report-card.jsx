@@ -30,6 +30,9 @@ export function SalesReportCard({ item }) {
               </span>
             </span>
             <div className="space-x-2">
+              <Button size="icon" icon="edit" className="rounded-full">
+                <span className="sr-only">edit paymnent status</span>
+              </Button>
               <Link href={`/dashboard/sales/${item?._id}`}>
                 <Button size="icon" className="rounded-full" icon="details" />
               </Link>

@@ -13,7 +13,7 @@ export function Receipt({ data }) {
   const headerContent = (
     <div>
       {data?.customerName && <p className="font-bold">{data?.customerName}</p>}
-      <p className="font-bold">{data?.saleId}</p>
+      <p>{data?.saleId}</p>
     </div>
   );
 
@@ -55,7 +55,9 @@ export function Receipt({ data }) {
           </span>
         </Block>
       </div>
-      <Button onClick={reactToPrintFn}>Print receipt</Button>
+      <div className="flex justify-end mt-4">
+        <Button onClick={reactToPrintFn}>Print receipt</Button>
+      </div>
     </>
   );
 }
