@@ -20,11 +20,11 @@ export default async function Page() {
   return (
     <>
       <Block title="orders">
-        <div className="grid grid-cols-2 gap-4">
-          <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading className="py-8" />}>
+          <div className="grid grid-cols-2 gap-4">
             <Orders />
-          </Suspense>
-        </div>
+          </div>
+        </Suspense>
       </Block>
     </>
   );

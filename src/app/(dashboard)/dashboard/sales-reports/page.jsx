@@ -25,11 +25,19 @@ async function Reports({ searchParams }) {
   return (
     <>
       {res.response.payload?.sales?.length > 0 && (
-        <CardView className="mt-4">
-          {res.response.payload?.sales?.map((item, index) => (
-            <SalesReportCard key={item._id || index} item={item} />
-          ))}
-        </CardView>
+        <>
+          <CardView className="mt-4">
+            {res.response.payload?.sales?.map((item, index) => (
+              <SalesReportCard key={item._id || index} item={item} />
+            ))}
+          </CardView>
+          <div className="mt-4 py-4 flex justify-between border-b border-b-input">
+            <span className="text-sm text-muted-foreground">TOTAL</span>
+            <span className="text-sm font-bold">
+              ৳{res.response.payload?.total / 100}
+            </span>
+          </div>
+        </>
       )}
 
       {res.response.payload?.sales?.length <= 0 && (
@@ -53,10 +61,6 @@ export default async function Page({ searchParams }) {
       <span className="text-primary">
         {new Date(searchParams.to).toDateString()}
       </span>
-      :{" "}
-      <b className="text-primary">
-        {/* <em>৳{res.response.payload?.total / 100}</em> */}
-      </b>
     </span>
   );
 
@@ -64,7 +68,7 @@ export default async function Page({ searchParams }) {
     <Block title="previous sales" headerContent={headerContent}>
       <SalesReportsFilters />
       {/* <SalesResportTable data={res.response.payload?.sales} /> */}
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading className="mt-4 py-8" />}>
         <Reports searchParams={searchParams} />
       </Suspense>
     </Block>

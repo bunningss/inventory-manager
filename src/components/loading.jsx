@@ -1,9 +1,15 @@
-import { LoaderIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Icon } from "./icon";
 
-export function Loading() {
+export function Loading({ className }) {
   return (
-    <div className="h-full w-full bg-background flex items-center justify-center">
-      <LoaderIcon className="animate-spin" size={50} />
+    <div
+      className={cn(
+        "h-full w-full bg-background flex items-center justify-center rounded-md",
+        className
+      )}
+    >
+      <Icon icon="loading" className="animate-spin" size={50} />
     </div>
   );
 }
