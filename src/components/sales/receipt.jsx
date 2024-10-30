@@ -12,7 +12,9 @@ export function Receipt({ data }) {
 
   const headerContent = (
     <div>
-      {data?.customerName && <p className="font-bold">{data?.customerName}</p>}
+      {data?.customerName && (
+        <p className="font-bold capitalize">{data?.customerName}</p>
+      )}
       <p>{data?.saleId}</p>
     </div>
   );

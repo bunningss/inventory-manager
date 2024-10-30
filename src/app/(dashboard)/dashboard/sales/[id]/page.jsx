@@ -3,13 +3,15 @@ import { Receipt } from "@/components/sales/receipt";
 import { Suspense } from "react";
 import { Loading } from "@/components/loading";
 
-export default async function Page({ params }) {
-  await new Promise((resolve) => setTimeout(resolve, 7000));
-  const res = await getData(`sales/${params.id}`);
+async function Receipts({ id }) {
+  const res = await getData(`sales/${id}`);
+  return <Receipt data={res.response.payload} />;
+}
 
+export default async function Page({ params }) {
   return (
     <Suspense fallback={<Loading />}>
-      <Receipt data={res.response.payload} />
+      <Receipts id={params.id} />
     </Suspense>
   );
 }
