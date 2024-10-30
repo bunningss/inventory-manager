@@ -14,7 +14,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { errorNotification } from "@/utils/toast";
 
-export function DatePickerWithRange({ className }) {
+export function DatePickerWithRange({ className, setActiveFilter }) {
   const [date, setDate] = React.useState({});
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,6 +28,7 @@ export function DatePickerWithRange({ className }) {
     params.set("to", date.to?.toISOString());
 
     router.push(`${pathname}?${params.toString()}`);
+    setActiveFilter("custom");
   };
 
   return (

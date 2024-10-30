@@ -18,6 +18,7 @@ const formSchema = z.object({
 
 export function SalesReportsFilters() {
   const [resetKey, setResetKey] = useState(0);
+  const [activeFilter, setActiveFilter] = useState("today");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -54,6 +55,7 @@ export function SalesReportsFilters() {
   const handleToday = () => {
     const today = new Date();
     updateDateRange(today, today);
+    setActiveFilter("today");
   };
 
   const handleClear = () => {
@@ -69,6 +71,8 @@ export function SalesReportsFilters() {
     setResetKey((prevKey) => prevKey + 1);
 
     router.push(`${pathname}?${params.toString()}`);
+
+    setActiveFilter("today");
   };
 
   const handleThisWeek = () => {
@@ -79,6 +83,7 @@ export function SalesReportsFilters() {
     const lastDayOfWeek = new Date(firstDayOfWeek);
     lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
     updateDateRange(firstDayOfWeek, lastDayOfWeek);
+    setActiveFilter("week");
   };
 
   const handleThisMonth = () => {
@@ -90,6 +95,7 @@ export function SalesReportsFilters() {
       0
     );
     updateDateRange(firstDayOfMonth, lastDayOfMonth);
+    setActiveFilter("month");
   };
 
   const handleThisYear = () => {
@@ -97,12 +103,18 @@ export function SalesReportsFilters() {
     const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
     const lastDayOfYear = new Date(today.getFullYear(), 11, 31);
     updateDateRange(firstDayOfYear, lastDayOfYear);
+    setActiveFilter("year");
+  };
+
+  const handleAll = () => {
+    // Implement the logic for "All" filter here
+    setActiveFilter("all");
   };
 
   const handleSubmit = (data) => {
     const params = new URLSearchParams(searchParams);
-    params.set("searchKey", data.searchKey);
-    params.set("sortBy", data.sortBy);
+    params.set("searchKey", data.searchKey || "");
+    params.set("sortBy", data.sortBy || "");
 
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -111,16 +123,41 @@ export function SalesReportsFilters() {
     <div>
       <div className="flex items-center justify-between">
         <div className="space-x-4">
-          <Button onClick={handleToday}>Today</Button>
-          <Button onClick={handleThisWeek}>This Week</Button>
-          <Button onClick={handleThisMonth}>This Month</Button>
-          <Button onClick={handleThisYear}>This Year</Button>
-          <Button onClick={() => {}}>All</Button>
-          <Button onClick={handleClear} icon="delete" variant="destructive">
-            clear
+          <Button
+            onClick={handleToday}
+            variant={activeFilter === "today" ? "default" : "outline"}
+          >
+            Today
+          </Button>
+          <Button
+            onClick={handleThisWeek}
+            variant={activeFilter === "week" ? "default" : "outline"}
+          >
+            This Week
+          </Button>
+          <Button
+            onClick={handleThisMonth}
+            variant={activeFilter === "month" ? "default" : "outline"}
+          >
+            This Month
+          </Button>
+          <Button
+            onClick={handleThisYear}
+            variant={activeFilter === "year" ? "default" : "outline"}
+          >
+            This Year
+          </Button>
+          <Button
+            onClick={handleAll}
+            variant={activeFilter === "all" ? "default" : "outline"}
+          >
+            All
+          </Button>
+          <Button onClick={handleClear} variant="destructive">
+            Clear
           </Button>
         </div>
-        <DatePickerWithRange />
+        <DatePickerWithRange setActiveFilter={setActiveFilter} />
       </div>
       <FormModal form={form} formLabel="search" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
