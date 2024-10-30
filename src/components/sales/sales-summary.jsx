@@ -21,6 +21,7 @@ import {
 const formSchema = z.object({
   paid: z.string().optional().nullable(),
   customerName: z.string().optional().nullable(),
+  customerNumber: z.string().optional().nullable(),
 });
 
 export function SalesSummary() {
@@ -33,6 +34,7 @@ export function SalesSummary() {
     defaultValues: {
       paid: "",
       customerName: "",
+      customerNumber: "",
     },
   });
 
@@ -45,6 +47,7 @@ export function SalesSummary() {
         products: salesItems,
         paid: data.paid,
         customerName: data.customerName,
+        customerNumber: data.customerNumber,
       });
 
       if (res.error) {
@@ -88,6 +91,12 @@ export function SalesSummary() {
                   placeholder="Customer Name / গ্রাহকের নাম"
                   label="Customer Name / গ্রাহকের নাম"
                   name="customerName"
+                />
+                <FormInput
+                  form={form}
+                  placeholder="Phone Number / গ্রাহকের নাম"
+                  label="Phone Number / মোবাইল নম্বর"
+                  name="customerNumber"
                 />
                 <FormInput
                   form={form}

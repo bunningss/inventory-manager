@@ -30,7 +30,6 @@ export function SalesSummaryCard({ product }) {
             <span>Total: ৳{(product.price * product.quantity) / 100}</span>
             <Button
               icon="close"
-              className="rounded-full"
               variant="destructive"
               onClick={() => onRemove(product._id)}
             />

@@ -28,9 +28,7 @@ export function SalesReportsTable({ data, from, to }) {
           <span className="text-sm font-bold">৳{data?.total / 100}</span>
         </div>
         <div className="mt-4 py-4 flex justify-between border-b border-b-input">
-          <span className="text-sm text-muted-foreground">
-            Paid / পরিশোধ করা
-          </span>
+          <span className="text-sm text-muted-foreground">Paid / পরিশোধ</span>
           <span className="text-sm font-bold">
             ৳{(data?.total - data?.dues) / 100}
           </span>
@@ -67,7 +65,7 @@ export function SalesReportsTableHeader() {
           total / মোট
         </th>
         <th scope="col" className="py-2 px-1 border border-muted-foreground">
-          paid / পরিশোধ করা
+          paid / পরিশোধ
         </th>
         <th scope="col" className="py-2 px-1 border border-muted-foreground">
           due / বাকি

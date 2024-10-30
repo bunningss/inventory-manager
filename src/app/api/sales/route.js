@@ -26,6 +26,9 @@ export async function POST(request) {
         { status: 400 }
       );
 
+    if (body.paid * 100 > body.amount)
+      return NextResponse.json({ msg: "Invalid amount." }, { status: 400 });
+
     for (const product of body.products) {
       const dbProduct = await Product.findById(product._id);
       if (!dbProduct)

@@ -10,6 +10,10 @@ const saleSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    customerNumber: {
+      type: String,
+      required: false,
+    },
     paid: {
       type: Number,
       required: true,
