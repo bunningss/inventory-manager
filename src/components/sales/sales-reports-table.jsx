@@ -87,7 +87,7 @@ export function SalesReportsTableItem({ item }) {
       <td className="py-2 border border-muted-foreground">
         {new Date(item?.createdAt).toDateString()}
       </td>
-      <td className="py-2 border border-muted-foreground">
+      <td className="py-2 border border-muted-foreground capitalize">
         {item?.customerName}
       </td>
       <td className="py-2 border border-muted-foreground">
@@ -104,7 +104,7 @@ export function SalesReportsTableItem({ item }) {
         ৳{item?.due / 100}
       </td>
       <td className="py-2 border border-muted-foreground space-x-4 print:hidden">
-        <UpdateSalesReport />
+        <UpdateSalesReport data={item} />
         <Link href={`/dashboard/sales/${item?._id}`}>
           <Button size="icon" className="rounded-full" icon="details" />
         </Link>

@@ -5,31 +5,67 @@ import { FormModal } from "../form/form-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Modal } from "./modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FormCheckbox } from "../form/form-checkbox";
+import { errorNotification, successNotification } from "@/utils/toast";
+import { putData } from "@/utils/api-calls";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   customerName: z.string().optional(),
-  paid: z.string(),
+  customerNumber: z.string().optional(),
+  newAmount: z.string().optional(),
+  clear: z.boolean().optional(),
 });
 
 export function UpdateSalesReport({ data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       customerName: data?.customerName,
-      paid: data?.paid / 100,
+      newAmount: "",
+      customerNumber: data?.customerNumber || "",
+      clear: data?.due * 1 === 0 ? true : false,
     },
   });
 
-  const handleSubmit = async (values) => {};
+  // Reset form on modal state change
+  useEffect(() => {
+    form.reset({
+      customerName: data?.customerName,
+      newAmount: "",
+      customerNumber: data?.customerNumber || "",
+      clear: data?.due * 1 === 0 ? true : false,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModalOpen]);
+
+  const handleSubmit = async (values) => {
+    setIsLoading(true);
+
+    try {
+      const res = await putData(`sales/${data?._id}`, values);
+      if (res.error) {
+        return errorNotification(res.response.msg);
+      }
+
+      router.refresh();
+      successNotification(res.response.msg);
+      setIsModalOpen(false);
+    } catch (err) {
+      errorNotification(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Modal
       title="Edit report"
-      description="Make changes to your report here. Click save when you're done."
       triggerIcon="edit"
       className="rounded-full"
       triggerSize="icon"
@@ -45,7 +81,18 @@ export function UpdateSalesReport({ data }) {
         onSubmit={handleSubmit}
       >
         <FormInput form={form} label="customer name" name="customerName" />
-        <FormInput form={form} label="paid amount" name="paid" />
+        <FormInput form={form} label="phone number" name="customerNumber" />
+        <div className="border-b border-input flex items-center justify-between">
+          <span>{`Due / বাকি - ৳${data?.paid / 100}`}</span>
+          <span>{`Due / বাকি - ৳${data?.due / 100}`}</span>
+        </div>
+
+        <FormInput form={form} label="amount" name="newAmount" />
+        <FormCheckbox
+          form={form}
+          name="clear"
+          label="Full Paid / সম্পূর্ণ অর্থ প্রদান"
+        />
       </FormModal>
     </Modal>
   );
