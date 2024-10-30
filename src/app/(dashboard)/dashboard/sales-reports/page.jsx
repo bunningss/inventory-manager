@@ -1,10 +1,8 @@
 import { Block } from "@/components/block";
-import { CardView } from "@/components/card-view";
 import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
 import { SalesReportsFilters } from "@/components/sales-reports-filters";
-import { SalesReportCard } from "@/components/sales/sales-report-card";
-import { SalesResportTable } from "@/components/sales/sales-report-table";
+import { SalesReportsTable } from "@/components/sales/sales-reports-table";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
@@ -25,19 +23,11 @@ async function Reports({ searchParams }) {
   return (
     <>
       {res.response.payload?.sales?.length > 0 && (
-        <>
-          <CardView className="mt-4">
-            {res.response.payload?.sales?.map((item, index) => (
-              <SalesReportCard key={item._id || index} item={item} />
-            ))}
-          </CardView>
-          <div className="mt-4 py-4 flex justify-between border-b border-b-input">
-            <span className="text-sm text-muted-foreground">TOTAL</span>
-            <span className="text-sm font-bold">
-              ৳{res.response.payload?.total / 100}
-            </span>
-          </div>
-        </>
+        <SalesReportsTable
+          data={res.response.payload}
+          from={new Date(searchParams.from).toDateString()}
+          to={new Date(searchParams.to).toDateString()}
+        />
       )}
 
       {res.response.payload?.sales?.length <= 0 && (

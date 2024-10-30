@@ -157,18 +157,16 @@ export async function GET(request) {
 
     await connectDb();
 
-    const allSales = await Sale.find().sort({ createdAt: -1 });
-
     // Determine sort order
     const sortOrder = sortBy === "amount" || sortBy === "due" ? -1 : -1;
 
     const sales = await Sale.find(filter).sort({ [sortBy]: sortOrder });
 
-    const alltimeTotal = allSales.reduce((a, c) => a + c.amount, 0);
+    const dues = sales.reduce((a, c) => a + c.due, 0);
     const total = sales.reduce((a, c) => a + c.amount, 0);
 
     return NextResponse.json(
-      { msg: "Data found.", payload: { sales, total, alltimeTotal } },
+      { msg: "Data found.", payload: { sales, total, dues } },
       { status: 200 }
     );
   } catch (err) {
