@@ -26,6 +26,7 @@ export function FormSelect({
   required,
   keyName = "name",
   keyValue = "value",
+  defaultValue,
 }) {
   return (
     <FormField
@@ -44,7 +45,7 @@ export function FormSelect({
               {label}
             </FormLabel>
           )}
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select onValueChange={field.onChange} defaultValue={defaultValue}>
             <FormControl>
               <SelectTrigger className="capitalize">
                 <SelectValue placeholder={placeholder || ""} />

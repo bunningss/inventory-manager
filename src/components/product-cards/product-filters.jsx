@@ -46,8 +46,7 @@ export function ProductFilters() {
     });
 
     router.push(`${pathname}`);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [form, router, pathname]);
 
   return (
     <div className="space-y-2">
@@ -70,6 +69,7 @@ export function ProductFilters() {
               { name: "Sold", value: "sold" },
               { name: "Discount", value: "discount" },
             ]}
+            defaultValue={searchParams.get("sortBy") || ""}
           />
         </div>
       </FormModal>

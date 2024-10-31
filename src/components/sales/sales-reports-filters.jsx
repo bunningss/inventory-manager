@@ -175,6 +175,7 @@ export function SalesReportsFilters() {
               { name: "Due / বকেয়া", value: "due" },
               { name: "amount / টাকার পরিমাণ", value: "amount" },
             ]}
+            defaultValue={searchParams.get("sortBy") || ""}
           />
         </div>
       </FormModal>
