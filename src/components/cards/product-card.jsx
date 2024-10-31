@@ -4,6 +4,7 @@ import { DeleteItem } from "../modals/delete";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { CalculatePrice } from "../product-cards/calculate-price";
 import { Button } from "../ui/button";
+import { AddProductQuantity } from "../modals/add-product-quantity";
 
 export function ProductCard({ product, disabled }) {
   return (
@@ -43,7 +44,7 @@ export function ProductCard({ product, disabled }) {
               className="flex-col md:flex-row"
             />
             <div className="space-x-2">
-              <Button icon="plus" size="icon" className="rounded-full" />
+              <AddProductQuantity data={product} />
               {!disabled && (
                 <Link href={`/dashboard/products/${product?.slug}`} passHref>
                   <Button size="icon" className="rounded-full" icon="edit" />

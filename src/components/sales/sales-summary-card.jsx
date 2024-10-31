@@ -31,6 +31,8 @@ export function SalesSummaryCard({ product }) {
             <Button
               icon="close"
               variant="destructive"
+              size="icon"
+              className="rounded-full"
               onClick={() => onRemove(product._id)}
             />
           </div>
