@@ -1,15 +1,13 @@
+import { Suspense } from "react";
 import { Block } from "@/components/block";
 import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
 import { SalesReportsFilters } from "@/components/sales/sales-reports-filters";
 import { SalesReportsTable } from "@/components/sales/sales-reports-table";
 import { getData } from "@/utils/api-calls";
-import { Suspense } from "react";
 
-async function Reports({ searchParams }) {
+async function fetchReportsData(searchParams) {
   const { from, to, sortBy, searchKey, all } = searchParams;
-
-  // prepare query string
   const queryParams = new URLSearchParams({
     ...(from && { from }),
     ...(to && { to }),
@@ -18,40 +16,32 @@ async function Reports({ searchParams }) {
     ...(all && { all }),
   }).toString();
 
-  // Fetch data with query parameters
-  const res = await getData(`sales?${queryParams}`, 0);
+  return getData(`sales?${queryParams}`, 0);
+}
 
+async function Reports({ searchParams, from, to }) {
+  const res = await fetchReportsData(searchParams);
+  if (res.response.payload?.sales?.length > 0) {
+    return (
+      <SalesReportsTable data={res.response.payload} from={from} to={to} />
+    );
+  }
   return (
-    <>
-      {res.response.payload?.sales?.length > 0 && (
-        <SalesReportsTable
-          data={res.response.payload}
-          from={new Date(searchParams.from).toDateString()}
-          to={new Date(searchParams.to).toDateString()}
-        />
-      )}
-
-      {res.response.payload?.sales?.length <= 0 && (
-        <Empty
-          message="No data found. / কোন তথ্য পাওয়া যায়নি"
-          className="bg-background mt-4"
-        />
-      )}
-    </>
+    <Empty
+      message="No data found. / কোন তথ্য পাওয়া যায়নি"
+      className="bg-background mt-4"
+    />
   );
 }
 
 export default async function Page({ searchParams }) {
+  const from = new Date(searchParams.from).toDateString();
+  const to = new Date(searchParams.to).toDateString();
+
   const headerContent = (
     <span className="block text-muted-foreground mt-4">
-      From{" "}
-      <span className="text-primary">
-        {new Date(searchParams.from).toDateString()}
-      </span>{" "}
-      to{" "}
-      <span className="text-primary">
-        {new Date(searchParams.to).toDateString()}
-      </span>
+      From <span className="text-primary">{from}</span> to{" "}
+      <span className="text-primary">{to}</span>
     </span>
   );
 
@@ -59,7 +49,7 @@ export default async function Page({ searchParams }) {
     <Block title="previous sales" headerContent={headerContent}>
       <SalesReportsFilters />
       <Suspense fallback={<Loading className="mt-4 py-8" />}>
-        <Reports searchParams={searchParams} />
+        <Reports from={from} to={to} searchParams={searchParams} />
       </Suspense>
     </Block>
   );

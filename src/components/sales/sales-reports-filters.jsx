@@ -4,12 +4,12 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DatePickerWithRange } from "../date-range-picker";
 import { Button } from "../ui/button";
 import { FormModal } from "../form/form-modal";
 import { FormInput } from "../form/form-input";
 import { FormSelect } from "../form/form-select";
-import { useEffect, useState } from "react";
 import { formatDate } from "@/utils/helpers";
 
 const formSchema = z.object({
@@ -18,7 +18,6 @@ const formSchema = z.object({
 });
 
 export function SalesReportsFilters() {
-  const [resetKey, setResetKey] = useState(0);
   const [activeFilter, setActiveFilter] = useState("today");
   const router = useRouter();
   const pathname = usePathname();
@@ -37,119 +36,114 @@ export function SalesReportsFilters() {
     form.setValue("sortBy", sortBy);
   }, [searchParams, form]);
 
-  const createQueryString = (from, to) => {
-    const params = new URLSearchParams(searchParams);
-    const type = params.get("all");
-    if (type) {
+  const createQueryString = useCallback(
+    (from, to) => {
+      const params = new URLSearchParams(searchParams);
       params.delete("all");
-    }
-    params.set("from", from);
-    params.set("to", to);
-    return params.toString();
-  };
+      params.set("from", from);
+      params.set("to", to);
+      return params.toString();
+    },
+    [searchParams]
+  );
 
-  const updateDateRange = (from, to) => {
-    const queryString = createQueryString(formatDate(from), formatDate(to));
-    router.push(`${pathname}?${queryString}`);
-  };
+  const updateDateRange = useCallback(
+    (from, to) => {
+      const queryString = createQueryString(formatDate(from), formatDate(to));
+      router.push(`${pathname}?${queryString}`);
+    },
+    [createQueryString, router, pathname]
+  );
 
-  const handleToday = () => {
+  const handleDateFilter = useCallback(
+    (filterType) => {
+      const today = new Date();
+      let from, to;
+
+      switch (filterType) {
+        case "today":
+          from = to = today;
+          break;
+        case "week":
+          from = new Date(today.setDate(today.getDate() - today.getDay()));
+          to = new Date(from);
+          to.setDate(to.getDate() + 6);
+          break;
+        case "month":
+          from = new Date(today.getFullYear(), today.getMonth(), 1);
+          to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+          break;
+        case "year":
+          from = new Date(today.getFullYear(), 0, 1);
+          to = new Date(today.getFullYear(), 11, 31);
+          break;
+        default:
+          return;
+      }
+
+      updateDateRange(from, to);
+      setActiveFilter(filterType);
+    },
+    [updateDateRange]
+  );
+
+  const handleClear = useCallback(() => {
     const today = new Date();
-    updateDateRange(today, today);
-    setActiveFilter("today");
-  };
-
-  const handleClear = () => {
     const params = new URLSearchParams();
-    params.set("from", formatDate(new Date()));
-    params.set("to", formatDate(new Date()));
+    params.set("from", formatDate(today));
+    params.set("to", formatDate(today));
 
     form.reset({
       searchKey: "",
       sortBy: "",
     });
 
-    setResetKey((prevKey) => prevKey + 1);
-
     router.push(`${pathname}?${params.toString()}`);
-
     setActiveFilter("today");
-  };
+  }, [form, router, pathname]);
 
-  const handleThisWeek = () => {
-    const today = new Date();
-    const firstDayOfWeek = new Date(
-      today.setDate(today.getDate() - today.getDay())
-    );
-    const lastDayOfWeek = new Date(firstDayOfWeek);
-    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 6);
-    updateDateRange(firstDayOfWeek, lastDayOfWeek);
-    setActiveFilter("week");
-  };
-
-  const handleThisMonth = () => {
-    const today = new Date();
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const lastDayOfMonth = new Date(
-      today.getFullYear(),
-      today.getMonth() + 1,
-      0
-    );
-    updateDateRange(firstDayOfMonth, lastDayOfMonth);
-    setActiveFilter("month");
-  };
-
-  const handleThisYear = () => {
-    const today = new Date();
-    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
-    const lastDayOfYear = new Date(today.getFullYear(), 11, 31);
-    updateDateRange(firstDayOfYear, lastDayOfYear);
-    setActiveFilter("year");
-  };
-
-  const handleAll = () => {
-    const params = new URLSearchParams();
+  const handleAll = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("from");
+    params.delete("to");
     params.set("all", "all");
     router.push(`${pathname}?${params.toString()}`);
     setActiveFilter("all");
-  };
+  }, [searchParams, router, pathname]);
 
-  const handleSubmit = (data) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("searchKey", data.searchKey || "");
-    params.set("sortBy", data.sortBy || "");
+  const handleSubmit = useCallback(
+    (data) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("searchKey", data.searchKey || "");
+      params.set("sortBy", data.sortBy || "");
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [searchParams, router, pathname]
+  );
 
-    router.push(`${pathname}?${params.toString()}`);
-  };
+  const filterButtons = useMemo(
+    () => [
+      { label: "Today", filter: "today" },
+      { label: "This Week", filter: "week" },
+      { label: "This Month", filter: "month" },
+      { label: "This Year", filter: "year" },
+    ],
+    []
+  );
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <div className="space-x-4">
-          <Button
-            onClick={handleToday}
-            variant={activeFilter === "today" ? "default" : "outline"}
-          >
-            Today
-          </Button>
-          <Button
-            onClick={handleThisWeek}
-            variant={activeFilter === "week" ? "default" : "outline"}
-          >
-            This Week
-          </Button>
-          <Button
-            onClick={handleThisMonth}
-            variant={activeFilter === "month" ? "default" : "outline"}
-          >
-            This Month
-          </Button>
-          <Button
-            onClick={handleThisYear}
-            variant={activeFilter === "year" ? "default" : "outline"}
-          >
-            This Year
-          </Button>
+          {filterButtons.map(({ label, filter }) => (
+            <Button
+              key={filter}
+              onClick={() => handleDateFilter(filter)}
+              variant={activeFilter === filter ? "default" : "outline"}
+            >
+              {label}
+            </Button>
+          ))}
           <Button
             onClick={handleAll}
             variant={activeFilter === "all" ? "default" : "outline"}
@@ -173,23 +167,13 @@ export function SalesReportsFilters() {
             placeholder="Receipt ID or Customer Name"
           />
           <FormSelect
-            key={resetKey}
             form={form}
             name="sortBy"
             placeholder="Sort by"
             options={[
-              {
-                name: "none",
-                value: null,
-              },
-              {
-                name: "Due / বকেয়া",
-                value: "due",
-              },
-              {
-                name: "amount / টাকার পরিমাণ",
-                value: "amount",
-              },
+              { name: "none", value: null },
+              { name: "Due / বকেয়া", value: "due" },
+              { name: "amount / টাকার পরিমাণ", value: "amount" },
             ]}
           />
         </div>
