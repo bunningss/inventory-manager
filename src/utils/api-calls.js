@@ -1,106 +1,100 @@
 "use server";
 
+import axios from "axios";
 import { getCookie } from "./cookie";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+async function getAuthToken() {
+  return await getCookie("ze-session");
+}
+
 export async function postData(url, data) {
-  const token = await getCookie("ze-session");
+  const token = await getAuthToken();
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "auth-token": `Bearer ${token}`,
-    },
-  });
+  try {
+    const res = await axios.post(apiUrl + url, data, {
+      headers: {
+        "auth-token": `Bearer ${token}`,
+      },
+    });
 
-  const resData = await res.json();
-  if (!res.ok) {
+    return {
+      error: false,
+      response: res.data,
+    };
+  } catch (error) {
     return {
       error: true,
-      response: resData,
+      response: error.response?.data || error.message,
     };
   }
-
-  return {
-    error: false,
-    response: resData,
-  };
 }
 
 export async function getData(url, revalidate = 600) {
-  const token = await getCookie("ze-session");
+  const token = await getAuthToken();
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-    method: "GET",
-    headers: {
-      "auth-token": `Bearer ${token}`,
-    },
-    next: { revalidate: revalidate },
-  });
+  try {
+    const res = await axios.get(apiUrl + url, {
+      headers: {
+        "auth-token": `Bearer ${token}`,
+      },
+      params: { revalidate },
+    });
 
-  const resData = await res.json();
-
-  if (!res.ok) {
+    return {
+      error: false,
+      response: res.data,
+    };
+  } catch (error) {
     return {
       error: true,
-      response: resData,
+      response: error.response?.data || error.message,
     };
   }
-
-  return {
-    error: false,
-    response: resData,
-  };
 }
 
 export async function putData(url, data) {
-  const token = await getCookie("ze-session");
+  const token = await getAuthToken();
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-    method: "PUT",
-    headers: {
-      "auth-token": `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const res = await axios.put(apiUrl + url, data, {
+      headers: {
+        "auth-token": `Bearer ${token}`,
+      },
+    });
 
-  const resData = await res.json();
-
-  if (!res.ok) {
+    return {
+      error: false,
+      response: res.data,
+    };
+  } catch (error) {
     return {
       error: true,
-      response: resData,
+      response: error.response?.data || error.message,
     };
   }
-
-  return {
-    error: false,
-    response: resData,
-  };
 }
 
 export async function deleteData(url, data) {
-  const token = await getCookie("ze-session");
+  const token = await getAuthToken();
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + url, {
-    method: "DELETE",
-    headers: {
-      "auth-token": `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const res = await axios.delete(apiUrl + url, {
+      headers: {
+        "auth-token": `Bearer ${token}`,
+      },
+      data, // axios allows the data to be passed here
+    });
 
-  const resData = await res.json();
-
-  if (!res.ok) {
+    return {
+      error: false,
+      response: res.data,
+    };
+  } catch (error) {
     return {
       error: true,
-      response: resData,
+      response: error.response?.data || error.message,
     };
   }
-
-  return {
-    error: false,
-    response: resData,
-  };
 }
