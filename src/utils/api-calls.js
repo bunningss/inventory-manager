@@ -26,7 +26,7 @@ export async function postData(url, data) {
   } catch (error) {
     return {
       error: true,
-      response: error.response?.data || error.message,
+      response: error.response?.data,
     };
   }
 }
