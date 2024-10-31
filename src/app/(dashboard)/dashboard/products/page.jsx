@@ -34,7 +34,7 @@ export default async function Page({ searchParams }) {
   return (
     <Block title="all products" className="space-y-8">
       <ProductFilters />
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading className="py-8" />}>
         <Products searchParams={searchParams} />
       </Suspense>
     </Block>
