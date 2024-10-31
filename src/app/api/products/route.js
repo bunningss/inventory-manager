@@ -1,8 +1,8 @@
+import Product from "@/lib/models/Product";
+import Category from "@/lib/models/Category";
 import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
 import { verifyToken } from "@/utils/auth";
-import Product from "@/lib/models/Product";
-import Category from "@/lib/models/Category";
 
 // Get all products
 export async function GET(request) {
@@ -11,9 +11,8 @@ export async function GET(request) {
   const category = reqUrl.searchParams.get("category");
   const subCategory = reqUrl.searchParams.get("sub");
   const featured = reqUrl.searchParams.get("featured");
-  const sortBySold = reqUrl.searchParams.get("sortBySold");
-  const sortByStock = reqUrl.searchParams.get("sortByStock");
   const limit = parseInt(reqUrl.searchParams.get("limit")) || 10;
+  const sortBy = reqUrl.searchParams.get("sortBy");
 
   try {
     await connectDb();
@@ -51,14 +50,17 @@ export async function GET(request) {
       query.featured = featured === "true";
     }
 
-    // Sort by most sold items
-    if (sortBySold === "true") {
-      sort.sold = -1;
-    }
-
-    // Sort by low stock items
-    if (sortByStock === "true") {
+    // Additional sorting based on sortBy parameter
+    if (sortBy === "name") {
+      sort.title = 1; // A-Z
+    } else if (sortBy === "price") {
+      sort.price = -1; // Highest to lowest
+    } else if (sortBy === "discount") {
+      sort.discountedPrice = 1; // Lowest to highest
+    } else if (sortBy === "stock") {
       sort.stock = 1;
+    } else if (sortBy === "sold") {
+      sort.sold = -1;
     }
 
     const productsQuery = Product.find(query)
