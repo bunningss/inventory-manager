@@ -127,6 +127,7 @@ export async function GET(request) {
     let to = reqUrl.searchParams.get("to");
     let sortBy = reqUrl.searchParams.get("sortBy") || "createdAt";
     let searchKey = reqUrl.searchParams.get("searchKey");
+    const type = reqUrl.searchParams.get("all");
 
     const filter = {};
 
@@ -136,16 +137,18 @@ export async function GET(request) {
     const endOfDay = new Date();
     endOfDay.setHours(23, 59, 59, 999);
 
-    // Determine the filter based on the presence of from and to
-    if (from && to) {
-      const fromDate = new Date(from);
-      const toDate = new Date(to);
-      fromDate.setHours(0, 0, 0, 0);
-      toDate.setHours(23, 59, 59, 999);
-      filter.createdAt = { $gte: fromDate, $lte: toDate };
-    } else {
-      // If neither from nor to is provided, filter for today's sales
-      filter.createdAt = { $gte: startOfDay, $lte: endOfDay };
+    // Determine the filter based on the presence of 'type' and dates
+    if (type !== "all") {
+      if (from && to) {
+        const fromDate = new Date(from);
+        const toDate = new Date(to);
+        fromDate.setHours(0, 0, 0, 0);
+        toDate.setHours(23, 59, 59, 999);
+        filter.createdAt = { $gte: fromDate, $lte: toDate };
+      } else {
+        // If neither from nor to is provided, filter for today's sales
+        filter.createdAt = { $gte: startOfDay, $lte: endOfDay };
+      }
     }
 
     // Add due filter if sortBy is 'due'
@@ -155,7 +158,10 @@ export async function GET(request) {
 
     // Add search filter if searchKey is provided
     if (searchKey) {
-      filter.saleId = { $regex: searchKey, $options: "i" }; // Case-insensitive search
+      filter.$or = [
+        { saleId: { $regex: searchKey, $options: "i" } },
+        { customerName: { $regex: searchKey, $options: "i" } },
+      ];
     }
 
     await connectDb();

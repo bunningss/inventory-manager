@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { errorNotification } from "@/utils/toast";
+import { formatDate } from "@/utils/helpers";
 
 export function DatePickerWithRange({
   className,
@@ -34,8 +35,12 @@ export function DatePickerWithRange({
     if (!date.to || !date.from) return errorNotification("Please select date.");
 
     const params = new URLSearchParams(searchParams);
-    params.set("from", date.from?.toISOString());
-    params.set("to", date.to?.toISOString());
+    params.set("from", formatDate(date.from));
+    params.set("to", formatDate(date.to));
+    const type = params.get("all");
+    if (type) {
+      params.delete("all");
+    }
 
     router.push(`${pathname}?${params.toString()}`);
     setActiveFilter("custom");

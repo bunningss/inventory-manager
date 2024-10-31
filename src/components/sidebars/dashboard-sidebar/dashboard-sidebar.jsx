@@ -1,3 +1,4 @@
+import { formatDate } from "@/utils/helpers";
 import { DashboardSidebarItem } from "./dashboard-sidebar-item";
 
 const sidebarItems = [
@@ -15,9 +16,9 @@ const sidebarItems = [
   },
   {
     label: "sales reports / বিক্রি রিপোর্ট",
-    href: `/dashboard/sales-reports?from=${
-      new Date(Date.now()).toISOString()?.split("T")[0]
-    }&to=${new Date(Date.now()).toISOString()?.split("T")[0]}`,
+    href: `/dashboard/sales-reports?from=${formatDate(
+      new Date(Date.now())
+    )}&to=${formatDate(new Date(Date.now()))}`,
     icon: "reports",
     children: [],
   },

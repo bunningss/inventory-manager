@@ -10,6 +10,7 @@ import { FormModal } from "../form/form-modal";
 import { FormInput } from "../form/form-input";
 import { FormSelect } from "../form/form-select";
 import { useEffect, useState } from "react";
+import { formatDate } from "@/utils/helpers";
 
 const formSchema = z.object({
   searchKey: z.string().optional().nullable(),
@@ -36,12 +37,12 @@ export function SalesReportsFilters() {
     form.setValue("sortBy", sortBy);
   }, [searchParams, form]);
 
-  const formatDate = (date) => {
-    return date.toISOString()?.split("T")[0];
-  };
-
   const createQueryString = (from, to) => {
     const params = new URLSearchParams(searchParams);
+    const type = params.get("all");
+    if (type) {
+      params.delete("all");
+    }
     params.set("from", from);
     params.set("to", to);
     return params.toString();
@@ -60,8 +61,8 @@ export function SalesReportsFilters() {
 
   const handleClear = () => {
     const params = new URLSearchParams();
-    params.set("from", new Date().toISOString());
-    params.set("to", new Date().toISOString());
+    params.set("from", formatDate(new Date()));
+    params.set("to", formatDate(new Date()));
 
     form.reset({
       searchKey: "",
@@ -107,7 +108,9 @@ export function SalesReportsFilters() {
   };
 
   const handleAll = () => {
-    // Implement the logic for "All" filter here
+    const params = new URLSearchParams();
+    params.set("all", "all");
+    router.push(`${pathname}?${params.toString()}`);
     setActiveFilter("all");
   };
 
@@ -164,7 +167,11 @@ export function SalesReportsFilters() {
       </div>
       <FormModal form={form} formLabel="search" onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-4">
-          <FormInput form={form} name="searchKey" placeholder="Order ID" />
+          <FormInput
+            form={form}
+            name="searchKey"
+            placeholder="Receipt ID or Customer Name"
+          />
           <FormSelect
             key={resetKey}
             form={form}

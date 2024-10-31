@@ -7,7 +7,7 @@ import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function Reports({ searchParams }) {
-  const { from, to, sortBy, searchKey } = searchParams;
+  const { from, to, sortBy, searchKey, all } = searchParams;
 
   // prepare query string
   const queryParams = new URLSearchParams({
@@ -15,6 +15,7 @@ async function Reports({ searchParams }) {
     ...(to && { to }),
     ...(sortBy && { sortBy }),
     ...(searchKey && { searchKey }),
+    ...(all && { all }),
   }).toString();
 
   // Fetch data with query parameters
