@@ -19,6 +19,9 @@ export async function POST(request) {
     await connectDb();
 
     const body = await request.json();
+    console.log(body); // temporary error fixing
+    if (!Array.isArray(body.products) || body.products?.length <= 0)
+      return NextResponse.json({ msg: "Invalid Sales data." }, { status: 400 });
 
     if (body.amount <= 0)
       return NextResponse.json(
@@ -33,7 +36,7 @@ export async function POST(request) {
       const dbProduct = await Product.findById(product._id);
       if (!dbProduct)
         return NextResponse.json(
-          { msg: "Invalid product selected." },
+          { msg: `Invalid product selected. ${product.title}` },
           { status: 400 }
         );
 
