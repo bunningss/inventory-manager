@@ -64,10 +64,10 @@ export function ProductFilters() {
             options={[
               { name: "none", value: null },
               { name: "Price (High to Low)", value: "price" },
+              { name: "Price (Low to High)", value: "discount" },
               { name: "Name (A - Z)", value: "name" },
-              { name: "Stock", value: "stock" },
-              { name: "Sold", value: "sold" },
-              { name: "Discount", value: "discount" },
+              { name: "Stock (Low to High)", value: "stock" },
+              { name: "Sales (High to Low)", value: "sold" },
             ]}
             defaultValue={searchParams.get("sortBy") || ""}
           />
