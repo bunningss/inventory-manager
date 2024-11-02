@@ -17,6 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { sendTelegramMessage } from "@/utils/send-telegram-message";
 
 const formSchema = z.object({
   paid: z.string().optional().nullable(),
@@ -54,6 +55,7 @@ export function SalesSummary() {
         return errorNotification(res.response.msg);
       }
 
+      await sendTelegramMessage("Sold!!");
       router.push(`/dashboard/sales-reports/${res.response.payload._id}`);
       onClear();
       successNotification(res.response.msg);

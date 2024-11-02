@@ -19,7 +19,7 @@ export async function POST(request) {
     await connectDb();
 
     const body = await request.json();
-    console.log(body); // temporary error fixing
+
     if (!Array.isArray(body.products) || body.products?.length <= 0)
       return NextResponse.json({ msg: "Invalid Sales data." }, { status: 400 });
 
