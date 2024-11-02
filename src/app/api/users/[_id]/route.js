@@ -62,7 +62,7 @@ export async function PUT(request, { params }) {
 
     await connectDb();
 
-    const userData = await User.findById(user.payload?._id);
+    const userData = await User.findById(params?._id);
     if (!userData)
       return NextResponse.json({ msg: "Invalid request." }, { status: 404 });
 
@@ -74,16 +74,10 @@ export async function PUT(request, { params }) {
         { status: 400 }
       );
 
-    if (body.bkash && body.bkash.length < 11)
-      return NextResponse.json(
-        { msg: "Please enter a valid bKash number." },
-        { status: 400 }
-      );
-
     if (userData?.role?.toLowerCase() === "admin") {
       if (body.role?.toLowerCase() !== userData.role?.toLowerCase()) {
         await User.findByIdAndUpdate(
-          user.payload._id,
+          params._id,
           {
             role: body.role,
           },
@@ -95,12 +89,11 @@ export async function PUT(request, { params }) {
     }
 
     await User.findByIdAndUpdate(
-      user.payload._id,
+      params._id,
       {
         name: body.name || userData.name,
         gender: body.gender,
         phone: body.phone,
-        bkash: body.bkash,
       },
       {
         new: true,
@@ -108,6 +101,22 @@ export async function PUT(request, { params }) {
     );
 
     return NextResponse.json({ msg: "Data updated." }, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ msg: err.message }, { status: 400 });
+  }
+}
+
+// Delete user
+export async function DELETE(request, { params }) {
+  try {
+    const user = await verifyToken(request);
+    if (user.payload?.role !== "admin") {
+      return NextResponse.json({ msg: "Unauthorized." }, { status: 403 });
+    }
+
+    await User.findByIdAndDelete(params?._id);
+
+    return NextResponse.json({ msg: "User deleted." }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ msg: err.message }, { status: 400 });
   }
