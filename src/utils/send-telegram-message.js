@@ -1,3 +1,4 @@
+"use server";
 import axios from "axios";
 
 export async function sendTelegramMessage(message) {
@@ -11,13 +12,7 @@ export async function sendTelegramMessage(message) {
   };
 
   try {
-    const response = await axios.post(url, payload);
-
-    if (response.data.ok) {
-      console.log("Message sent successfully:", response.data.result);
-    } else {
-      console.error("Error sending message:", response.data.description);
-    }
+    await axios.post(url, payload);
   } catch (error) {
     console.error("Error sending message to Telegram:", error.message);
   }
