@@ -38,7 +38,7 @@ export function LoginForm() {
 
     try {
       const res = await postData("login", data);
-      console.log(res);
+
       if (res.error) {
         return errorNotification(res.response.msg);
       }
