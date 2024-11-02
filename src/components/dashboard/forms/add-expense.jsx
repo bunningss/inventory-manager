@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/api-calls";
@@ -6,34 +7,37 @@ import { errorNotification, successNotification } from "@/utils/toast";
 import { FormInput } from "@/components/form/form-input";
 import { Editor } from "../editor";
 import { FormModal } from "@/components/form/form-modal";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { sendTelegramMessage } from "@/utils/send-telegram-message";
 
 const formSchema = z.object({
-  title: z.string(),
-  amount: z.string(),
-  date: z.string(),
+  title: z.string().min(1, "Title is required"),
+  amount: z.string().min(1, "Amount is required"),
+  date: z.string().min(1, "Date is required"),
+  details: z.string().optional(),
 });
 
 export function AddExpense() {
   const [isLoading, setIsLoading] = useState(false);
-  const [description, setDescription] = useState("");
   const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      amount: "",
+      date: "",
+      details: "",
+    },
   });
 
   const handleSubmit = async (data) => {
     setIsLoading(true);
 
     try {
-      const res = await postData("expenses", {
-        ...data,
-        details: description,
-      });
+      const res = await postData("expenses", data);
       if (res.error) {
         return errorNotification(res.response.msg);
       }
@@ -79,17 +83,22 @@ export function AddExpense() {
             form={form}
             label="amount"
             placeholder="e.g. 999"
+            type="number"
             min={0}
             required
             name="amount"
           />
         </div>
-        <Editor
-          content={description}
-          setContent={setDescription}
-          label="details"
-          required
-          placeholder="details of expenses"
+        <Controller
+          name="details"
+          render={({ field }) => (
+            <Editor
+              content={field.value}
+              setContent={field.onChange}
+              label="details"
+              placeholder="details of expenses"
+            />
+          )}
         />
       </FormModal>
     </div>

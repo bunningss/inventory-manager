@@ -1,9 +1,8 @@
 "use client";
+
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-const JoditEditor = dynamic(async () => await import("jodit-react"), {
-  ssr: false,
-});
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 export function Editor({ placeholder, label, required, content, setContent }) {
   const config = useMemo(
@@ -20,7 +19,7 @@ export function Editor({ placeholder, label, required, content, setContent }) {
       {label && (
         <label
           className={`capitalize ${
-            required && "after:content-['*'] after:text-destructive"
+            required ? "after:content-['*'] after:text-destructive" : ""
           }`}
         >
           {label}
