@@ -1,6 +1,7 @@
 import { Card, CardContent, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Icon } from "../icon";
+import { UpdateUser } from "../modals/update-user";
 
 export function UserCard({ user }) {
   return (
@@ -22,7 +23,7 @@ export function UserCard({ user }) {
               </span>
             </span>
             <div className="space-x-2">
-              <Button size="icon" className="rounded-full" icon="edit" />
+              <UpdateUser data={user} />
               <Button
                 variant="destructive"
                 size="icon"

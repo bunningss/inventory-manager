@@ -13,10 +13,10 @@ export async function GET(request, { params }) {
   try {
     const user = await verifyToken(request);
     if (user.error)
-      NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+      NextResponse.json({ msg: "Unauthorized." }, { status: 401 });
 
     if (user.payload?._id !== params._id && user.payload?.role !== "admin") {
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+      return NextResponse.json({ msg: "Unauthorized." }, { status: 403 });
     }
 
     await connectDb();
@@ -35,6 +35,10 @@ export async function GET(request, { params }) {
       })
       .select("-password -role -__v");
 
+    if (!userData) {
+      return NextResponse.json({ msg: "User not found." }, { status: 404 });
+    }
+
     return NextResponse.json(
       { msg: "Data found.", payload: userData },
       { status: 200 }
@@ -50,13 +54,17 @@ export async function PUT(request, { params }) {
   try {
     const user = await verifyToken(request);
     if (user.error)
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+      return NextResponse.json({ msg: "Unauthorized." }, { status: 401 });
+
+    if (user.payload?._id !== params._id && user.payload?.role !== "admin") {
+      return NextResponse.json({ msg: "Unauthorized." }, { status: 403 });
+    }
 
     await connectDb();
 
     const userData = await User.findById(user.payload?._id);
     if (!userData)
-      return NextResponse.json({ msg: "Invalid request." }, { status: 400 });
+      return NextResponse.json({ msg: "Invalid request." }, { status: 404 });
 
     const body = await request.json();
 
@@ -72,8 +80,22 @@ export async function PUT(request, { params }) {
         { status: 400 }
       );
 
+    if (userData?.role?.toLowerCase() === "admin") {
+      if (body.role?.toLowerCase() !== userData.role?.toLowerCase()) {
+        await User.findByIdAndUpdate(
+          user.payload._id,
+          {
+            role: body.role,
+          },
+          {
+            new: true,
+          }
+        );
+      }
+    }
+
     await User.findByIdAndUpdate(
-      params._id,
+      user.payload._id,
       {
         name: body.name || userData.name,
         gender: body.gender,
