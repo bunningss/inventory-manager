@@ -9,6 +9,7 @@ import { FormModal } from "@/components/form/form-modal";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { sendTelegramMessage } from "@/utils/send-telegram-message";
 
 const formSchema = z.object({
   title: z.string(),
@@ -36,6 +37,10 @@ export function AddExpense() {
       if (res.error) {
         return errorNotification(res.response.msg);
       }
+
+      await sendTelegramMessage(
+        `🧾 নতুন খরচ যোগ করা হয়েছে. \nবর্ণনা: ${data.title}\nমোট:৳${data.amount} \nতারিখ: ${data.date}`
+      );
       successNotification(res.response.msg);
       router.push("/dashboard/expenses");
     } catch (err) {
@@ -74,7 +79,6 @@ export function AddExpense() {
             form={form}
             label="amount"
             placeholder="e.g. 999"
-            type="number"
             min={0}
             required
             name="amount"

@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useCallback } from "react";
+import { sendTelegramMessage } from "@/utils/send-telegram-message";
 
-export function DeleteItem({ _id, requestUrl }) {
+export function DeleteItem({ _id, requestUrl, message }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -27,6 +28,9 @@ export function DeleteItem({ _id, requestUrl }) {
         return errorNotification(res.response.msg);
       }
 
+      if (message) {
+        await sendTelegramMessage(message);
+      }
       successNotification(res.response.msg);
       router.refresh();
       handleModalClose();

@@ -55,7 +55,17 @@ export function SalesSummary() {
         return errorNotification(res.response.msg);
       }
 
-      await sendTelegramMessage("Sold!!");
+      // Format salesItems into a string
+      const productsList = salesItems
+        .map(
+          (item) =>
+            `${item.title} - ৳${item.price / 100} x ${item.quantity} পিস`
+        )
+        .join("\n");
+
+      await sendTelegramMessage(
+        `💵 মোট বিক্রয়: ${total / 100}টাকা.\nবিস্তারিত বিবরণ:\n${productsList}`
+      );
       router.push(`/dashboard/sales-reports/${res.response.payload._id}`);
       onClear();
       successNotification(res.response.msg);
