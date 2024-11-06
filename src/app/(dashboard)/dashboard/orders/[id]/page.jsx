@@ -29,10 +29,6 @@ export default async function Page({ params }) {
             dataValue={`৳ ${order?.totalAfterDiscount / 100}`}
           />
           <DataCell
-            dataName="total after comission"
-            dataValue={`৳ ${order?.totalAfterComission / 100}`}
-          />
-          <DataCell
             dataName="seller total amount"
             dataValue={`৳ ${order?.sellerTotal / 100}`}
           />
@@ -52,14 +48,6 @@ export default async function Page({ params }) {
           <DataCell
             dataName="coupon code"
             dataValue={order?.couponCode?.code}
-          />
-          <DataCell
-            dataName="comission"
-            dataValue={`৳ ${order?.comission / 100}`}
-          />
-          <DataCell
-            dataName="comission to"
-            dataValue={order?.comissionTo?.name}
           />
           <DataCell
             dataName="payment method"

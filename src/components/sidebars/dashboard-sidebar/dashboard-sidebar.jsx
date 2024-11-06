@@ -15,6 +15,12 @@ const sidebarItems = [
     children: [],
   },
   {
+    label: "returns / ফেরত",
+    href: "/dashboard/return",
+    icon: "sales",
+    children: [],
+  },
+  {
     label: "sales reports / বিক্রি রিপোর্ট",
     href: `/dashboard/sales-reports?from=${formatDate(
       new Date(Date.now())

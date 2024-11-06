@@ -2,9 +2,11 @@ import { SalesProductCard } from "@/components/sales/sales-product-card";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 import { Loading } from "../loading";
+import { ProductFilters } from "../product-cards/product-filters";
 
-async function Products() {
-  const res = await getData("products", 0);
+async function Products({ searchParams }) {
+  const queryString = new URLSearchParams(searchParams).toString();
+  const res = await getData(`products?${queryString ? queryString : ""}`, 0);
 
   return (
     <>
@@ -15,11 +17,12 @@ async function Products() {
   );
 }
 
-export async function SalesItems() {
+export async function SalesItems({ searchParams }) {
   return (
     <div className="space-y-4">
+      <ProductFilters />
       <Suspense fallback={<Loading className="py-8" />}>
-        <Products />
+        <Products searchParams={searchParams} />
       </Suspense>
     </div>
   );

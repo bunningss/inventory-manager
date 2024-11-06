@@ -148,7 +148,7 @@ async function DashboardData() {
       </Block>
       {/* Recent Orders */}
       <Block
-        title="recent orders"
+        title="recent orders / সর্বশেষ অর্ডার"
         headerContent={<HeaderContent url="/dashboard/orders" />}
       >
         <CardView>
@@ -162,7 +162,7 @@ async function DashboardData() {
       </Block>
       {/* Popular Products */}
       <Block
-        title="Most sold products"
+        title="Most sold products / সর্বাধিক বিক্রিত পণ্য"
         headerContent={
           <HeaderContent
             url={{
@@ -183,7 +183,7 @@ async function DashboardData() {
       </Block>
       {/* Low in stock */}
       <Block
-        title="Low in stock"
+        title="Low in stock / স্টক কম"
         headerContent={
           <HeaderContent
             url={{
