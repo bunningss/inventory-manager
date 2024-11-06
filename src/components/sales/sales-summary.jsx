@@ -89,7 +89,7 @@ export function SalesSummary() {
         formLabel="save"
         onSubmit={handleSubmit}
         loading={isLoading}
-        disabled={isLoading}
+        disabled={isLoading || total <= 0}
       >
         <Heading>Total: ৳ {total / 100}</Heading>
 

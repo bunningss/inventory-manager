@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormModal } from "../form/form-modal";
 import { FormInput } from "../form/form-input";
+import { errorNotification } from "@/utils/toast";
 
 const formSchema = z.object({
   price: z.string().optional().nullable(),
@@ -28,6 +29,12 @@ export function SalesProductCard({ product }) {
   });
 
   const handleSubmit = (data) => {
+    if (
+      isNaN(data.price) ||
+      isNaN(factorCartPrice(product?.discountedPrice, product?.price))
+    )
+      return errorNotification("Invalid Price.");
+
     onAdd({
       ...product,
       quantity: data.quantity ? data.quantity * 1 : 1,

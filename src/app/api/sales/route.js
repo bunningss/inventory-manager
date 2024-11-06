@@ -31,8 +31,12 @@ export async function POST(request) {
 
     if (body.paid * 100 > body.amount)
       return NextResponse.json({ msg: "Invalid amount." }, { status: 400 });
-
     for (const product of body.products) {
+      if (isNaN(product.price))
+        return NextResponse.json({
+          msg: `Invalid price. Remove ${product.title} and try again.`,
+        });
+
       const dbProduct = await Product.findById(product._id);
       if (!dbProduct)
         return NextResponse.json(
@@ -43,23 +47,6 @@ export async function POST(request) {
       if (product.quantity > dbProduct.stock)
         return NextResponse.json(
           { msg: `${dbProduct.title} out of stock.` },
-          { status: 400 }
-        );
-
-      let saleProductPrice =
-        product.discountedPrice <= product.price
-          ? product.discountedPrice
-          : product.price;
-      let dbProductPrice =
-        dbProduct.discountedPrice <= dbProduct.price
-          ? dbProduct.discountedPrice
-          : dbProduct.price;
-
-      if (saleProductPrice !== dbProductPrice)
-        return NextResponse.json(
-          {
-            msg: `Price mismatch for ${product.title}. Remove the product from cart and add again.`,
-          },
           { status: 400 }
         );
     }

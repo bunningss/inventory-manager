@@ -24,7 +24,9 @@ export function SalesSummaryCard({ product }) {
             {product?.title}
           </CardTitle>
           <div className="flex gap-2">
-            <span>Quantity: {product?.quantity}</span>
+            <span>
+              ৳{product.price / 100} x {product?.quantity}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <span>Total: ৳{(product.price * product.quantity) / 100}</span>
@@ -33,7 +35,7 @@ export function SalesSummaryCard({ product }) {
               variant="destructive"
               size="icon"
               className="rounded-full"
-              onClick={() => onRemove(product._id)}
+              onClick={() => onRemove(product?._id, product?.price)}
             />
           </div>
         </div>
