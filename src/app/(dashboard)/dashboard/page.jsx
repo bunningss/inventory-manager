@@ -20,12 +20,12 @@ async function DashboardData() {
           res.response.payload?.totalSales) /
         100
       }`,
-      icon: "total",
+      icon: "receipt",
     },
     {
       dataKey: "total expense / মোট খরচ",
       dataValue: `৳ ${res.response.payload?.totalExpenses / 100}`,
-      icon: "total",
+      icon: "expense",
     },
     {
       dataKey: "total revenue / মোট লাভ",
@@ -35,7 +35,7 @@ async function DashboardData() {
           res.response.payload?.totalExpenses) /
         100
       }`,
-      icon: "total",
+      icon: "receipt",
     },
   ];
 
@@ -47,27 +47,27 @@ async function DashboardData() {
           res.response.payload?.currentMonthTotalSales) /
         100
       }`,
-      icon: "total",
+      icon: "receipt",
     },
     {
       dataKey: "total orders / মোট অর্ডার",
       dataValue: `${res.response.payload?.currentMonthTotalOrders}`,
-      icon: "total",
+      icon: "receipt",
     },
     {
       dataKey: "completed orders / সম্পূর্ণ",
       dataValue: `${res.response.payload?.currentMonthCompletedOrders}`,
-      icon: "total",
+      icon: "verified",
     },
     {
       dataKey: "cancelled orders / বাতিল",
       dataValue: `${res.response.payload?.currentMonthCancelledOrders}`,
-      icon: "total",
+      icon: "cancel",
     },
     {
       dataKey: "total expense / মোট খরচ",
       dataValue: `৳ ${res.response.payload?.currentMonthTotalExpenses / 100}`,
-      icon: "total",
+      icon: "expense",
     },
     {
       dataKey: "revenue / আয়",
@@ -77,7 +77,7 @@ async function DashboardData() {
           res.response.payload?.currentMonthTotalExpenses) /
         100
       }`,
-      icon: "total",
+      icon: "income",
     },
   ];
 

@@ -17,7 +17,7 @@ const sidebarItems = [
   {
     label: "returns / ফেরত",
     href: "/dashboard/return",
-    icon: "sales",
+    icon: "returns",
     children: [],
   },
   {
