@@ -1,22 +1,23 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/api-calls";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormInput } from "@/components/form/form-input";
-import { Editor } from "../editor";
 import { FormModal } from "@/components/form/form-modal";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { sendTelegramMessage } from "@/utils/send-telegram-message";
+import { CustomEditor } from "../custom-editor";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   amount: z.string().min(1, "Amount is required"),
   date: z.string().min(1, "Date is required"),
-  details: z.string().optional(),
+  details: z.string().min(10, {
+    message: "Details is required.",
+  }),
 });
 
 export function AddExpense() {
@@ -89,17 +90,7 @@ export function AddExpense() {
             name="amount"
           />
         </div>
-        <Controller
-          name="details"
-          render={({ field }) => (
-            <Editor
-              content={field.value}
-              setContent={field.onChange}
-              label="details"
-              placeholder="details of expenses"
-            />
-          )}
-        />
+        <CustomEditor name="details" form={form} />
       </FormModal>
     </div>
   );

@@ -1,8 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
+import { useMemo } from "react";
 
 export function Editor({ placeholder, label, required, content, setContent }) {
   const config = useMemo(

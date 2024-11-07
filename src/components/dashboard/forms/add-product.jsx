@@ -7,12 +7,12 @@ import { postData } from "@/utils/api-calls";
 import { Icon } from "@/components/icon";
 import { FormInput } from "@/components/form/form-input";
 import { FormSelect } from "@/components/form/form-select";
-import { Editor } from "../editor";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
+import { CustomEditor } from "../custom-editor";
 
 const formSchema = z.object({
   title: z.string().min(1, "Product title is required"),
@@ -33,11 +33,13 @@ const formSchema = z.object({
   brand: z.string().min(1, "Brand is required"),
   tags: z.string().optional(),
   seoTags: z.string().optional(),
+  description: z.string().min(50, {
+    message: "Description must be at least 50 characters.",
+  }),
   seoDescription: z.string().min(1, "SEO description is required"),
 });
 
 export function AddProduct({ categories }) {
-  const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState([]);
   const router = useRouter();
@@ -61,35 +63,30 @@ export function AddProduct({ categories }) {
       brand: "",
       tags: "",
       seoTags: "",
+      description: "",
       seoDescription: "",
     },
   });
 
   const handleSubmit = async (data) => {
     setIsLoading(true);
-
     try {
       if (images.length <= 0) {
-        return errorToast("Please upload at least one image.");
+        return errorNotification("Please upload at least one image.");
       }
-
       const tags_trimmed = data.tags?.split(",").map((tag) => tag.trim());
       const seo_tags_trimmed = data.seoTags
         ?.split(",")
         .map((tag) => tag.trim());
-
       const res = await postData("products", {
         ...data,
         tags: tags_trimmed,
         seoTags: seo_tags_trimmed,
-        description: description,
         images,
       });
-
       if (res.error) {
         return errorNotification(res.response.msg);
       }
-
       successNotification(res.response.msg);
       router.push("/dashboard/products");
     } catch (err) {
@@ -304,13 +301,7 @@ export function AddProduct({ categories }) {
           type="textarea"
           name="seoTags"
         />
-
-        <Editor
-          label="product description"
-          required
-          content={description}
-          setContent={setDescription}
-        />
+        <CustomEditor name="description" form={form} />
         <FormInput
           form={form}
           placeholder=""

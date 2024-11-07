@@ -1,6 +1,7 @@
 import { Icon } from "@/components/icon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { UpdateExpense } from "../modals/update-expense";
 
 export function ExpenseCard({ expense }) {
   return (
@@ -22,7 +23,7 @@ export function ExpenseCard({ expense }) {
               </span>
             </span>
             <div className="space-x-2">
-              <Button size="icon" className="rounded-full" icon="edit" />
+              <UpdateExpense />
               <Button
                 variant="destructive"
                 size="icon"
