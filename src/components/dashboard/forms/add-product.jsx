@@ -301,7 +301,12 @@ export function AddProduct({ categories }) {
           type="textarea"
           name="seoTags"
         />
-        <CustomEditor name="description" form={form} />
+        <CustomEditor
+          name="description"
+          label="product description"
+          required
+          form={form}
+        />
         <FormInput
           form={form}
           placeholder=""

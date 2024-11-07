@@ -1,8 +1,9 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Controller } from "react-hook-form";
 import { useMemo } from "react";
-import dynamic from "next/dynamic";
+import { FormControl, FormItem, FormLabel } from "../ui/form";
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 export function CustomEditor({ name, form, placeholder, label, required }) {
@@ -19,26 +20,31 @@ export function CustomEditor({ name, form, placeholder, label, required }) {
     <Controller
       name={name}
       control={form.control}
-      render={({ field, fieldState: { error } }) => (
-        <div className="flex flex-col gap-2">
+      render={({ field }) => (
+        <FormItem>
           {label && (
-            <label
-              className={`capitalize ${
-                required ? "after:content-['*'] after:text-destructive" : ""
+            <FormLabel
+              className={`capitalize relative ${
+                required
+                  ? "after:content-['*'] after:absolute after:text-destructive after:text-lg"
+                  : ""
               }`}
             >
               {label}
-            </label>
+            </FormLabel>
           )}
-          <JoditEditor
-            value={field.value}
-            config={config}
-            tabIndex={1}
-            onBlur={field.onChange}
-          />
-
-          {error && <span className="text-destructive">{error?.message}</span>}
-        </div>
+          <FormControl>
+            <JoditEditor
+              value={field.value}
+              config={config}
+              tabIndex={1}
+              onBlur={field.onChange}
+            />
+          </FormControl>
+          {error && (
+            <span className="text-destructive text-sm">{error?.message}</span>
+          )}
+        </FormItem>
       )}
     />
   );
