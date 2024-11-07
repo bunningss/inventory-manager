@@ -30,7 +30,7 @@ export default async function Home() {
         title="popular picks"
         href={{
           pathname: "/shop",
-          query: { category: "popular" },
+          query: { sortBy: "sold" },
         }}
       >
         <Suspense fallback={<ProductviewSkeleton />}>
@@ -45,11 +45,11 @@ export default async function Home() {
         title="best sellers"
         href={{
           pathname: "/shop",
-          query: { sortBySold: "true" },
+          query: { sortBy: "sold" },
         }}
       >
         <Suspense fallback={<ProductviewSkeleton />}>
-          <ProductList query="sortBySold=true" />
+          <ProductList query="sortBy=sold" />
         </Suspense>
       </ProductView>
 
