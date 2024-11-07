@@ -12,7 +12,6 @@ import {
 import { forwardRef } from "react";
 import { Container } from "../container";
 import { getData } from "@/utils/api-calls";
-import { Button } from "../ui/button";
 
 export async function Navigation() {
   const res = await getData("categories", 3600);
@@ -44,7 +43,7 @@ export async function Navigation() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem className="capitalize">
-              <Link href="/shop" legacyBehavior passHref>
+              <Link href="/shop" legacyBehavior passHref prefetch={true}>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   all products
                 </NavigationMenuLink>
@@ -62,7 +61,8 @@ export const ListItem = forwardRef(
     return (
       <li>
         <NavigationMenuLink asChild>
-          <a
+          <Link
+            prefetch={true}
             ref={ref}
             className={cn(
               "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
@@ -76,7 +76,7 @@ export const ListItem = forwardRef(
             <p className="capitalize line-clamp-2 text-sm leading-snug text-muted-foreground">
               {children}
             </p>
-          </a>
+          </Link>
         </NavigationMenuLink>
       </li>
     );
