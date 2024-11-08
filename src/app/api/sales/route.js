@@ -52,6 +52,17 @@ export async function POST(request) {
           { msg: `${dbProduct?.title} out of stock.` },
           { status: 400 }
         );
+
+      await Product.findByIdAndUpdate(
+        product?._id,
+        {
+          $inc: {
+            stock: -product.quantity,
+            sold: product.quantity,
+          },
+        },
+        { session }
+      );
     }
 
     let saleId;
@@ -78,22 +89,11 @@ export async function POST(request) {
       paid,
       due,
     });
-    await newSale.save({ session });
 
-    for (const product of body.products) {
-      await Product.findByIdAndUpdate(
-        product?._id,
-        {
-          $inc: {
-            stock: -product.quantity,
-            sold: product.quantity,
-          },
-        },
-        { session }
-      );
-    }
-
-    await session.commitTransaction();
+    await Promise.all([
+      await newSale.save({ session }),
+      await session.commitTransaction(),
+    ]);
 
     return NextResponse.json(
       { msg: "Data saved successfully.", payload: newSale },
