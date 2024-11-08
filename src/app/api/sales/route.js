@@ -100,6 +100,7 @@ export async function POST(request) {
       { status: 200 }
     );
   } catch (err) {
+    console.log(err);
     await session.abortTransaction();
     return NextResponse.json({ msg: err.message }, { status: 400 });
   } finally {
