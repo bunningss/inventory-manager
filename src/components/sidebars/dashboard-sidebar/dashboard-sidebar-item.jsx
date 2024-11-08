@@ -9,6 +9,7 @@ export function DashboardSidebarItem({ item }) {
   return (
     <>
       <Link
+        prefetch={true}
         href={item?.href ? item.href : "#"}
         role="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -32,6 +33,7 @@ export function DashboardSidebarItem({ item }) {
               className="pt-2 pb-2 pr-2 flex items-center gap-2 before:content-[''] before:h-[1px] before:w-4 before:border-t before:border-primary before:border-dashed"
             >
               <Link
+                prefetch={true}
                 href={`/dashboard/${child.href}`}
                 className="w-full h-full hover:text-primary transition-colors duration-300"
               >

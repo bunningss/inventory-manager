@@ -37,16 +37,16 @@ export async function POST(request) {
           msg: `Invalid price. Remove ${product.title} and try again.`,
         });
 
-      const dbProduct = await Product.findById(product._id);
+      const dbProduct = await Product.findById(product?._id);
       if (!dbProduct)
         return NextResponse.json(
-          { msg: `Invalid product selected. ${product.title}` },
+          { msg: `Invalid product selected. ${product?.title}` },
           { status: 400 }
         );
 
-      if (product.quantity > dbProduct.stock)
+      if (product?.quantity > dbProduct?.stock)
         return NextResponse.json(
-          { msg: `${dbProduct.title} out of stock.` },
+          { msg: `${dbProduct?.title} out of stock.` },
           { status: 400 }
         );
     }
@@ -60,8 +60,8 @@ export async function POST(request) {
     let paid;
     let due;
 
-    if (body.paid) {
-      paid = body.paid * 100;
+    if (body?.paid) {
+      paid = body?.paid * 100;
       due = body.amount - body.paid * 100;
     } else {
       paid = body.amount;
