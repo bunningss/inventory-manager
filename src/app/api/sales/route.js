@@ -29,8 +29,11 @@ export async function POST(request) {
         { status: 400 }
       );
 
-    if (body.paid * 100 > body.amount)
-      return NextResponse.json({ msg: "Invalid amount." }, { status: 400 });
+    if (body.paid) {
+      if (body.paid * 100 > body.amount)
+        return NextResponse.json({ msg: "Invalid amount." }, { status: 400 });
+    }
+
     for (const product of body.products) {
       if (isNaN(product.price))
         return NextResponse.json({
@@ -60,7 +63,7 @@ export async function POST(request) {
     let paid;
     let due;
 
-    if (body?.paid) {
+    if (body.paid) {
       paid = body?.paid * 100;
       due = body.amount - body.paid * 100;
     } else {
@@ -79,7 +82,7 @@ export async function POST(request) {
 
     for (const product of body.products) {
       await Product.findByIdAndUpdate(
-        product._id,
+        product?._id,
         {
           $inc: {
             stock: -product.quantity,
