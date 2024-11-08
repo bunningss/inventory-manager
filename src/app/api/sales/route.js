@@ -31,6 +31,7 @@ export async function POST(request) {
 
     if (body.paid * 100 > body.amount)
       return NextResponse.json({ msg: "Invalid amount." }, { status: 400 });
+
     for (const product of body.products) {
       if (isNaN(product.price))
         return NextResponse.json({
@@ -49,6 +50,11 @@ export async function POST(request) {
           { msg: `${dbProduct?.title} out of stock.` },
           { status: 400 }
         );
+
+      dbProduct.stock -= product.quantity;
+      dbProduct.sold += product.quantity;
+
+      await dbProduct.save({ session });
     }
 
     let saleId;
@@ -75,21 +81,8 @@ export async function POST(request) {
       paid,
       due,
     });
+
     await newSale.save({ session });
-
-    for (const product of body.products) {
-      await Product.findByIdAndUpdate(
-        product._id,
-        {
-          $inc: {
-            stock: -product.quantity,
-            sold: product.quantity,
-          },
-        },
-        { session }
-      );
-    }
-
     await session.commitTransaction();
 
     return NextResponse.json(
