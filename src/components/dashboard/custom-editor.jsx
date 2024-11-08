@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
+const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 import { Controller } from "react-hook-form";
 import { useMemo } from "react";
 import { FormControl, FormItem, FormLabel } from "../ui/form";
-const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 
 export function CustomEditor({ name, form, placeholder, label, required }) {
   const config = useMemo(
@@ -20,7 +20,7 @@ export function CustomEditor({ name, form, placeholder, label, required }) {
     <Controller
       name={name}
       control={form.control}
-      render={({ field }) => (
+      render={({ field, fieldState: { error } }) => (
         <FormItem>
           {label && (
             <FormLabel
