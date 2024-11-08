@@ -6,19 +6,6 @@ import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
 import { generateRandomString } from "@/utils/helpers";
 
-function validateSaleData(body) {
-  if (!Array.isArray(body.products) || body.products.length <= 0) {
-    return "Invalid Sales data.";
-  }
-  if (body.amount <= 0) {
-    return "Invalid amount. Please select some items.";
-  }
-  if (body.paid && body.paid * 100 > body.amount) {
-    return "Invalid amount.";
-  }
-  return null;
-}
-
 export async function POST(request) {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -26,49 +13,60 @@ export async function POST(request) {
   try {
     const user = await verifyToken(request);
     if (user.payload?.role?.toLowerCase() !== "admin") {
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 403 });
+      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
     }
 
     await connectDb();
 
     const body = await request.json();
 
-    const validationError = validateSaleData(body);
-    if (validationError) {
-      return NextResponse.json({ msg: validationError }, { status: 400 });
-    }
+    if (!Array.isArray(body.products) || body.products?.length <= 0)
+      return NextResponse.json({ msg: "Invalid Sales data." }, { status: 400 });
 
-    const bulkOps = [];
+    if (body.amount <= 0)
+      return NextResponse.json(
+        { msg: "Invalid amount. Please select some items." },
+        { status: 400 }
+      );
+
+    if (body.paid * 100 > body.amount)
+      return NextResponse.json({ msg: "Invalid amount." }, { status: 400 });
     for (const product of body.products) {
-      if (isNaN(product.price)) {
+      if (isNaN(product.price))
         return NextResponse.json({
           msg: `Invalid price. Remove ${product.title} and try again.`,
         });
-      }
 
-      bulkOps.push({
-        updateOne: {
-          filter: { _id: product._id, stock: { $gte: product.quantity } },
-          update: {
-            $inc: {
-              stock: -product.quantity,
-              sold: product.quantity,
-            },
-          },
-        },
-      });
+      const dbProduct = await Product.findById(product?._id);
+      if (!dbProduct)
+        return NextResponse.json(
+          { msg: `Invalid product selected. ${product?.title}` },
+          { status: 400 }
+        );
+
+      if (product?.quantity > dbProduct?.stock)
+        return NextResponse.json(
+          { msg: `${dbProduct?.title} out of stock.` },
+          { status: 400 }
+        );
     }
 
-    const updateResult = await Product.bulkWrite(bulkOps, { session });
+    let saleId;
+    // Generate order id until a unique one found
+    do {
+      saleId = generateRandomString(13);
+    } while (await Sale.findOne({ saleId: saleId }));
 
-    if (updateResult.modifiedCount !== body.products.length) {
-      throw new Error("One or more products are out of stock or invalid.");
+    let paid;
+    let due;
+
+    if (body?.paid) {
+      paid = body?.paid * 100;
+      due = body.amount - body.paid * 100;
+    } else {
+      paid = body.amount;
+      due = 0;
     }
-
-    const saleId = await generateUniqueSaleId();
-
-    const paid = body.paid ? body.paid * 100 : body.amount;
-    const due = body.paid ? body.amount - body.paid * 100 : 0;
 
     const newSale = new Sale({
       ...body,
@@ -77,8 +75,21 @@ export async function POST(request) {
       paid,
       due,
     });
-
     await newSale.save({ session });
+
+    for (const product of body.products) {
+      await Product.findByIdAndUpdate(
+        product._id,
+        {
+          $inc: {
+            stock: -product.quantity,
+            sold: product.quantity,
+          },
+        },
+        { session }
+      );
+    }
+
     await session.commitTransaction();
 
     return NextResponse.json(
@@ -86,20 +97,11 @@ export async function POST(request) {
       { status: 200 }
     );
   } catch (err) {
-    console.error("Error in sales route:", err);
     await session.abortTransaction();
     return NextResponse.json({ msg: err.message }, { status: 400 });
   } finally {
     session.endSession();
   }
-}
-
-async function generateUniqueSaleId() {
-  let saleId;
-  do {
-    saleId = generateRandomString(13);
-  } while (await Sale.findOne({ saleId: saleId }));
-  return saleId;
 }
 
 // Get all sales
