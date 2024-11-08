@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { MenuItem } from "./menu-sidebar/menu-item";
@@ -65,6 +66,18 @@ export function AccountSidebar({ userData }) {
               onClick={accountSidebar.onClose}
             />
           ))}
+
+        {userData.payload?.role?.toLowerCase() === "admin" && (
+          <Link href="/dashboard">
+            <Button
+              as="a"
+              className="w-full"
+              onClick={() => accountSidebar.onClose()}
+            >
+              Dashboard
+            </Button>
+          </Link>
+        )}
 
         {!userData.error && (
           <Button
