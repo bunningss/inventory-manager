@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   ArrowRight,
   CheckCheck,
@@ -1233,7 +1234,7 @@ export function Icon({
 
   return (
     <CurrentIcon
-      className={className}
+      className={cn(className)}
       size={size}
       color={iconColor}
       height={size}
