@@ -51,7 +51,7 @@ export const Product = ({ product }) => {
 
           <figure className="relative h-[120px] md:h-[140px] w-full group-hover:scale-105 transition-transform">
             <Image
-              src={product?.images[0] ? product.images[0] : ""}
+              src={product?.images?.length > 0 ? product.images[0] : ""}
               alt={product?.title}
               fill
               className="object-contain"

@@ -3,31 +3,35 @@ import Category from "@/lib/models/Category";
 import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
 import { verifyToken } from "@/utils/auth";
+import { cache } from "react";
 
 // Get all products
+const getCachedCategory = cache(async (label) => {
+  return await Category.findOne({ label }).lean();
+});
+
 export async function GET(request) {
   const reqUrl = new URL(request.url);
   const searchKey = reqUrl.searchParams.get("searchKey");
   const category = reqUrl.searchParams.get("category");
   const subCategory = reqUrl.searchParams.get("sub");
   const featured = reqUrl.searchParams.get("featured");
-  const limit = parseInt(reqUrl.searchParams.get("limit")) || 10;
-  const sortBy = reqUrl.searchParams.get("sortBy");
+  const limit = parseInt(reqUrl.searchParams.get("limit") || "10");
+  const page = parseInt(reqUrl.searchParams.get("page") || "1");
+  const sortBy = reqUrl.searchParams.get("sortBy") || "createdAt";
 
   try {
     await connectDb();
 
-    let query = {};
-    let sort = {};
+    const query = {};
+    let sort = { createdAt: -1 };
 
-    // Search by title
     if (searchKey) {
       query.title = { $regex: searchKey, $options: "i" };
     }
 
-    // Search by category
     if (category) {
-      const categoryData = await Category.findOne({ label: category });
+      const categoryData = await getCachedCategory(category);
       if (categoryData) {
         query.category = categoryData._id;
       } else {
@@ -38,54 +42,71 @@ export async function GET(request) {
       }
     }
 
-    // Search by subcategory (tags)
     if (subCategory) {
       query.tags = {
         $elemMatch: { $regex: new RegExp(`^${subCategory}$`, "i") },
       };
     }
 
-    // Filter by featured status
     if (featured !== null) {
       query.featured = featured === "true";
     }
 
-    // Additional sorting based on sortBy parameter
-    if (sortBy === "name") {
-      sort.title = 1; // A-Z
-    } else if (sortBy === "price") {
-      sort.price = -1; // Highest to lowest
-    } else if (sortBy === "discount") {
-      sort.discountedPrice = 1; // Lowest to highest
-    } else if (sortBy === "stock") {
-      sort.stock = 1;
-    } else if (sortBy === "sold") {
-      sort.sold = -1;
-    }
+    if (sortBy === "name") sort = { title: 1 };
+    else if (sortBy === "price") sort = { price: -1 };
+    else if (sortBy === "discount") sort = { discountedPrice: 1 };
+    else if (sortBy === "stock") sort = { stock: 1 };
+    else if (sortBy === "sold") sort = { sold: -1 };
 
-    const productsQuery = Product.find(query)
-      .populate({
-        path: "category",
-        select: "label -_id", // Only select the label field from category
-      })
-      .select({
-        seoTags: 0,
-        seoTitle: 0,
-      })
-      .sort(sort)
-      .limit(limit);
+    const pipeline = [
+      { $match: query },
+      { $sort: sort },
+      { $skip: (page - 1) * limit },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      { $unwind: "$category" },
+      {
+        $project: {
+          _id: 1,
+          images: 1,
+          slug: 1,
+          brand: 1,
+          title: 1,
+          price: 1,
+          discountedPrice: 1,
+          stock: 1,
+          sold: 1,
+          featured: 1,
+          tags: 1,
+          "category.label": 1,
+        },
+      },
+    ];
 
-    const products = await productsQuery;
+    const [products, totalCount] = await Promise.all([
+      Product.aggregate(pipeline),
+      Product.countDocuments(query),
+    ]);
 
     return NextResponse.json(
       {
         msg: "Products fetched successfully.",
         payload: products,
-        total: await Product.countDocuments(query),
+        total: totalCount,
+        page,
+        limit,
       },
       { status: 200 }
     );
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { msg: "An error occurred while fetching products." },
       { status: 500 }

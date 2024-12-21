@@ -15,13 +15,13 @@ export function ProductView({ children, title, href, className }) {
             href={href}
             className="capitalize text-primary font-bold underline decoration-wavy"
           >
-            see all
+            view all
           </Link>
         )}
       </div>
       <div
         className={cn(
-          "w-full grid gap-3 mt-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+          "w-full grid gap-3 mt-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
           className
         )}
       >
