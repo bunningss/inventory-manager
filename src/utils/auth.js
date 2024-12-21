@@ -3,7 +3,7 @@ import { jwtVerify } from "jose";
 import { getCookie, setCookie } from "./cookie";
 
 export async function getSession() {
-  const session = await getCookie("ze-session");
+  const session = await getCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE);
 
   if (!session)
     return {
@@ -63,5 +63,5 @@ export async function verifyToken(request) {
 }
 
 export async function logout() {
-  await Promise.all([setCookie("ze-session", "", 0)]);
+  await Promise.all([setCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE, "", 0)]);
 }

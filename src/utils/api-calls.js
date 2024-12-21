@@ -6,7 +6,7 @@ import { getCookie } from "./cookie";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 async function getAuthToken() {
-  return await getCookie("ze-session");
+  return await getCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE);
 }
 
 export async function postData(url, data) {

@@ -44,7 +44,7 @@ export function LoginForm() {
       }
 
       await setCookie(
-        "ze-session",
+        process.env.NEXT_PUBLIC_SESSION_COOKIE,
         res.response.session_token,
         res.response.expiryTime
       );

@@ -33,14 +33,6 @@ const formSchema = z.object({
     .max(11)
     .optional()
     .or(z.literal("")),
-  bkash: z
-    .string()
-    .min(11, {
-      message: "Bkash number must be at least 11 characters.",
-    })
-    .max(11)
-    .optional()
-    .or(z.literal("")),
 });
 
 const genderOptions = [
@@ -65,7 +57,6 @@ export function UpdateProfile({ data }) {
       name: data?.name,
       gender: data?.gender,
       phone: data?.phone || "",
-      bkash: data?.bkash || "",
     },
   });
 
@@ -129,13 +120,6 @@ export function UpdateProfile({ data }) {
           placeholder=""
           label="phone number"
           defaultValue={data?.phone}
-        />
-        <FormInput
-          form={form}
-          name="bkash"
-          placeholder=""
-          label="bkash account number"
-          defaultValue={data?.bkash}
         />
       </FormModal>
     </Modal>
