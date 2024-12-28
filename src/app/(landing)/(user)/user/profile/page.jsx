@@ -69,14 +69,6 @@ async function ProfileData() {
                 : "-----"
             }
           />
-          <DataCell
-            dataName="coupon code"
-            dataValue={
-              res.response?.payload?.code?.code
-                ? res.response?.payload?.code?.code
-                : "-----"
-            }
-          />
         </div>
       </div>
     </>
