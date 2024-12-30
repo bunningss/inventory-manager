@@ -25,3 +25,15 @@ export const pagesData = [
     slug: "/track-order",
   },
 ];
+
+export const permissions = {
+  admin: {
+    can: ["manage:all"],
+  },
+  salesman: {
+    can: ["view:dashboard-data", "view:dashboard"],
+  },
+  user: {
+    can: [],
+  },
+};

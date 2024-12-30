@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
-import { getSession } from "./utils/auth";
+import { checkPermission, getSession } from "./utils/auth";
 
 const HOME_URL = "/";
 const SIGN_IN_URL = "/sign-in";
 
 export async function middleware(request) {
-  const session = await getSession();
+  const { error, payload } = await getSession();
   const { pathname } = request.nextUrl;
+  const isAllowed = await checkPermission("view:dashboard", payload._id);
 
   // Redirect authenticated users from auth pages
-  if (!session.error) {
+  if (!error) {
     if (
       pathname === SIGN_IN_URL ||
       pathname === "/sign-up" ||
@@ -21,15 +22,12 @@ export async function middleware(request) {
   }
 
   // Redirect non-admin users from dashboard
-  if (
-    session.payload?.role?.toLowerCase() !== "admin" &&
-    pathname.startsWith("/dashboard")
-  ) {
+  if (!isAllowed && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL(HOME_URL, request.url));
   }
 
   // Redirect unauthenticated users from user pages
-  if (session.error && pathname.startsWith("/user")) {
+  if (error && pathname.startsWith("/user")) {
     return NextResponse.redirect(new URL(SIGN_IN_URL, request.url));
   }
 

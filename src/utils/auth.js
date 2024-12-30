@@ -1,6 +1,8 @@
 "use server";
 import { jwtVerify } from "jose";
 import { getCookie, setCookie } from "./cookie";
+import { getData } from "./api-calls";
+import { permissions } from "@/lib/static";
 
 export async function getSession() {
   const session = await getCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE);
@@ -32,8 +34,10 @@ export async function getSession() {
   }
 }
 
-export async function verifyToken(request) {
+export async function verifyToken(request, action) {
   try {
+    if (!action) throw new Error("You are not authorized.");
+
     const token = await request.headers.get("auth-token");
     const sessionKey = token?.split(" ")[1];
 
@@ -42,6 +46,7 @@ export async function verifyToken(request) {
         error: true,
         payload: null,
       };
+
     const verifiedToken = await jwtVerify(
       sessionKey,
       new TextEncoder().encode(process.env.TOKEN_SECRET),
@@ -50,18 +55,37 @@ export async function verifyToken(request) {
       }
     );
 
+    await checkPermission(action, verifiedToken.payload?._id);
+
     return {
       error: false,
       payload: verifiedToken.payload,
+      id: verifiedToken.payload?._id,
     };
   } catch (err) {
-    return {
-      error: true,
-      payload: null,
-    };
+    throw new Error(err.message);
   }
 }
 
 export async function logout() {
-  await Promise.all([setCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE, "", 0)]);
+  await setCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE, "", 0);
 }
+
+export const checkPermission = async (action, id) => {
+  const { response } = await getData(`get-role/${id}`, 0);
+
+  const rolePermissions = permissions[response.payload.role];
+  if (!rolePermissions) {
+    throw new Error("You are not authorized.");
+  }
+
+  if (rolePermissions.can?.includes("manage:all")) {
+    return true;
+  }
+
+  if (!rolePermissions.can?.includes(action)) {
+    return false;
+  }
+
+  return true;
+};

@@ -15,12 +15,8 @@ const ORDER_STATUSES = {
 
 export async function GET(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin") {
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 403 });
-    }
-
     await connectDb();
+    await verifyToken(request, "view:dashboard-data");
 
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
@@ -162,6 +158,6 @@ export async function GET(request) {
     );
   } catch (err) {
     console.error("Error fetching orders:", err);
-    return NextResponse.json({ msg: "An error occurred." }, { status: 500 });
+    return NextResponse.json({ msg: err.message }, { status: 500 });
   }
 }
