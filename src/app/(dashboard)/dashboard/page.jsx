@@ -151,7 +151,7 @@ async function DashboardData() {
         title="recent orders / সর্বশেষ অর্ডার"
         headerContent={<HeaderContent url="/dashboard/orders" />}
       >
-        <CardView>
+        <CardView className="md:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
           {res.response.payload.recentOrders?.map((order, index) => (
             <OrderCard key={index} order={order} />
           ))}

@@ -46,3 +46,5 @@ export const permissions = {
 };
 
 // update:roles
+// add:coupon
+// view:coupons

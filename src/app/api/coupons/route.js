@@ -1,5 +1,4 @@
 import Coupon from "@/lib/models/Coupon";
-import User from "@/lib/models/User";
 import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
@@ -7,17 +6,16 @@ import { NextResponse } from "next/server";
 // Add new code
 export async function POST(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "add:coupon");
+
     const body = await request.json();
 
     const existingCode = await Coupon.findOne({ code: body.code }).collation({
       locale: "en",
       strength: 2,
     });
+
     if (existingCode)
       return NextResponse.json(
         {
@@ -45,11 +43,8 @@ export async function POST(request) {
 // Get all codes
 export async function GET(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "view:coupons");
 
     const codes = await Coupon.find()
       .select("code discount isActive")
@@ -64,33 +59,7 @@ export async function GET(request) {
 // Delete code
 export async function DELETE(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
-    const body = await request.json();
-
-    const existingCode = await Coupon.findOne({ _id: body._id });
-    if (!existingCode)
-      return NextResponse.json(
-        { msg: "Coupon code not found." },
-        { status: 404 }
-      );
-
-    await Promise.all([
-      Coupon.findByIdAndDelete(body._id),
-      User.findByIdAndUpdate(
-        existingCode.user,
-        {
-          code: null,
-        },
-        {
-          new: true,
-        }
-      ),
-    ]);
-
-    return NextResponse.json({ msg: "Code deleted." }, { status: 200 });
+    return NextResponse.json({ msg: "Option Disabled." }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ msg: err.message }, { status: 400 });
   }

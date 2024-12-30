@@ -1,28 +1,22 @@
 import { Block } from "@/components/block";
-import { CardView } from "@/components/card-view";
-import { CouponCard } from "@/components/cards/coupon-card";
 import { Loading } from "@/components/loading";
+import { CouponsTable } from "@/components/tables/coupons-table";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function Coupons() {
-  const res = await getData("coupons", 0);
+  const { response } = await getData("coupons", 0);
 
-  return (
-    <CardView>
-      {res.response?.payload?.map((coupon, index) => (
-        <CouponCard key={index} coupon={coupon} />
-      ))}
-    </CardView>
-  );
+  return <CouponsTable coupons={response.payload} />;
 }
 
 export default function Page() {
   return (
     <Suspense fallback={<Loading />}>
-      <Block title="Coupons codes">
+      <div className="space-y-4">
+        <Block title="Coupon codes"></Block>
         <Coupons />
-      </Block>
+      </div>
     </Suspense>
   );
 }
