@@ -4,7 +4,7 @@ import { RatingStars } from "../rating-stars";
 
 export function ProductSpecifications({ currentProduct, actionButtons }) {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="space-y-8">
       <div className="space-y-1">
         <Heading>{currentProduct?.title}</Heading>
         <RatingStars />

@@ -11,7 +11,7 @@ export function ProductSmall({ product }) {
     <Link href={`product/${product?.slug}`} passHref>
       <Card title={product?.title}>
         <CardContent className="flex items-center p-1 md:p-1">
-          <figure className="relative h-[100px] w-[120px]">
+          <figure className="relative h-[100px] w-[120px] rounded-tl-md rounded-bl-md overflow-hidden">
             <Image
               src={product?.images[0] ? product.images[0] : ""}
               alt={product?.title}

@@ -43,7 +43,7 @@ async function ProductData({ slug }) {
       <ProductDetails currentProduct={res.response.payload} />
       {/* customer reviews */}
       <div className="lg:grid lg:grid-cols-[2fr_1fr] lg:gap-2">
-        <section className="space-y-4">
+        <section className="space-y-2">
           <Heading className="grid gap-2 text-xl font-bold capitalize after:content-[''] after:h-[1px] after:w-full after:rounded-md after:bg-muted">
             Reviews
           </Heading>
@@ -56,11 +56,11 @@ async function ProductData({ slug }) {
           </div>
         </section>
 
-        <section className="space-y-1">
+        <section>
           <Heading className="grid gap-2 text-xl font-bold capitalize after:content-[''] after:h-[1px] after:w-full after:rounded-md after:bg-muted">
             Related products
           </Heading>
-          <ProductView className="grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1">
+          <ProductView className="grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1 mt-0">
             <ProductSmall />
             <ProductSmall />
             <ProductSmall />
