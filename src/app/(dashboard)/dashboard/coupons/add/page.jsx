@@ -3,12 +3,9 @@ import { AddCoupon } from "@/components/dashboard/forms/add-coupon";
 
 export default async function Page() {
   return (
-    <div>
-      <Block title="add coupon"></Block>
-
-      <div className="mt-8">
-        <AddCoupon />
-      </div>
+    <div className="space-y-4">
+      <Block title="add coupon" />
+      <AddCoupon />
     </div>
   );
 }
