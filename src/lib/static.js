@@ -28,7 +28,7 @@ export const pagesData = [
 
 export const permissions = {
   admin: {
-    can: ["manage:all"],
+    can: ["manage:all", "view:dashboard"],
   },
   salesman: {
     can: [
@@ -37,10 +37,11 @@ export const permissions = {
       "view:self",
       "update:self",
       "place:order",
+      "view:self-order",
     ],
   },
   user: {
-    can: ["view:self", "update:self", "place:order"],
+    can: ["view:self", "update:self", "place:order", "view:self-order"],
   },
 };
 

@@ -5,13 +5,11 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.error)
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+    const { id } = await verifyToken(request, "view:self-order");
 
     await connectDb();
 
-    const orders = await Order.find({ user: user.payload?._id })
+    const orders = await Order.find({ user: id })
       .select(
         "name address phone totalWithDeliveryCharge status paymentMethod paymentStatus orderDate orderId couponCode products"
       )

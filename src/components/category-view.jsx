@@ -1,6 +1,5 @@
 "use client";
 import { CategoryBox } from "./category-box";
-import { Section } from "./section";
 import {
   Carousel,
   CarouselContent,
@@ -14,7 +13,7 @@ export const CategoryView = ({ categories }) => {
   if (!categories || categories?.length <= 0) return null;
 
   return (
-    <Section>
+    <section>
       <Carousel
         plugins={[
           Autoplay({
@@ -35,6 +34,6 @@ export const CategoryView = ({ categories }) => {
         <CarouselPrevious className="left-1 md:left-4" />
         <CarouselNext className="right-1 md:right-4" />
       </Carousel>
-    </Section>
+    </section>
   );
 };

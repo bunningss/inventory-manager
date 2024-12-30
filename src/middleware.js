@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { checkPermission, getSession } from "./utils/auth";
+import { getSession } from "./utils/auth";
+import { permissions } from "./lib/static";
 
 const HOME_URL = "/";
 const SIGN_IN_URL = "/sign-in";
@@ -7,7 +8,7 @@ const SIGN_IN_URL = "/sign-in";
 export async function middleware(request) {
   const { error, payload } = await getSession();
   const { pathname } = request.nextUrl;
-  const isAllowed = await checkPermission("view:dashboard", payload._id);
+  const isAllowed = permissions[payload?.role]?.can?.includes("view:dashboard");
 
   // Redirect authenticated users from auth pages
   if (!error) {

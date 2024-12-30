@@ -12,6 +12,7 @@ import {
 import { logout } from "@/utils/auth";
 import { Icon } from "./icon";
 import { useRouter } from "next/navigation";
+import { permissions } from "@/lib/static";
 
 export function User({ userData }) {
   const router = useRouter();
@@ -64,7 +65,9 @@ export function User({ userData }) {
             </Link>
           </>
         )}
-        {userData?.payload?.role === "admin" && (
+        {permissions[userData?.payload?.role]?.can?.includes(
+          "view:dashboard"
+        ) && (
           <Link href="/dashboard" passHref>
             <DropdownMenuItem>
               <span>dashboard</span>

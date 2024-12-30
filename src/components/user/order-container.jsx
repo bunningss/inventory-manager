@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 export function OrderContainer({ order }) {
   return (
-    <div className="rounded-md shadow-regular bg-accent dark:bg-background p-2">
+    <div className="rounded-md shadow-regular bg-accent p-2">
       <div className="flex justify-between items-start">
         <div className="flex flex-col gap-2">
           <DataCell

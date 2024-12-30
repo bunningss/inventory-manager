@@ -15,18 +15,18 @@ export async function generateMetadata() {
 }
 
 async function OrderData() {
-  const res = await getData(`users/orders`, 0);
+  const { response } = await getData(`users/orders`, 0);
 
   return (
     <>
-      {res.response.payload?.orders?.length > 0 && (
+      {response.payload?.length > 0 && (
         <div className="grid gap-4">
-          {res.response.payload?.orders?.map((order, index) => (
+          {response.payload?.map((order, index) => (
             <OrderContainer key={index} order={order} />
           ))}
         </div>
       )}
-      {res.response.payload?.orders?.length === 0 && (
+      {response.payload?.length === 0 && (
         <Empty message="You haven't placed any orders yet. Order something to continue." />
       )}
     </>

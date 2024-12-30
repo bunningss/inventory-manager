@@ -8,12 +8,16 @@ import { NextResponse } from "next/server";
 import { permissions } from "@/lib/static";
 
 // Get one user
-export async function GET(request) {
+export async function GET(request, { params }) {
   try {
     await connectDb();
     const { id } = await verifyToken(request, "view:self");
 
-    const userData = await User.findById(id)
+    if (params._id !== id) {
+      await verifyToken(request, "view:others");
+    }
+
+    const userData = await User.findById(params._id)
       .populate({
         path: "orders",
         select:

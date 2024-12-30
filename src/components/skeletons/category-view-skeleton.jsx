@@ -1,9 +1,8 @@
-import { Section } from "../section";
 import { CategoryboxSkeleton } from "./category-box-skeleton";
 
 export function CategoryviewSkeleton() {
   return (
-    <Section>
+    <section>
       <div className="flex gap-4 overflow-hidden">
         <CategoryboxSkeleton />
         <CategoryboxSkeleton />
@@ -13,6 +12,6 @@ export function CategoryviewSkeleton() {
         <CategoryboxSkeleton />
         <CategoryboxSkeleton />
       </div>
-    </Section>
+    </section>
   );
 }
