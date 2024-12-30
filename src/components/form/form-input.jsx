@@ -17,6 +17,7 @@ export function FormInput({
   required,
   disabled,
   type = "text",
+  className,
 }) {
   return (
     <FormField
@@ -41,6 +42,7 @@ export function FormInput({
               type={type}
               placeholder={placeholder || ""}
               {...field}
+              className={className}
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}

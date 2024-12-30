@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/use-cart";
-import { createGrantToken, createPayment } from "@/utils/bkash";
 import { useRouter } from "next/navigation";
 import { getData, postData } from "@/utils/api-calls";
 import {
@@ -18,8 +17,6 @@ import { FormInput } from "../form/form-input";
 import { FormSelect } from "../form/form-select";
 import { FormRadio } from "../form/form-radio";
 import { FormModal } from "../form/form-modal";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 
 const locations = [
   {
@@ -39,8 +36,8 @@ const formSchema = z.object({
   address: z.string().min(5, {
     message: "Address must be at least 5 characters.",
   }),
-  phone: z.string().min(9, {
-    message: "Phone number must be at least 9 characters.",
+  phone: z.string().min(11, {
+    message: "Phone number must be at least 11 characters.",
   }),
   city: z.string({
     required_error: "Please select city.",
@@ -48,11 +45,11 @@ const formSchema = z.object({
   paymentMethod: z.enum(["BKASH", "COD"], {
     required_error: "You need to select a payment method.",
   }),
+  couponCode: z.string().optional().nullable(),
 });
 
 export function CheckoutForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(null);
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const { cartItems, total, onClear } = useCart();
@@ -65,7 +62,8 @@ export function CheckoutForm() {
       address: "",
       phone: "",
       city: "",
-      paymentMethod: "",
+      paymentMethod: "COD",
+      couponCode: "",
     },
   });
 
@@ -82,35 +80,16 @@ export function CheckoutForm() {
 
     try {
       // Start processing order
-      const res = await postData("orders", {
+      const { error, response } = await postData("orders", {
         ...data,
         products: cartItems,
         total: total,
-        couponCode: couponCode,
         deliveryCharge: data.city,
         location: locations.filter((loc) => loc.value === data.city)[0]?.name,
       });
 
-      if (res.error) {
-        return errorNotification(res.response.msg);
-      }
-
-      if (data.paymentMethod === "BKASH") {
-        const grantToken = await createGrantToken();
-        if (grantToken.error) {
-          return errorNotification(
-            "An error occured during payment. Please try again."
-          );
-        }
-
-        const paymenturl = await createPayment({}, grantToken.payload);
-        if (paymenturl.error) {
-          return errorNotification(
-            "An error occured during payment. Please try again."
-          );
-        }
-
-        router.push(paymenturl.payload);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
       onClear();
@@ -127,20 +106,21 @@ export function CheckoutForm() {
     if (e) {
       e.preventDefault();
     }
-    setIsLoading(true);
 
     try {
+      setIsLoading(true);
+      const couponCode = form.getValues("couponCode");
+
       if (!couponCode.trim()) {
         return warningNotification("Please enter valid a coupon code.");
       }
 
-      const res = await getData(`coupons/${couponCode}`, 0);
-      if (res.error) {
-        setCouponCode("");
-        return errorNotification(res.response.msg);
+      const { error, response } = await getData(`coupons/${couponCode}`, 0);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
-      setDiscount(res.response.payload.discount);
+      setDiscount(response.payload.discount);
       successNotification("Coupon code applied successfully.");
     } catch (err) {
       errorNotification(err.message);
@@ -167,7 +147,6 @@ export function CheckoutForm() {
               placeholder="John Doe"
               name="name"
               required
-              description=""
             />
             <FormInput
               form={form}
@@ -175,7 +154,6 @@ export function CheckoutForm() {
               placeholder="21/3, Mariana Drive, AC"
               name="address"
               required
-              description=""
             />
 
             <div className="grid md:grid-cols-2 gap-2 md:gap-4">
@@ -193,7 +171,6 @@ export function CheckoutForm() {
                 name="phone"
                 label="phone number / মোবাইল নম্বর"
                 required
-                description=""
               />
             </div>
           </div>
@@ -201,14 +178,12 @@ export function CheckoutForm() {
 
         {/* Coupon code */}
         <div className="grid gap-4 border border-shade border-dashed p-4 rounded-md">
-          <div className="space-y-2">
-            <Label className="capitalize">coupon code / কুপন</Label>
-            <Input
-              className="uppercase"
-              placeholder={couponCode ? couponCode : "example2024"}
-              onChange={(e) => setCouponCode(e.target.value)}
-            />
-          </div>
+          <FormInput
+            form={form}
+            name="couponCode"
+            placeholder="example2024"
+            className="uppercase"
+          />
 
           <Button
             icon="discount"
@@ -263,15 +238,14 @@ export function CheckoutForm() {
                   ৳
                   {discount
                     ? (
-                        (parseInt(total) -
-                          parseInt(total * discount) / 100 +
-                          parseInt(deliveryCharge)) /
+                        (Number(total) -
+                          Number(total * discount) / 100 +
+                          Number(deliveryCharge)) /
                         100
                       ).toFixed(2)
-                    : (
-                        (parseInt(total) + parseInt(deliveryCharge)) /
-                        100
-                      ).toFixed(2)}
+                    : ((Number(total) + Number(deliveryCharge)) / 100).toFixed(
+                        2
+                      )}
                 </td>
               </tr>
             </tbody>
