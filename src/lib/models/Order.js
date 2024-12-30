@@ -106,7 +106,7 @@ const orderSchema = new mongoose.Schema(
         },
         weight: {
           type: String,
-          required: true,
+          required: false,
         },
         price: {
           type: Number,
@@ -124,7 +124,7 @@ const orderSchema = new mongoose.Schema(
         ],
         brand: {
           type: String,
-          required: true,
+          required: false,
         },
       },
     ],

@@ -76,9 +76,8 @@ export function CheckoutForm() {
   }, [form.watch("city")]);
 
   const handleSubmit = async (data) => {
-    setIsLoading(true);
-
     try {
+      setIsLoading(true);
       // Start processing order
       const { error, response } = await postData("orders", {
         ...data,
@@ -93,8 +92,8 @@ export function CheckoutForm() {
       }
 
       onClear();
-      router.push(`/success?id=${res.response?.payload}`);
-      successNotification(res.response.msg);
+      router.push(`/success?id=${response?.payload}`);
+      successNotification(response.msg);
     } catch (err) {
       errorNotification(err.message);
     } finally {
@@ -117,6 +116,7 @@ export function CheckoutForm() {
 
       const { error, response } = await getData(`coupons/${couponCode}`, 0);
       if (error) {
+        form.setValue("couponCode", "");
         return errorNotification(response.msg);
       }
 
