@@ -29,6 +29,19 @@ const locations = [
   },
 ];
 
+const paymentMethods = [
+  {
+    name: "bKash",
+    value: "BKASH",
+    icon: "bkash",
+  },
+  {
+    name: "cash on delivery",
+    value: "COD",
+    icon: "cod",
+  },
+];
+
 const formSchema = z.object({
   name: z.string().min(3, {
     message: "Name must be at least 3 characters.",
@@ -177,7 +190,7 @@ export function CheckoutForm() {
         </div>
 
         {/* Coupon code */}
-        <div className="grid gap-4 border border-shade border-dashed p-4 rounded-md">
+        <div className="space-y-4 border border-shade border-dashed p-4 rounded-md">
           <FormInput
             form={form}
             name="couponCode"
@@ -190,6 +203,7 @@ export function CheckoutForm() {
             onClick={handleCoupon}
             loading={isLoading}
             disabled={isLoading || cartItems.length === 0}
+            className="w-full"
           >
             apply coupon
           </Button>
@@ -199,12 +213,16 @@ export function CheckoutForm() {
         <div className="mt-4">
           <Heading>payment method</Heading>
           <div className="grid gap-2 md:gap-4 mt-4">
-            <FormRadio form={form} />
+            <FormRadio
+              form={form}
+              name="paymentMethod"
+              options={paymentMethods}
+            />
           </div>
         </div>
 
         {/* Order summary */}
-        <div className="p-2 bg-accent">
+        <div className="p-2 bg-accent rounded-md">
           <table className="w-full rounded-md">
             <tbody>
               <tr>
