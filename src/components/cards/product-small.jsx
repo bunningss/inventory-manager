@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { RatingStars } from "../rating-stars";
-import { CalculatePrice } from "./calculate-price";
-import { CalculateDiscount } from "./calculate-discount";
+import { CalculatePrice } from "../calculate-price";
+import { CalculateDiscount } from "../calculate-discount";
 import { Card, CardContent, CardTitle } from "../ui/card";
 import Link from "next/link";
 

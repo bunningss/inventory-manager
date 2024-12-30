@@ -2,7 +2,7 @@ import { SalesProductCard } from "@/components/sales/sales-product-card";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 import { Loading } from "../loading";
-import { ProductFilters } from "../product-cards/product-filters";
+import { ProductFilters } from "../filters/product-filters";
 
 async function Products({ searchParams }) {
   const queryString = new URLSearchParams(searchParams).toString();

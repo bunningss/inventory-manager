@@ -1,5 +1,5 @@
 import { AuthWrapper } from "@/components/auth/auth-wrapper";
-import { ResetPasswordForm } from "@/components/auth/reset-password-form";
+import { ResetPasswordForm } from "@/components/forms/reset-password-form";
 
 export default async function Page({ params }) {
   return (

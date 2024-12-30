@@ -1,5 +1,5 @@
 import { AuthWrapper } from "@/components/auth/auth-wrapper";
-import { LoginForm } from "@/components/auth/login-form";
+import { LoginForm } from "@/components/forms/login-form";
 
 export function metadata() {
   return {

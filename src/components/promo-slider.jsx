@@ -1,6 +1,5 @@
 "use client";
 import { PromoCard } from "./promo-card";
-import { Section } from "./section";
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +11,7 @@ import Autoplay from "embla-carousel-autoplay";
 
 export const PromoSlider = () => {
   return (
-    <Section>
+    <section>
       <Carousel
         plugins={[
           Autoplay({
@@ -34,6 +33,6 @@ export const PromoSlider = () => {
         <CarouselPrevious className="left-1 md:left-4" />
         <CarouselNext className="right-1 md:right-4" />
       </Carousel>
-    </Section>
+    </section>
   );
 };

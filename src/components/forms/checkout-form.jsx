@@ -60,6 +60,13 @@ export function CheckoutForm() {
 
   const form = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      address: "",
+      phone: "",
+      city: "",
+      paymentMethod: "",
+    },
   });
 
   useEffect(() => {

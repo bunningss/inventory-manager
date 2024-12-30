@@ -1,5 +1,5 @@
-import { CheckoutForm } from "@/components/checkout/checkout-form";
-import { CheckoutSummary } from "@/components/checkout/checkout-summary";
+import { CheckoutForm } from "@/components/forms/checkout-form";
+import { CheckoutSummary } from "@/components/checkout-summary";
 import { Container } from "@/components/container";
 
 export const metadata = {

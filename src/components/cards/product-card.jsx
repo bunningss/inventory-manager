@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { DeleteItem } from "../modals/delete";
 import { Card, CardContent, CardTitle } from "../ui/card";
-import { CalculatePrice } from "../product-cards/calculate-price";
+import { CalculatePrice } from "../calculate-price";
 import { Button } from "../ui/button";
 import { AddProductQuantity } from "../modals/add-product-quantity";
 

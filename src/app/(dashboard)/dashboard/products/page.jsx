@@ -3,7 +3,7 @@ import { CardView } from "@/components/card-view";
 import { ProductCard } from "@/components/cards/product-card";
 import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
-import { ProductFilters } from "@/components/product-cards/product-filters";
+import { ProductFilters } from "@/components/filters/product-filters";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 

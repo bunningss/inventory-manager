@@ -1,6 +1,6 @@
 import { CategoryView } from "@/components/category-view";
 import { Container } from "@/components/container";
-import { Product } from "@/components/product-cards/product";
+import { Product } from "@/components/cards/product";
 import { ProductView } from "@/components/product-view";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";

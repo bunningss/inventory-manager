@@ -11,7 +11,7 @@ import {
 } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { RatingStars } from "../rating-stars";
-import { CalculatePrice } from "./calculate-price";
+import { CalculatePrice } from "../calculate-price";
 import { useCheckCart, useCheckWishlist, useEcommerce } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 

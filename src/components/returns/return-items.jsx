@@ -1,7 +1,7 @@
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 import { Loading } from "../loading";
-import { ProductFilters } from "../product-cards/product-filters";
+import { ProductFilters } from "../filters/product-filters";
 import { ReturnProductCard } from "./return-product-card";
 
 async function Products({ searchParams }) {

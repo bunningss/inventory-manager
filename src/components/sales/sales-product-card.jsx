@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { CalculatePrice } from "@/components/product-cards/calculate-price";
+import { CalculatePrice } from "@/components/calculate-price";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { useSales } from "@/hooks/use-sales";
 import { factorCartPrice } from "@/utils/helpers";

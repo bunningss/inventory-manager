@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Product } from "@/components/product-cards/product";
+import { Product } from "@/components/cards/product";
 import { ProductView } from "@/components/product-view";
 import { getData } from "@/utils/api-calls";
 import { Container } from "@/components/container";

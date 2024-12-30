@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Section } from "./section";
 import { Heading } from "./heading";
 
 export function ProductView({ children, title, href, className }) {
   return (
-    <Section>
+    <section>
       {/* Heading */}
       <div className="flex items-center justify-between mb-2">
         {title && <Heading>{title}</Heading>}
@@ -27,6 +26,6 @@ export function ProductView({ children, title, href, className }) {
       >
         {children}
       </div>
-    </Section>
+    </section>
   );
 }

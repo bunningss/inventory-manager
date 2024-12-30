@@ -1,6 +1,6 @@
 "use client";
 import { useWishlist } from "@/hooks/use-wishlist";
-import { Product } from "./product-cards/product";
+import { Product } from "./cards/product";
 import { ProductView } from "./product-view";
 import { Empty } from "./empty";
 
