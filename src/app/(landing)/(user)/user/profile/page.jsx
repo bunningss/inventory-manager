@@ -17,13 +17,13 @@ export async function generateMetadata() {
 
 async function ProfileData() {
   const session = await getSession();
-  const res = await getData(`users/${session.payload?._id}`, 0);
+  const { response } = await getData(`users/${session.payload?._id}`, 0);
 
   return (
     <>
       <div className="flex justify-between items-center mb-4 md:mb-1">
-        <Heading>{res.response?.payload?.name}</Heading>
-        <UpdateProfile data={res.response?.payload} />
+        <Heading>{response?.payload?.name}</Heading>
+        <UpdateProfile data={response?.payload} />
       </div>
       <div className="flex flex-wrap gap-x-4 gap-y-2 md:gap-6">
         <div className="flex items-center gap-2">
@@ -32,13 +32,12 @@ async function ProfileData() {
         </div>
         <div className="flex items-center gap-2">
           <Icon icon="email" size={20} />
-          <p>{res.response?.payload?.email}</p>
+          <p>{response?.payload?.email}</p>
         </div>
         <div className="flex items-center gap-2">
           <Icon icon="verified" size={20} />
           <p>
-            Member since{" "}
-            {new Date(res.response?.payload?.createdAt).toDateString()}
+            Member since {new Date(response?.payload?.createdAt).toDateString()}
           </p>
         </div>
       </div>
@@ -48,25 +47,21 @@ async function ProfileData() {
           <DataCell
             dataName="gender"
             dataValue={
-              res.response?.payload?.gender
-                ? res.response?.payload?.gender
-                : "-----"
+              response?.payload?.gender ? response?.payload?.gender : "-----"
             }
           />
           <DataCell
             dataName="birthdate"
             dataValue={
-              res.response?.payload?.birthdate
-                ? new Date(res.response?.payload?.birthdate)?.toDateString()
+              response?.payload?.birthdate
+                ? new Date(response?.payload?.birthdate)?.toDateString()
                 : "-----"
             }
           />
           <DataCell
             dataName="phone number"
             dataValue={
-              res.response?.payload?.phone
-                ? res.response?.payload?.phone
-                : "-----"
+              response?.payload?.phone ? response?.payload?.phone : "-----"
             }
           />
         </div>
