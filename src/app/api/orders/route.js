@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Coupon from "@/lib/models/Coupon";
 import Order from "@/lib/models/Order";
 import Product from "@/lib/models/Product";
@@ -8,14 +9,16 @@ import { generateRandomString } from "@/utils/helpers";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-  try {
-    const isUser = await verifyToken(request);
+  const session = await mongoose.startSession();
 
+  try {
     await connectDb();
+    session.startTransaction();
+
+    const { id } = await verifyToken(request, "place:order");
 
     let total = 0;
     let verifiedCoupon;
-    let userComission = 0;
 
     const body = await request.json();
     let rawTotal = body.total;
@@ -42,7 +45,7 @@ export async function POST(request) {
       if (cartProductPrice !== dbProductPrice)
         return NextResponse.json(
           {
-            msg: `Price mismatch for ${product.title}. Remove the product from cart and add again.`,
+            msg: `Price does not match for ${product.title}. Remove the product from cart and add again.`,
           },
           { status: 400 }
         );
@@ -61,7 +64,6 @@ export async function POST(request) {
           { status: 400 }
         );
 
-      userComission = (total * verifiedCoupon?.comission) / 100;
       total -= (total * verifiedCoupon?.discount) / 100;
       rawTotal -= (rawTotal * verifiedCoupon?.discount) / 100;
     }
@@ -69,7 +71,7 @@ export async function POST(request) {
     if (total !== rawTotal)
       return NextResponse.json(
         {
-          msg: "Total price mismatch. Please clear cart and try again.",
+          msg: "Total price does not match. Please clear your cart and try again.",
         },
         { status: 400 }
       );
@@ -83,34 +85,21 @@ export async function POST(request) {
     const newOrder = new Order({
       ...body,
       orderId,
-      user: isUser.payload?._id,
+      user: id,
       totalAfterDiscount: total,
       totalWithDeliveryCharge: body.total + parseInt(body.deliveryCharge),
       discountPercentage: verifiedCoupon?.discount,
       couponCode: verifiedCoupon?._id,
-      comission: userComission,
       totalBeforeDiscount: body.total,
-      totalAfterComission: body.total - userComission,
-      sellerTotal: total - userComission,
-      comissionTo: verifiedCoupon?.user,
+      totalAfterComission: body.total,
+      sellerTotal: total,
     });
 
-    // Find user from coupon code and add pending comission
-    if (verifiedCoupon) {
+    await newOrder.save({ session });
+
+    if (id) {
       await User.findByIdAndUpdate(
-        verifiedCoupon?.user,
-        {
-          $inc: { pendingComission: userComission },
-        },
-        {
-          new: true,
-        }
-      );
-    }
-    await newOrder.save();
-    if (isUser.payload?._id) {
-      await User.findByIdAndUpdate(
-        isUser.payload._id,
+        id,
         {
           $push: {
             orders: newOrder._id,
@@ -118,16 +107,22 @@ export async function POST(request) {
         },
         {
           new: true,
+          session,
         }
       );
     }
+
+    await session.commitTransaction();
 
     return NextResponse.json(
       { msg: "Order placed successfully.", payload: newOrder?.orderId },
       { status: 200 }
     );
   } catch (err) {
+    await session.abortTransaction();
     return NextResponse.json({ msg: err.message }, { status: 400 });
+  } finally {
+    session.endSession();
   }
 }
 

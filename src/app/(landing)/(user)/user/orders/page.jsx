@@ -36,7 +36,7 @@ async function OrderData() {
 export default async function Page() {
   return (
     <>
-      <Heading className="my-4">Order details</Heading>
+      <Heading className="mb-4">Order details</Heading>
       <Suspense fallback={<OrdercontainerSkeleton />}>
         <OrderData />
       </Suspense>

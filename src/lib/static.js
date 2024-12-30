@@ -31,10 +31,16 @@ export const permissions = {
     can: ["manage:all"],
   },
   salesman: {
-    can: ["view:dashboard-data", "view:dashboard", "view:self", "update:self"],
+    can: [
+      "view:dashboard-data",
+      "view:dashboard",
+      "view:self",
+      "update:self",
+      "place:order",
+    ],
   },
   user: {
-    can: ["view:self", "update:self"],
+    can: ["view:self", "update:self", "place:order"],
   },
 };
 
