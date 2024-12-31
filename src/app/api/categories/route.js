@@ -1,8 +1,8 @@
 import Category from "@/lib/models/Category";
+import SubCategory from "@/lib/models/Sub-Category";
 import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
-import SubCategory from "@/lib/models/Sub-Category";
 
 // Add new category
 export async function POST(request) {

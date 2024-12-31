@@ -3,7 +3,7 @@ import Coupon from "@/lib/models/Coupon";
 import Order from "@/lib/models/Order";
 import Category from "@/lib/models/Category";
 import { connectDb } from "@/lib/db/connectDb";
-import { verifyToken } from "@/utils/auth";
+import { hasPermission, verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
 import { permissions } from "@/lib/static";
 
@@ -11,10 +11,10 @@ import { permissions } from "@/lib/static";
 export async function GET(request, { params }) {
   try {
     await connectDb();
-    const { id } = await verifyToken(request, "view:self");
+    const { id, role } = await verifyToken(request, "view:self");
 
     if (params._id !== id) {
-      await verifyToken(request, "view:others");
+      await hasPermission("view:others", role);
     }
 
     const userData = await User.findById(params._id)
@@ -42,7 +42,7 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDb();
-    const { id } = await verifyToken(request, "update:self");
+    const { id, role } = await verifyToken(request, "update:self");
 
     const userData = await User.findById(params._id);
     if (!userData)
@@ -57,7 +57,7 @@ export async function PUT(request, { params }) {
       );
 
     if (body.role) {
-      await verifyToken(request, "update:roles");
+      await hasPermission("update:roles", role);
       if (Object.keys(permissions).includes(body.role)) {
         userData.role = body.role;
       }

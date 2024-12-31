@@ -57,6 +57,7 @@ export async function verifyToken(request, action) {
       error: false,
       payload: verifiedToken.payload,
       id: verifiedToken.payload?._id,
+      role: verifiedToken.payload?.role,
     };
   } catch (err) {
     throw new Error(err.message);
@@ -85,3 +86,21 @@ export const checkPermission = async (action, id) => {
 
   return true;
 };
+
+export async function hasPermission(action, role) {
+  const rolePermissions = permissions[role];
+
+  if (!rolePermissions) {
+    throw new Error("You are not authorized.");
+  }
+
+  if (rolePermissions.can?.includes("manage:all")) {
+    return true;
+  }
+
+  if (!rolePermissions.can?.includes(action)) {
+    throw new Error("You are not authorized.");
+  }
+
+  return true;
+}
