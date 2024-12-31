@@ -25,7 +25,7 @@ export function FormRadio({ form, options, name }) {
             >
               {options?.map((option, index) => (
                 <FormItem
-                  className="flex items-center space-x-3 space-y-0"
+                  className="flex flex-row items-center space-x-3 space-y-0"
                   key={index}
                 >
                   <FormControl>

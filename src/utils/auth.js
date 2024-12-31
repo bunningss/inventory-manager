@@ -41,11 +41,7 @@ export async function verifyToken(request, action) {
     const token = await request.headers.get("auth-token");
     const sessionKey = token?.split(" ")[1];
 
-    if (!sessionKey)
-      return {
-        error: true,
-        payload: null,
-      };
+    if (!sessionKey) throw new Error("You are not authorized.");
 
     const verifiedToken = await jwtVerify(
       sessionKey,

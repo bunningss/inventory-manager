@@ -8,6 +8,7 @@ import { verifyToken } from "@/utils/auth";
 import { generateRandomString } from "@/utils/helpers";
 import { NextResponse } from "next/server";
 
+// Create new order
 export async function POST(request) {
   const session = await mongoose.startSession();
 
@@ -129,17 +130,15 @@ export async function POST(request) {
 // Get all orders
 export async function GET(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload.role.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "view:orders");
 
     const orders = await Order.find()
       .sort({ createdAt: -1 })
       .select(
         "orderDate orderId _id name phone totalAfterDiscount deliveryCharge paymentStatus status address"
-      );
+      )
+      .lean();
 
     return NextResponse.json(
       { msg: "Data found.", payload: orders },

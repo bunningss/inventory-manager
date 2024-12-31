@@ -1,31 +1,23 @@
 import { Block } from "@/components/block";
-import { OrderCard } from "@/components/cards/order-card";
 import { Loading } from "@/components/loading";
+import { OrdersTable } from "@/components/tables/orders-table";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function Orders() {
-  const res = await getData("orders", 0);
+  const { response } = await getData("orders", 0);
 
-  return (
-    <>
-      {res.response.payload?.map((order, index) => (
-        <OrderCard key={index} order={order} />
-      ))}
-    </>
-  );
+  return <OrdersTable orders={response.payload} />;
 }
 
 export default async function Page() {
   return (
-    <>
-      <Block title="orders">
-        <Suspense fallback={<Loading className="py-8" />}>
-          <div className="grid grid-cols-2 gap-4">
-            <Orders />
-          </div>
-        </Suspense>
-      </Block>
-    </>
+    <div className="space-y-4">
+      <Block title="orders" />
+
+      <Suspense fallback={<Loading className="py-8" />}>
+        <Orders />
+      </Suspense>
+    </div>
   );
 }

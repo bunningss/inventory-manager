@@ -50,3 +50,5 @@ export const permissions = {
 // view:coupons
 // view:users
 // delete:users
+// view:orders
+// view:order
