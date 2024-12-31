@@ -3,20 +3,20 @@ import { TableModal } from "./table-modal";
 
 const columns = [
   {
-    header: "সি. নং",
+    header: "Serial No.",
     accessorKey: "index",
     cell: (_, index) => index + 1,
   },
   {
-    header: "code",
-    accessorKey: "code",
+    header: "Code",
+    cell: (item) => `${item.code?.toUpperCase()}`,
   },
   {
-    header: "discount",
+    header: "Discount",
     cell: (item) => `${item.discount}%`,
   },
   {
-    header: "code status",
+    header: "Code Status",
     cell: (item) => (item.isActive ? "Active" : "Inactive"),
   },
 ];

@@ -1,4 +1,4 @@
-import { AuthWrapper } from "@/components/auth/auth-wrapper";
+import { AuthWrapper } from "@/components/auth-wrapper";
 import { ForgotPasswordForm } from "@/components/forms/forgot-password-form";
 
 export default function Page() {

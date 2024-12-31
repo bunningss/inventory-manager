@@ -10,6 +10,7 @@ import { Modal } from "./modal";
 import { FormModal } from "../form/form-modal";
 import { FormInput } from "../form/form-input";
 import { FormSelect } from "../form/form-select";
+import { permissions } from "@/lib/static";
 
 const formSchema = z.object({
   name: z
@@ -18,22 +19,11 @@ const formSchema = z.object({
       message: "Name must be at least 3 characters.",
     })
     .max(50),
-  role: z.enum(["admin", "user"], {
+  role: z.enum(Object.keys(permissions), {
     required_error: "Please select a role.",
     message: "Please select a role.",
   }),
 });
-
-const roleOptions = [
-  {
-    name: "user",
-    value: "user",
-  },
-  {
-    name: "admin",
-    value: "admin",
-  },
-];
 
 export function UpdateUser({ data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,6 +60,11 @@ export function UpdateUser({ data }) {
     }
   };
 
+  const roles = Object.keys(permissions).map((item) => ({
+    name: item,
+    value: item,
+  }));
+
   return (
     <Modal
       title="Edit User"
@@ -97,7 +92,7 @@ export function UpdateUser({ data }) {
         />
         <FormSelect
           form={form}
-          options={roleOptions}
+          options={roles}
           placeholder="select role"
           name="role"
           label="role"

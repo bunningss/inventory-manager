@@ -48,3 +48,5 @@ export const permissions = {
 // update:roles
 // add:coupon
 // view:coupons
+// view:users
+// delete:users

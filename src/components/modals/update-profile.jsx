@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormInput } from "../form/form-input";
 import { FormSelect } from "../form/form-select";
 import { FormModal } from "../form/form-modal";
+import { FormCalendar } from "../form/form-calendar";
 
 const formSchema = z.object({
   name: z
@@ -33,6 +34,7 @@ const formSchema = z.object({
     .max(11)
     .optional()
     .or(z.literal("")),
+  birthdate: z.date().or(z.literal("")),
 });
 
 const genderOptions = [
@@ -57,6 +59,7 @@ export function UpdateProfile({ data }) {
       name: data?.name,
       gender: data?.gender,
       phone: data?.phone || "",
+      birthdate: data?.birthdate || "",
     },
   });
 
@@ -102,7 +105,6 @@ export function UpdateProfile({ data }) {
         <FormInput
           form={form}
           name="name"
-          placeholder=""
           label="name"
           defaultValue={data?.name}
         />
@@ -114,10 +116,10 @@ export function UpdateProfile({ data }) {
           label="gender"
           defaultValue={data?.gender}
         />
+        <FormCalendar form={form} name="birthdate" label="birth date" />
         <FormInput
           form={form}
           name="phone"
-          placeholder=""
           label="phone number"
           defaultValue={data?.phone}
         />

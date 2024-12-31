@@ -1,18 +1,15 @@
-import { connectDb } from "@/lib/db/connectDb";
 import User from "@/lib/models/User";
+import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
 
 // Get all users
 export async function GET(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "view:users");
 
-    const users = await User.find().select("name email role");
+    const users = await User.find().select("name email role").lean();
 
     return NextResponse.json(
       { msg: "Data found.", payload: users },
@@ -26,19 +23,18 @@ export async function GET(request) {
 // Delete user
 export async function DELETE(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+    await connectDb();
+    await verifyToken(request, "delete:user");
 
     const body = await request.json();
 
-    const existingUser = await User.findOne({ _id: body._id });
+    const existingUser = await User.findById(body._id);
     if (!existingUser)
       return NextResponse.json({ msg: "User not found." }, { status: 404 });
 
     if (existingUser.role.toLowerCase() === "admin")
       return NextResponse.json(
-        { msg: "Admin user cannot be deleted." },
+        { msg: "Cannot delete admin user." },
         { status: 400 }
       );
 

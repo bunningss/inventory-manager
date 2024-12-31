@@ -72,6 +72,7 @@ export async function PUT(request, { params }) {
     userData.name = body.name ? body.name : userData.name;
     userData.gender = body.gender ? body.gender : userData.gender;
     userData.phone = body.phone ? body.phone : userData.phone;
+    userData.birthdate = body.birthdate ? body.birthdate : userData.birthdate;
 
     await userData.save();
 
