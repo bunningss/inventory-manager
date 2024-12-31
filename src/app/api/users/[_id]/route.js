@@ -21,13 +21,7 @@ export async function GET(request, { params }) {
       .populate({
         path: "orders",
         select:
-          "name address phone totalWithDeliveryCharge status paymentMethod paymentStatus orderDate orderId couponCode products",
-        populate: [
-          {
-            path: "couponCode",
-            select: "-_id code discount",
-          },
-        ],
+          "name address phone totalWithDeliveryCharge status paymentMethod paymentStatus orderDate orderId products",
       })
       .select("-password -role -__v");
 
@@ -50,7 +44,7 @@ export async function PUT(request, { params }) {
     await connectDb();
     const { id } = await verifyToken(request, "update:self");
 
-    const userData = await User.findById(id);
+    const userData = await User.findById(params._id);
     if (!userData)
       return NextResponse.json({ msg: "Invalid request." }, { status: 404 });
 
@@ -69,10 +63,12 @@ export async function PUT(request, { params }) {
       }
     }
 
-    userData.name = body.name ? body.name : userData.name;
-    userData.gender = body.gender ? body.gender : userData.gender;
-    userData.phone = body.phone ? body.phone : userData.phone;
-    userData.birthdate = body.birthdate ? body.birthdate : userData.birthdate;
+    if (id === params._id || (await verifyToken(request, "update:roles"))) {
+      userData.name = body.name ? body.name : userData.name;
+      userData.gender = body.gender ? body.gender : userData.gender;
+      userData.phone = body.phone ? body.phone : userData.phone;
+      userData.birthdate = body.birthdate ? body.birthdate : userData.birthdate;
+    }
 
     await userData.save();
 
@@ -85,7 +81,7 @@ export async function PUT(request, { params }) {
 // Delete user
 export async function DELETE(request, { params }) {
   try {
-    await verifyToken(request, "delete:user");
+    await verifyToken(request, "delete:users");
 
     await User.findByIdAndDelete(params?._id);
 
