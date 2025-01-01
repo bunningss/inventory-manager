@@ -52,3 +52,5 @@ export const permissions = {
 // delete:users
 // view:orders
 // view:order
+// view:others-order
+// update:order-status

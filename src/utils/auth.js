@@ -70,28 +70,16 @@ export async function logout() {
 
 export const checkPermission = async (action, id) => {
   const { response } = await getData(`get-role/${id}`, 0);
-  const rolePermissions = permissions[response.payload?.role];
 
-  if (!rolePermissions) {
+  if (!hasPermission(action, response.payload?.role))
     throw new Error("You are not authorized.");
-  }
-
-  if (rolePermissions.can?.includes("manage:all")) {
-    return true;
-  }
-
-  if (!rolePermissions.can?.includes(action)) {
-    throw new Error("You are not authorized.");
-  }
-
-  return true;
 };
 
 export async function hasPermission(action, role) {
   const rolePermissions = permissions[role];
 
   if (!rolePermissions) {
-    throw new Error("You are not authorized.");
+    return false;
   }
 
   if (rolePermissions.can?.includes("manage:all")) {
@@ -99,7 +87,7 @@ export async function hasPermission(action, role) {
   }
 
   if (!rolePermissions.can?.includes(action)) {
-    throw new Error("You are not authorized.");
+    false;
   }
 
   return true;

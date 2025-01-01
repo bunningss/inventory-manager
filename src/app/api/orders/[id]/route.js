@@ -1,6 +1,6 @@
 import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
-import { verifyToken } from "@/utils/auth";
+import { hasPermission, verifyToken } from "@/utils/auth";
 import Order from "@/lib/models/Order";
 import User from "@/lib/models/User";
 import mongoose from "mongoose";
@@ -9,23 +9,25 @@ import Product from "@/lib/models/Product";
 
 export async function GET(request, { params }) {
   try {
-    const user = await verifyToken(request);
-
-    let order;
+    await connectDb();
+    const user = await verifyToken(request, "view:others-order");
 
     const { id } = params;
-    await connectDb();
 
-    order = await Order.findOne({ orderId: id }).populate({
-      path: "couponCode",
-      select: "code",
-    });
+    const order = await Order.findById(id)
+      .populate({
+        path: "couponCode",
+        select: "code",
+      })
+      .lean();
 
     if (!order)
       return NextResponse.json({ msg: "No data found." }, { status: 400 });
 
-    if (user.payload?.role?.toLowerCase() !== "admin") {
-      order = {
+    let orderData;
+
+    if (!hasPermission("view:full-order-details", user?.role)) {
+      orderData = {
         name: order.name,
         email: order?.email,
         phone: order?.phone,
@@ -38,8 +40,11 @@ export async function GET(request, { params }) {
         paymentMethod: order?.paymentMethod,
         orderDate: order?.orderDate,
       };
+    } else {
+      orderData = order;
     }
-    return NextResponse.json({ msg: "Data Found.", payload: order });
+
+    return NextResponse.json({ msg: "Data Found.", payload: orderData });
   } catch (err) {
     return NextResponse.json({ msg: err.message }, { status: 400 });
   }
@@ -48,26 +53,18 @@ export async function GET(request, { params }) {
 // Update order status
 export async function PUT(request, { params }) {
   const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role.toLowerCase() !== "admin") {
-      await session.abortTransaction();
-      session.endSession();
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-    }
+    await connectDb();
+    session.startTransaction();
+    await verifyToken(request, "update:order-status");
 
     const { id } = params;
     const body = await request.json();
 
-    await connectDb();
-
-    const existingOrder = await Order.findOne({ _id: id }).session(session);
+    const existingOrder = await Order.findById(id).session(session);
     if (!existingOrder) {
-      await session.abortTransaction();
-      session.endSession();
-      return NextResponse.json({ msg: "Order not found." }, { status: 404 });
+      throw new Error("Order not found.");
     }
 
     // Check order status transitions

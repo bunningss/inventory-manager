@@ -69,7 +69,7 @@ export function UpdateOrder({ order }) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       address: order?.address,
-      status: order?.status,
+      status: "courier",
       paymentStatus: order?.paymentStatus,
     },
   });
