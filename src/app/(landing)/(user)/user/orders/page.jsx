@@ -7,10 +7,10 @@ import { getSession } from "@/utils/auth";
 import { Suspense } from "react";
 
 export async function generateMetadata() {
-  const session = await getSession();
+  const { payload } = await getSession();
 
   return {
-    title: `${session.payload?.name}'s past orders`,
+    title: `${payload?.name}'s past orders`,
   };
 }
 

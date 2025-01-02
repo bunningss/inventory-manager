@@ -92,7 +92,6 @@ export async function POST(request) {
       discountPercentage: verifiedCoupon?.discount,
       couponCode: verifiedCoupon?._id,
       totalBeforeDiscount: body.total,
-      totalAfterComission: body.total,
       sellerTotal: total,
     });
 
@@ -150,23 +149,23 @@ export async function GET(request) {
 }
 
 // Delete order
-export async function DELETE(request) {
-  try {
-    const user = await verifyToken(request);
-    if (user.payload.role.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+// export async function DELETE(request) {
+//   try {
+//     const user = await verifyToken(request);
+//     if (user.payload.role.toLowerCase() !== "admin")
+//       return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
 
-    await connectDb();
+//     await connectDb();
 
-    const body = await request.json();
-    const existingOrder = await Order.findOne({ _id: body._id });
-    if (!existingOrder)
-      return NextResponse.json({ msg: "Order not found." }, { status: 404 });
+//     const body = await request.json();
+//     const existingOrder = await Order.findOne({ _id: body._id });
+//     if (!existingOrder)
+//       return NextResponse.json({ msg: "Order not found." }, { status: 404 });
 
-    await Order.findByIdAndDelete(body._id);
+//     await Order.findByIdAndDelete(body._id);
 
-    return NextResponse.json({ msg: "Order Deleted." }, { status: 200 });
-  } catch (err) {
-    return NextResponse.json({ msg: err.message }, { status: 400 });
-  }
-}
+//     return NextResponse.json({ msg: "Order Deleted." }, { status: 200 });
+//   } catch (err) {
+//     return NextResponse.json({ msg: err.message }, { status: 400 });
+//   }
+// }

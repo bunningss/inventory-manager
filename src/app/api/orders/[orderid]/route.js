@@ -10,11 +10,10 @@ import Product from "@/lib/models/Product";
 export async function GET(request, { params }) {
   try {
     await connectDb();
-    const user = await verifyToken(request, "view:others-order");
+    const { id, role } = await verifyToken(request, "view:order-details");
+    const { orderid } = params;
 
-    const { id } = params;
-
-    const order = await Order.findById(id)
+    const order = await Order.findById(orderid)
       .populate({
         path: "couponCode",
         select: "code",
@@ -26,7 +25,7 @@ export async function GET(request, { params }) {
 
     let orderData;
 
-    if (!hasPermission("view:full-order-details", user?.role)) {
+    if (!hasPermission("view:order-details-full", role)) {
       orderData = {
         name: order.name,
         email: order?.email,
@@ -57,7 +56,7 @@ export async function PUT(request, { params }) {
   try {
     await connectDb();
     session.startTransaction();
-    await verifyToken(request, "update:order-status");
+    await verifyToken(request, "update:order-details");
 
     const { id } = params;
     const body = await request.json();
@@ -185,13 +184,12 @@ export async function PUT(request, { params }) {
       );
     }
 
-    // Commit the transaction after all operations are successful
     await session.commitTransaction();
     session.endSession();
 
     return NextResponse.json({ msg: "Data Updated.", payload: updatedOrder });
   } catch (err) {
-    await session.abortTransaction(); // Rollback in case of any error
+    await session.abortTransaction();
     session.endSession();
     return NextResponse.json({ msg: err.message }, { status: 400 });
   }

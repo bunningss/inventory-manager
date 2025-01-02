@@ -11,10 +11,12 @@ import { permissions } from "@/lib/static";
 export async function GET(request, { params }) {
   try {
     await connectDb();
-    const { id, role } = await verifyToken(request, "view:self");
+    const { id, role } = await verifyToken(request, "view:profile");
 
     if (params._id !== id) {
-      await hasPermission("view:others", role);
+      const isAllowed = await hasPermission("view:user-details", role);
+      if (!isAllowed)
+        return NextResponse.json({ msg: "Unauthorized." }, { status: 401 });
     }
 
     const userData = await User.findById(params._id)
@@ -23,7 +25,8 @@ export async function GET(request, { params }) {
         select:
           "name address phone totalWithDeliveryCharge status paymentMethod paymentStatus orderDate orderId products",
       })
-      .select("-password -role -__v");
+      .select("-password -role -__v")
+      .lean();
 
     if (!userData) {
       return NextResponse.json({ msg: "User not found." }, { status: 404 });
@@ -42,7 +45,13 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDb();
-    const { id, role } = await verifyToken(request, "update:self");
+    const { id, role } = await verifyToken(request, "update:profile");
+
+    if (params._id !== id) {
+      const isAllowed = await hasPermission("update:user-details", role);
+      if (!isAllowed)
+        return NextResponse.json({ msg: "Unauthorized." }, { status: 401 });
+    }
 
     const userData = await User.findById(params._id);
     if (!userData)
@@ -57,18 +66,16 @@ export async function PUT(request, { params }) {
       );
 
     if (body.role) {
-      await hasPermission("update:roles", role);
+      await hasPermission("update:user-details", role);
       if (Object.keys(permissions).includes(body.role)) {
         userData.role = body.role;
       }
     }
 
-    if (id === params._id || (await verifyToken(request, "update:roles"))) {
-      userData.name = body.name ? body.name : userData.name;
-      userData.gender = body.gender ? body.gender : userData.gender;
-      userData.phone = body.phone ? body.phone : userData.phone;
-      userData.birthdate = body.birthdate ? body.birthdate : userData.birthdate;
-    }
+    userData.name = body.name ? body.name : userData.name;
+    userData.gender = body.gender ? body.gender : userData.gender;
+    userData.phone = body.phone ? body.phone : userData.phone;
+    userData.birthdate = body.birthdate ? body.birthdate : userData.birthdate;
 
     await userData.save();
 

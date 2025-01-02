@@ -41,16 +41,16 @@ export const permissions = {
     ],
   },
   user: {
-    can: ["view:self", "update:self", "place:order", "view:self-order"],
+    can: ["view:profile", "update:profile", "place:order"],
   },
 };
 
-// update:roles
+// view:user-details
+// update:user-details
 // add:coupon
 // view:coupons
 // view:users
 // delete:users
 // view:orders
-// view:order
 // view:others-order
-// update:order-status
+// update:order-details

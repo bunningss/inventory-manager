@@ -59,7 +59,7 @@ export function UpdateProfile({ data }) {
       name: data?.name,
       gender: data?.gender,
       phone: data?.phone || "",
-      birthdate: data?.birthdate || "",
+      birthdate: new Date(data?.birthdate) || "",
     },
   });
 

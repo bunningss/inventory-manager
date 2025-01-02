@@ -7,9 +7,11 @@ import { verifyToken } from "@/utils/auth";
 export async function GET(request, { params }) {
   try {
     await connectDb();
-    const product = await Product.findOne({ slug: params.slug }).populate({
-      path: "category",
-    });
+    const product = await Product.findOne({ slug: params.slug })
+      .populate({
+        path: "category",
+      })
+      .lean();
 
     if (!product) {
       return NextResponse.json(
