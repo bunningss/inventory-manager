@@ -3,8 +3,8 @@ import { Block } from "@/components/block";
 import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
 import { SalesReportsFilters } from "@/components/sales/sales-reports-filters";
-import { SalesReportsTable } from "@/components/sales/sales-reports-table";
 import { getData } from "@/utils/api-calls";
+import { SaleReportsTable } from "@/components/tables/sale-reports-table";
 
 async function fetchReportsData(searchParams) {
   const { from, to, sortBy, searchKey, all } = searchParams;
@@ -19,12 +19,11 @@ async function fetchReportsData(searchParams) {
   return getData(`sales?${queryParams}`, 0);
 }
 
-async function Reports({ searchParams, from, to }) {
-  const res = await fetchReportsData(searchParams);
-  if (res.response.payload?.sales?.length > 0) {
-    return (
-      <SalesReportsTable data={res.response.payload} from={from} to={to} />
-    );
+async function Reports({ searchParams }) {
+  const { response } = await fetchReportsData(searchParams);
+
+  if (response.payload?.sales?.length > 0) {
+    return <SaleReportsTable reports={response?.payload?.sales} />;
   }
   return (
     <Empty
@@ -49,7 +48,7 @@ export default async function Page({ searchParams }) {
     <Block title="previous sales" headerContent={headerContent}>
       <SalesReportsFilters />
       <Suspense fallback={<Loading className="mt-4 py-8" />}>
-        <Reports from={from} to={to} searchParams={searchParams} />
+        <Reports searchParams={searchParams} />
       </Suspense>
     </Block>
   );
