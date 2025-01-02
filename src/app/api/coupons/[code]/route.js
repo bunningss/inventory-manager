@@ -9,7 +9,10 @@ export async function GET(request, { params }) {
     const couponData = await Coupon.findOne(
       { code: params.code },
       "discount -_id"
-    ).collation({ locale: "en", strength: 2 });
+    )
+      .collation({ locale: "en", strength: 2 })
+      .lean();
+
     if (!couponData)
       return NextResponse.json(
         { msg: "Invalid coupon code." },

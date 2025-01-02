@@ -11,10 +11,12 @@ export async function POST(request) {
 
     const body = await request.json();
 
-    const existingCode = await Coupon.findOne({ code: body.code }).collation({
-      locale: "en",
-      strength: 2,
-    });
+    const existingCode = await Coupon.findOne({ code: body.code })
+      .collation({
+        locale: "en",
+        strength: 2,
+      })
+      .lean();
 
     if (existingCode)
       return NextResponse.json(
@@ -48,7 +50,8 @@ export async function GET(request) {
 
     const codes = await Coupon.find()
       .select("code discount isActive")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     return NextResponse.json({ msg: "Data found.", payload: codes });
   } catch (err) {
