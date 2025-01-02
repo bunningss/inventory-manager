@@ -1,12 +1,12 @@
 "use client";
 import { useReactToPrint } from "react-to-print";
 import { Block } from "../block";
-import { SalesReceiptCard } from "./sales-receipt-card";
 import { useRef } from "react";
 import { Button } from "../ui/button";
 import { Heading } from "../heading";
+import { SalesReceiptCard } from "../sales/sales-receipt-card";
 
-export function Receipt({ data }) {
+export function SaleReceipt({ data }) {
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 

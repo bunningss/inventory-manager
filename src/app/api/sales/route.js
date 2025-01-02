@@ -8,49 +8,45 @@ import { generateRandomString } from "@/utils/helpers";
 
 // Create a new sale
 export async function POST(request) {
+  const session = await mongoose.startSession();
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin") {
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-    }
+    await connectDb();
+    session.startTransaction();
+    await verifyToken(request, "add:sale");
 
     const body = await request.json();
-    const { customerName, customerNumber, products, amount, due, paid } = body;
+    const { customerName, customerNumber, products, amount, paid } = body;
+
+    if (isNaN(amount)) {
+      throw new Error("Invalid amount.");
+    }
+
+    if (paid) {
+      if (isNaN(paid)) {
+        throw new Error("Invalid paid amount.");
+      }
+    }
 
     if (amount <= 0) {
-      return NextResponse.json(
-        { msg: "Amount must be greater than zero." },
-        { status: 400 }
-      );
+      throw new Error("Amount cannot be less than or equal to zero.");
     }
 
     if (paid * 100 > amount) {
-      return NextResponse.json(
-        { msg: "Paid amount cannot be greater than total amount." },
-        { status: 400 }
-      );
-    }
-
-    if (due < 0) {
-      return NextResponse.json(
-        { msg: "Due amount cannot be less than zero." },
-        { status: 400 }
-      );
+      throw new Error("Paid amount cannot be greater than total amount.");
     }
 
     if (!products.length) {
-      return NextResponse.json(
-        { msg: "Please add products to the sale." },
-        { status: 400 }
-      );
+      throw new Error("Please add products to the sale.");
     }
 
-    await connectDb();
-
-    let remainingDue;
+    let due;
 
     if (paid) {
-      remainingDue = amount - paid * 100;
+      if (isNaN(paid)) {
+        throw new Error("Invalid paid amount.");
+      }
+
+      due = amount - paid * 100;
     }
 
     const saleId = generateRandomString(13);
@@ -61,36 +57,43 @@ export async function POST(request) {
       customerNumber,
       products,
       amount,
-      due: remainingDue ? remainingDue : 0,
+      due: due ? due : 0,
       paid: paid ? paid * 100 : amount,
     });
     // Update product stock
     for (const product of products) {
       const { _id, quantity } = product;
-      await Product.findByIdAndUpdate(_id, {
-        $inc: { stock: -quantity, sold: quantity },
-      });
+      await Product.findByIdAndUpdate(
+        _id,
+        {
+          $inc: { stock: -quantity, sold: quantity },
+        },
+        {
+          new: true,
+          session,
+        }
+      );
     }
 
-    await sale.save();
-    console.log(sale);
+    await sale.save({ session });
+    await session.commitTransaction();
+
     return NextResponse.json(
       { msg: "Sale created.", payload: sale },
       { status: 200 }
     );
   } catch (err) {
-    console.log(err);
+    await session.abortTransaction();
     return NextResponse.json({ msg: err.message }, { status: 400 });
+  } finally {
+    session.endSession();
   }
 }
 
 // Get all sales
 export async function GET(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin") {
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-    }
+    await verifyToken(request, "view:sales");
 
     const reqUrl = new URL(request.url);
     let from = reqUrl.searchParams.get("from");
@@ -139,7 +142,9 @@ export async function GET(request) {
     // Determine sort order
     const sortOrder = sortBy === "amount" || sortBy === "due" ? -1 : -1;
 
-    const sales = await Sale.find(filter).sort({ [sortBy]: sortOrder });
+    const sales = await Sale.find(filter)
+      .sort({ [sortBy]: sortOrder })
+      .lean();
 
     const dues = sales.reduce((a, c) => a + c.due, 0);
     const total = sales.reduce((a, c) => a + c.amount, 0);

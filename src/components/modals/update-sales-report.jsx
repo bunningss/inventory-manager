@@ -29,7 +29,7 @@ export function UpdateSalesReport({ data }) {
       customerName: data?.customerName,
       newAmount: "",
       customerNumber: data?.customerNumber || "",
-      clear: data?.due * 1 === 0 ? true : false,
+      clear: Number(data?.due) === 0 ? true : false,
     },
   });
 
@@ -39,7 +39,7 @@ export function UpdateSalesReport({ data }) {
       customerName: data?.customerName,
       newAmount: "",
       customerNumber: data?.customerNumber || "",
-      clear: data?.due * 1 === 0 ? true : false,
+      clear: Number(data?.due) === 0 ? true : false,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
@@ -48,13 +48,13 @@ export function UpdateSalesReport({ data }) {
     setIsLoading(true);
 
     try {
-      const res = await putData(`sales/${data?._id}`, values);
-      if (res.error) {
-        return errorNotification(res.response.msg);
+      const { response, error } = await putData(`sales/${data?._id}`, values);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
       router.refresh();
-      successNotification(res.response.msg);
+      successNotification(response.msg);
       setIsModalOpen(false);
     } catch (err) {
       errorNotification(err.message);

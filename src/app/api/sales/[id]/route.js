@@ -5,13 +5,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "view:sale-details");
 
-    const sale = await Sale.findById(params.id);
+    const sale = await Sale.findById(params.id).lean();
 
     return NextResponse.json(
       { msg: "Data found.", payload: sale },
@@ -22,25 +19,25 @@ export async function GET(request, { params }) {
   }
 }
 
+// Update sale details
 export async function PUT(request, { params }) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+    await verifyToken(request, "update:sale-details");
 
     const body = await request.json();
-
-    const existingSale = await Sale.findById(params.id);
+    const existingSale = await Sale.findById(params.id).lean();
 
     if (body.newAmount) {
+      if (isNaN(body.newAmount)) throw new Error("Invalid Amount");
+
       if (existingSale.paid + body.newAmount * 100 > existingSale.amount) {
-        return NextResponse.json({ msg: "Invalid Amount" }, { status: 400 });
+        throw new Error("Invalid Amount");
       }
     }
 
     await connectDb();
 
-    if (body.clear) {
+    if (body.clear === true) {
       await Sale.findByIdAndUpdate(
         params.id,
         {
@@ -72,6 +69,6 @@ export async function PUT(request, { params }) {
 
     return NextResponse.json({ msg: "Data updated." }, { status: 200 });
   } catch (err) {
-    return NextResponse({ msg: err.message }, { status: 500 });
+    return NextResponse.json({ msg: err.message }, { status: 500 });
   }
 }

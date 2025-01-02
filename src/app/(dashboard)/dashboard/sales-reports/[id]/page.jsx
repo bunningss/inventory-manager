@@ -1,11 +1,11 @@
 import { getData } from "@/utils/api-calls";
-import { Receipt } from "@/components/sales/receipt";
 import { Suspense } from "react";
 import { Loading } from "@/components/loading";
+import { SaleReceipt } from "@/components/receipts/sale-receipt";
 
 async function Receipts({ id }) {
   const res = await getData(`sales/${id}`, 0);
-  return <Receipt data={res.response.payload} />;
+  return <SaleReceipt data={res.response.payload} />;
 }
 
 export default async function Page({ params }) {

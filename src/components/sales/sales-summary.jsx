@@ -43,7 +43,7 @@ export function SalesSummary() {
     setIsLoading(true);
 
     try {
-      const res = await postData("sales", {
+      const { response, error } = await postData("sales", {
         amount: total,
         products: salesItems,
         paid: data.paid,
@@ -51,8 +51,8 @@ export function SalesSummary() {
         customerNumber: data.customerNumber,
       });
 
-      if (res.error) {
-        return errorNotification(res.response.msg);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
       // Format salesItems into a string
@@ -66,9 +66,9 @@ export function SalesSummary() {
       await sendTelegramMessage(
         `💵 মোট বিক্রয়: ${total / 100}টাকা.\nবিস্তারিত বিবরণ:\n${productsList}`
       );
-      router.push(`/dashboard/sales-reports/${res.response.payload._id}`);
+      router.push(`/dashboard/sales-reports/${response.payload._id}`);
       onClear();
-      successNotification(res.response.msg);
+      successNotification(response.msg);
     } catch (err) {
       errorNotification(err.message);
     } finally {
