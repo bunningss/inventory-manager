@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import User from "@/lib/models/User";
-import { SignJWT } from "jose";
 import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
+import { signToken } from "@/utils/auth";
 
 export async function POST(req) {
   try {
@@ -30,25 +30,11 @@ export async function POST(req) {
 
     const { password: _, ...userDetails } = userExist._doc;
 
-    // creating token which is gonna expire in 7days
-    const expiry = 60 * 60 * 24;
-
-    // Convert TOKEN_SECRET to Uint8Array
-    const secretKey = new TextEncoder().encode(process.env.TOKEN_SECRET);
-
-    const token = await new SignJWT({ ...userDetails })
-      .setProtectedHeader({ alg: "HS256" })
-      .setIssuedAt()
-      .setExpirationTime(`${expiry}s`)
-      .sign(secretKey);
+    await signToken(userDetails);
 
     return NextResponse.json(
       {
         msg: "Login successful.",
-        session_token: token,
-        expiryTime: expiry,
-        partner: userDetails?.code ? true : false,
-        payload: userDetails,
       },
       { status: 200 }
     );

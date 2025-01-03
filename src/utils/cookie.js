@@ -1,10 +1,12 @@
 "use server";
 import { cookies } from "next/headers";
 
-export async function setCookie(name, value, expires) {
+export async function setCookie(name, value, expiresIn) {
   cookies().set(name, value, {
-    maxAge: expires,
+    maxAge: expiresIn,
     httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
   });
 }
 

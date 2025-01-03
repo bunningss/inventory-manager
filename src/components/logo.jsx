@@ -1,16 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/springbird.svg";
 
 export function Logo() {
   return (
     <Link href="/">
-      <figure className="h-[50px] w-[150px]">
+      <figure className="relative h-[50px] w-[150px]">
         <Image
           src={logo}
-          alt="zeris"
-          className="filter invert dark:invert-0"
+          alt="springbird logo"
+          className="cobject-contain"
           sizes="120px"
+          fill
         />
       </figure>
     </Link>

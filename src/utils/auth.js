@@ -1,5 +1,5 @@
 "use server";
-import { jwtVerify } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 import { getCookie, setCookie } from "./cookie";
 import { getData } from "./api-calls";
 import { permissions } from "@/lib/static";
@@ -91,4 +91,17 @@ export async function hasPermission(action, role) {
   }
 
   return true;
+}
+
+export async function signToken(data) {
+  const expiry = 60 * 60 * 24 * 7;
+  const secretKey = new TextEncoder().encode(process.env.TOKEN_SECRET);
+
+  const token = await new SignJWT(data)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(`${expiry}s`)
+    .sign(secretKey);
+
+  await setCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE, token, expiry);
 }

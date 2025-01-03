@@ -4,7 +4,6 @@ import { Heading } from "../heading";
 import { postData } from "@/utils/api-calls";
 import { useState } from "react";
 import { errorNotification, successNotification } from "@/utils/toast";
-import { setCookie } from "@/utils/cookie";
 import { useRouter } from "next/navigation";
 import { FormInput } from "../form/form-input";
 import { useForm } from "react-hook-form";
@@ -42,12 +41,6 @@ export function LoginForm() {
       if (res.error) {
         return errorNotification(res.response.msg);
       }
-
-      await setCookie(
-        process.env.NEXT_PUBLIC_SESSION_COOKIE,
-        res.response.session_token,
-        res.response.expiryTime
-      );
 
       router.push("/");
       successNotification(res.response.msg);
