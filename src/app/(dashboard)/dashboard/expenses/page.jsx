@@ -6,11 +6,11 @@ import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function Expenses() {
-  const res = await getData("expenses", 0);
+  const { response } = await getData("expenses", 0);
 
   return (
     <CardView>
-      {res.response.payload?.map((expense, index) => (
+      {response.payload?.map((expense, index) => (
         <ExpenseCard key={index} expense={expense} />
       ))}
     </CardView>
@@ -19,10 +19,12 @@ async function Expenses() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<Loading />}>
-      <Block title="expenses">
+    <div className="space-y-4">
+      <Block title="expenses" />
+
+      <Suspense fallback={<Loading />}>
         <Expenses />
-      </Block>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }

@@ -7,7 +7,7 @@ export function CategoryCard({ category }) {
   return (
     <Card title={category?.title}>
       <CardContent className="flex items-center gap-2 p-1 md:p-1">
-        <div className="bg-slate-100 dark:bg-primary-foreground px-1">
+        <div className="bg-input rounded-md px-1">
           <DynamicIcon name={category?.icon} size={80} />
         </div>
         <div className="py-0 px-1 w-full space-y-2">

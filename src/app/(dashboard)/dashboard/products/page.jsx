@@ -32,11 +32,12 @@ async function Products({ searchParams }) {
 
 export default async function Page({ searchParams }) {
   return (
-    <Block title="all products" className="space-y-8">
+    <div className="space-y-4">
+      <Block title="all products" className="space-y-8" />
       <ProductFilters />
       <Suspense fallback={<Loading className="py-8" />}>
         <Products searchParams={searchParams} />
       </Suspense>
-    </Block>
+    </div>
   );
 }

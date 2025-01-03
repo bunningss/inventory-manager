@@ -31,16 +31,15 @@ export async function POST(request) {
   }
 }
 
-// Retrieve all expenses
+// Get all expenses
 export async function GET(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
+    await verifyToken(request, "view:expenses");
     await connectDb();
 
-    const expenses = await Expense.find().select("title date amount status");
+    const expenses = await Expense.find()
+      .select("title date amount status")
+      .lean();
 
     return NextResponse.json({ msg: "Data found.", payload: expenses });
   } catch (err) {

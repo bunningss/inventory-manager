@@ -6,11 +6,11 @@ import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function SubCategories() {
-  const res = await getData("categories/sub-categories", 0);
+  const { response } = await getData("categories/sub-categories", 0);
 
   return (
     <CardView>
-      {res.response.payload?.map((subcategory, index) => (
+      {response.payload?.map((subcategory, index) => (
         <SubCategoryCard key={index} subCategory={subcategory} />
       ))}
     </CardView>
@@ -19,10 +19,12 @@ async function SubCategories() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<Loading />}>
-      <Block title="sub categories">
+    <div className="space-y-4">
+      <Block title="sub categories" />
+
+      <Suspense fallback={<Loading />}>
         <SubCategories />
-      </Block>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }

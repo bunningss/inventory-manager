@@ -11,7 +11,7 @@ import { FormInput } from "../form/form-input";
 import { FormModal } from "../form/form-modal";
 
 const formSchema = z.object({
-  quantity: z.string(),
+  quantity: z.string().min(1, { message: "Quantity is required." }),
 });
 
 export function AddProductQuantity({ data }) {
@@ -30,16 +30,16 @@ export function AddProductQuantity({ data }) {
     setIsLoading(true);
 
     try {
-      const res = await putData(
+      const { response, error } = await putData(
         `products/update-quantity/${data?._id}`,
         formData
       );
 
-      if (res.error) {
-        return errorNotification(res.response.msg);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
-      successNotification(res.response.msg);
+      successNotification(response.msg);
       form.reset({
         quantity: "",
       });

@@ -8,7 +8,7 @@ export default async function DashboardLayout({ children }) {
   return (
     <div>
       <DashboardNavbar userData={session} />
-      <div className="flex gap-4">
+      <div className="flex gap-2">
         <DashboardSidebar />
         <main className="w-full pr-2">{children}</main>
       </div>

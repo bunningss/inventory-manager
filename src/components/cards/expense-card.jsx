@@ -7,7 +7,7 @@ export function ExpenseCard({ expense }) {
   return (
     <Card title={expense?.title}>
       <CardContent className="flex items-center gap-2 p-1 md:p-1">
-        <div className="bg-slate-100 dark:bg-primary-foreground px-1">
+        <div className="bg-input rounded-md px-1">
           <Icon icon="expense" size={80} />
         </div>
         <div className="py-0 px-1 w-full flex flex-col">

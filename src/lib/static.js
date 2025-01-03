@@ -58,3 +58,5 @@ export const permissions = {
 // view:sale-details
 // add:sale
 // update:sale-details
+// update:product
+// view:expenses

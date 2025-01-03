@@ -19,10 +19,12 @@ async function Categories() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<Loading />}>
-      <Block title="categories">
+    <div className="space-y-4">
+      <Block title="categories" />
+
+      <Suspense fallback={<Loading />}>
         <Categories />
-      </Block>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }
