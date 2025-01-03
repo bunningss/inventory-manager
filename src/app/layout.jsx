@@ -4,8 +4,9 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
-  title: "E-commerce",
-  description: "Everything you need in one place",
+  title: "Springbird",
+  description:
+    "Complete e-commerce and POS solution for small to medium businesses.",
 };
 
 export default async function RootLayout({ children }) {
