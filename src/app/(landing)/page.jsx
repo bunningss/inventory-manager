@@ -9,11 +9,13 @@ import { Suspense } from "react";
 
 // component for product lists
 const ProductList = async ({ query }) => {
-  const res = await getData(`productss?${query}&limit=10`, 0);
+  const { error, response } = await getData(`productss?${query}&limit=10`, 0);
+
+  if (error) throw new Error("Something went wrong. Please try again later.");
 
   return (
     <>
-      {res.response.payload?.map((product, index) => (
+      {response.payload?.map((product, index) => (
         <Product key={index} product={product} />
       ))}
     </>
