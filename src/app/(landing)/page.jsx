@@ -9,9 +9,7 @@ import { Suspense } from "react";
 
 // component for product lists
 const ProductList = async ({ query }) => {
-  const { error, response } = await getData(`productss?${query}&limit=10`, 0);
-
-  if (error) throw new Error("Something went wrong. Please try again later.");
+  const { response } = await getData(`productss?${query}&limit=10`);
 
   return (
     <>
