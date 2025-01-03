@@ -9,7 +9,7 @@ import { Suspense } from "react";
 
 // component for product lists
 const ProductList = async ({ query }) => {
-  const { response } = await getData(`productss?${query}&limit=10`);
+  const { response } = await getData(`products?${query}&limit=10`);
 
   return (
     <>
