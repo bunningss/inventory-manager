@@ -43,11 +43,7 @@ export function LoginForm() {
         return errorNotification(response.msg);
       }
 
-      await setCookie(
-        process.env.NEXT_PUBLIC_SESSION_COOKIE,
-        response.payload,
-        process.env.NEXT_PUBLIC_TOKEN_EXPIRY_TIME
-      );
+      await setCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE, response.payload);
 
       router.push("/");
       successNotification(response.msg);
