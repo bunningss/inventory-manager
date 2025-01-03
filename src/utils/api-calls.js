@@ -12,46 +12,55 @@ async function getAuthToken() {
 export async function postData(url, data) {
   const token = await getAuthToken();
 
-  try {
-    const res = await axios.post(apiUrl + url, data, {
-      headers: {
-        "auth-token": `Bearer ${token}`,
-      },
-    });
+  const res = await fetch(apiUrl + url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "auth-token": `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
 
-    return {
-      error: false,
-      response: res.data,
-    };
-  } catch (error) {
+  const resData = await res.json();
+
+  if (!res.ok) {
     return {
       error: true,
-      response: error.response?.data,
+      response: resData,
     };
   }
+
+  return {
+    error: false,
+    response: resData,
+  };
 }
 
 export async function getData(url, revalidate = 600) {
   const token = await getAuthToken();
 
-  try {
-    const res = await axios.get(apiUrl + url, {
-      headers: {
-        "auth-token": `Bearer ${token}`,
-      },
-      params: { revalidate },
-    });
+  const res = await fetch(apiUrl + url, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      "auth-token": `Bearer ${token}`,
+    },
+    next: { revalidate },
+  });
 
-    return {
-      error: false,
-      response: res.data,
-    };
-  } catch (error) {
+  const resData = await res.json();
+
+  if (!res.ok) {
     return {
       error: true,
-      response: error.response?.data || error.message,
+      response: resData,
     };
   }
+
+  return {
+    error: false,
+    response: resData,
+  };
 }
 
 export async function putData(url, data) {
