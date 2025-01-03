@@ -31,7 +31,9 @@ const formSchema = z.object({
     .min(11, {
       message: "Phone number must be at least 11 characters.",
     })
-    .max(11)
+    .max(11, {
+      message: "Phone number cannot be more than 11 characters.",
+    })
     .optional()
     .or(z.literal("")),
   birthdate: z.date().or(z.literal("")),
@@ -67,9 +69,7 @@ export function UpdateProfile({ data }) {
     setIsLoading(true);
 
     try {
-      const res = await putData(`users/${data?._id}`, {
-        ...formData,
-      });
+      const res = await putData(`users/${data?._id}`, formData);
 
       if (res.error) {
         return errorNotification(res.response.msg);
@@ -102,27 +102,16 @@ export function UpdateProfile({ data }) {
         disabled={isLoading}
         formLabel="update"
       >
-        <FormInput
-          form={form}
-          name="name"
-          label="name"
-          defaultValue={data?.name}
-        />
+        <FormInput form={form} name="name" label="name" />
         <FormSelect
           form={form}
           options={genderOptions}
           placeholder="select gender"
           name="gender"
           label="gender"
-          defaultValue={data?.gender}
         />
         <FormCalendar form={form} name="birthdate" label="birth date" />
-        <FormInput
-          form={form}
-          name="phone"
-          label="phone number"
-          defaultValue={data?.phone}
-        />
+        <FormInput form={form} name="phone" label="phone number" />
       </FormModal>
     </Modal>
   );
