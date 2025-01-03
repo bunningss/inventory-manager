@@ -1,5 +1,8 @@
 "use client";
+import Link from "next/link";
 import { TableModal } from "./table-modal";
+import { UpdateSalesReport } from "../modals/update-sales-report";
+import { Button } from "../ui/button";
 
 const columns = [
   {
@@ -21,19 +24,27 @@ const columns = [
   },
   {
     header: "Total Amount",
-    accessorKey: "amount",
+    cell: (report) => `৳${report.amount / 100}`,
   },
   {
     header: "Paid Amount",
-    accessorKey: "paid",
+    cell: (report) => `৳${report.paid / 100}`,
   },
   {
     header: "Due Amount",
-    accessorKey: "due",
+    cell: (report) => `৳${report.due / 100}`,
   },
   {
     header: "Actions",
     accessorKey: "status",
+    cell: (report) => (
+      <div className="space-x-2">
+        <UpdateSalesReport data={report} />
+        <Link href={`/dashboard/sales/sales-reports/${report?._id}`}>
+          <Button size="icon" className="rounded-full" icon="details" />
+        </Link>
+      </div>
+    ),
   },
 ];
 

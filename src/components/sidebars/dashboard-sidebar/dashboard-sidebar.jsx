@@ -22,7 +22,7 @@ const sidebarItems = [
   },
   {
     label: "sales reports / বিক্রি রিপোর্ট",
-    href: `/dashboard/sales-reports?from=${formatDate(
+    href: `/dashboard/sales/sales-reports?from=${formatDate(
       new Date(Date.now())
     )}&to=${formatDate(new Date(Date.now()))}`,
     icon: "reports",

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Block } from "@/components/block";
 import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
-import { SalesReportsFilters } from "@/components/sales/sales-reports-filters";
+import { SalesReportsFilters } from "@/components/filters/sales-reports-filters";
 import { getData } from "@/utils/api-calls";
 import { SaleReportsTable } from "@/components/tables/sale-reports-table";
 
@@ -45,11 +45,12 @@ export default async function Page({ searchParams }) {
   );
 
   return (
-    <Block title="previous sales" headerContent={headerContent}>
+    <div className="space-y-4">
+      <Block title="previous sales" headerContent={headerContent} />
       <SalesReportsFilters />
       <Suspense fallback={<Loading className="mt-4 py-8" />}>
         <Reports searchParams={searchParams} />
       </Suspense>
-    </Block>
+    </div>
   );
 }
