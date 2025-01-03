@@ -52,7 +52,7 @@ export async function PUT(request, { params }) {
         throw new Error("You are not authorized.");
     }
 
-    const userData = await User.findById(params._id);
+    const userData = await User.findById(params._id).select("-password");
     if (!userData) throw new Error("User not found.");
 
     const body = await request.json();
