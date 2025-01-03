@@ -41,7 +41,9 @@ const columns = [
       <div className="space-x-2">
         <UpdateSalesReport data={report} />
         <Link href={`/dashboard/sales/sales-reports/${report?._id}`}>
-          <Button size="icon" className="rounded-full" icon="details" />
+          <Button className="rounded-full normal-case h-auto p-1">
+            details
+          </Button>
         </Link>
       </div>
     ),

@@ -1,20 +1,13 @@
 import { Block } from "@/components/block";
-import { CardView } from "@/components/card-view";
-import { ExpenseCard } from "@/components/cards/expense-card";
 import { Loading } from "@/components/loading";
+import { ExpenseTable } from "@/components/tables/expense-table";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function Expenses() {
   const { response } = await getData("expenses", 0);
 
-  return (
-    <CardView>
-      {response.payload?.map((expense, index) => (
-        <ExpenseCard key={index} expense={expense} />
-      ))}
-    </CardView>
-  );
+  return <ExpenseTable expenses={response?.payload} />;
 }
 
 export default function Page() {

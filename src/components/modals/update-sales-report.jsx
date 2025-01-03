@@ -66,8 +66,8 @@ export function UpdateSalesReport({ data }) {
   return (
     <Modal
       title="Edit report"
-      triggerIcon="edit"
-      className="rounded-full"
+      triggerLabel="edit"
+      className="rounded-full h-auto p-1 normal-case"
       triggerSize="icon"
       isOpen={isModalOpen}
       onClose={() => setIsModalOpen(false)}

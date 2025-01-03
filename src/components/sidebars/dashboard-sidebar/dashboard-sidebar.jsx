@@ -144,7 +144,7 @@ const sidebarItems = [
 
 export function DashboardSidebar() {
   return (
-    <aside className="min-w-[300px] h-[calc(theme(height.screen)-76px)] border border-input rounded-md shadow-active overflow-y-auto sticky top-[76px]">
+    <aside className="min-w-[300px] h-[calc(theme(height.screen)-70px)] border border-input rounded-md shadow-active overflow-y-auto sticky top-[64px]">
       <div className="flex flex-col gap-2 p-2">
         {sidebarItems?.map((item, index) => (
           <DashboardSidebarItem key={index} item={item} />

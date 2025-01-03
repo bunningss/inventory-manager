@@ -9,8 +9,6 @@ import {
   Heart,
   HeartOff,
   LoaderCircle,
-  Mail,
-  MapPin,
   Menu,
   Minus,
   Plus,
@@ -595,13 +593,7 @@ const Icons = {
     </svg>
   ),
   verified: (props) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={50}
-      height={50}
-      viewBox="0 0 100 100"
-      {...props}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" {...props}>
       <path
         d="M38.5 93c-7.513 0-13.709-5.743-14.43-13.07C16.744 79.209 11 73.013 11 65.5v-40C11 17.505 17.505 11 25.5 11h40c7.513 0 13.709 5.743 14.43 13.07C87.256 24.791 93 30.987 93 38.5v40C93 86.495 86.495 93 78.5 93h-40z"
         opacity={0.35}
@@ -1112,7 +1104,6 @@ const Icons = {
       />
     </svg>
   ),
-
   user: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" {...props}>
       <path
@@ -1159,7 +1150,6 @@ const Icons = {
       />
     </svg>
   ),
-
   coupon: (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" {...props}>
       <path
@@ -1319,7 +1309,7 @@ export function Icon({
 
   return (
     <CurrentIcon
-      className={cn(className)}
+      className={cn("!h-auto !w-auto", className)}
       size={size}
       color={iconColor}
       height={size}

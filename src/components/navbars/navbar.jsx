@@ -19,14 +19,6 @@ export const Navbar = ({ userData }) => {
           <Logo />
 
           <div className="flex items-center gap-4">
-            {/* <Button
-              variant="outline"
-              size="icon"
-              icon="search"
-              className="rounded-full"
-            >
-              <span className="sr-only">search</span>
-            </Button> */}
             <div className="md:hidden">
               <ThemeToggle />
             </div>
@@ -44,8 +36,12 @@ export const Navbar = ({ userData }) => {
                   <span>{wishlist?.wishlistItems?.length}</span>
                 </Button>
               </Link>
-
-              <User userData={userData} />
+              {userData?.error && (
+                <Link href="/sign-in">
+                  <Button>Login</Button>
+                </Link>
+              )}
+              {!userData?.error && <User userData={userData} />}
               <ThemeToggle />
             </div>
           </div>

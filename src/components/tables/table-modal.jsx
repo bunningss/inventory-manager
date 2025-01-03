@@ -32,7 +32,7 @@ export function TableModal({
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
-                <TableHead key={column.header} className={`text-center `}>
+                <TableHead key={column.header} className="text-center">
                   {column.header}
                 </TableHead>
               ))}

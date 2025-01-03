@@ -30,25 +30,9 @@ export function User({ userData }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="capitalize">
-          {userData?.payload?.name ? userData.payload?.name : "My account"}
+          {userData?.payload?.name}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {(!userData || userData?.error) && (
-          <>
-            <Link passHref href="/sign-in" className="w-full">
-              <DropdownMenuItem>
-                <span>login</span>
-                <Icon icon="login2" size={22} />
-              </DropdownMenuItem>
-            </Link>
-            <Link passHref href="/sign-up" className="w-full">
-              <DropdownMenuItem>
-                <span>create account</span>
-                <Icon icon="register" size={22} />
-              </DropdownMenuItem>
-            </Link>
-          </>
-        )}
         {userData?.error !== undefined && !userData.error && (
           <>
             <Link passHref href="/user/profile" className="w-full">
@@ -68,7 +52,7 @@ export function User({ userData }) {
         {permissions[userData?.payload?.role]?.can?.includes(
           "view:dashboard"
         ) && (
-          <Link href="/dashboard" passHref>
+          <Link href="/dashboard" passHref prefetch={true}>
             <DropdownMenuItem>
               <span>dashboard</span>
               <Icon size={22} icon="dashboard" />

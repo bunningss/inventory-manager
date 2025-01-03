@@ -9,7 +9,7 @@ const columns = [
   },
   {
     header: "Order ID",
-    accessorKey: "_id",
+    accessorKey: "orderId",
   },
   {
     header: "Customer Name",

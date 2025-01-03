@@ -71,7 +71,7 @@ export async function logout() {
 export const checkPermission = async (action, id) => {
   const { response } = await getData(`get-role/${id}`, 0);
 
-  if (!hasPermission(action, response.payload?.role))
+  if (!(await hasPermission(action, response.payload?.role)))
     throw new Error("You are not authorized.");
 };
 
@@ -87,7 +87,7 @@ export async function hasPermission(action, role) {
   }
 
   if (!rolePermissions.can?.includes(action)) {
-    false;
+    return false;
   }
 
   return true;
