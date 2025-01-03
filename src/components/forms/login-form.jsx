@@ -46,7 +46,7 @@ export function LoginForm() {
       await setCookie(
         process.env.NEXT_PUBLIC_SESSION_COOKIE,
         response.payload,
-        process.env.TOKEN_EXPIRY_TIME
+        process.env.NEXT_PUBLIC_TOKEN_EXPIRY_TIME
       );
 
       router.push("/");
