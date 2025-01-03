@@ -3,7 +3,7 @@
 import axios from "axios";
 import { getCookie } from "./cookie";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.API_URL;
 
 async function getAuthToken() {
   return await getCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE);

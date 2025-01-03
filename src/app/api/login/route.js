@@ -30,11 +30,12 @@ export async function POST(req) {
 
     const { password: _, ...userDetails } = userExist._doc;
 
-    await signToken(userDetails);
+    const token = await signToken(userDetails);
 
     return NextResponse.json(
       {
         msg: "Login successful.",
+        payload: token,
       },
       { status: 200 }
     );

@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FormModal } from "../form/form-modal";
+import { setCookie } from "@/utils/cookie";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -36,14 +37,20 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      const res = await postData("login", data);
+      const { response, error } = await postData("login", data);
 
-      if (res.error) {
-        return errorNotification(res.response.msg);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
+      await setCookie(
+        process.env.NEXT_PUBLIC_SESSION_COOKIE,
+        response.payload,
+        process.env.TOKEN_EXPIRY_TIME
+      );
+
       router.push("/");
-      successNotification(res.response.msg);
+      successNotification(response.msg);
     } catch (err) {
       errorNotification(err.message);
     } finally {
