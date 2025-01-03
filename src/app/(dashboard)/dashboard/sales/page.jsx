@@ -1,15 +1,38 @@
 import { Block } from "@/components/block";
-import { SalesItems } from "@/components/sales/sales-items";
-import { SalesSummary } from "@/components/sales/sales-summary";
+import { ProductFilters } from "@/components/filters/product-filters";
+import { Loading } from "@/components/loading";
+import { SalesProductCard } from "@/components/cards/sales-product-card";
+import { SalesSummary } from "@/components/sales-summary";
+import { getData } from "@/utils/api-calls";
+import { Suspense } from "react";
 
-export default function Page({ searchParams }) {
+async function Products({ searchParams }) {
+  const queryString = new URLSearchParams(searchParams).toString();
+  const res = await getData(`products?${queryString ? queryString : ""}`, 0);
+
   return (
-    <Block title="sales">
+    <>
+      {res.response?.payload?.map((product, index) => (
+        <SalesProductCard key={index} product={product} />
+      ))}
+    </>
+  );
+}
+
+export default async function Page({ searchParams }) {
+  return (
+    <div className="space-y-4">
+      <Block title="sales" />
       <div className="grid grid-cols-[2fr,1fr] gap-4 items-start">
-        <SalesItems searchParams={searchParams} />
+        <div className="space-y-4">
+          <ProductFilters />
+          <Suspense fallback={<Loading className="py-8" />}>
+            <Products searchParams={searchParams} />
+          </Suspense>
+        </div>
 
         <SalesSummary />
       </div>
-    </Block>
+    </div>
   );
 }

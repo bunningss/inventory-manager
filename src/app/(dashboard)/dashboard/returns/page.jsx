@@ -1,7 +1,6 @@
 import { Block } from "@/components/block";
 import { ReturnItems } from "@/components/returns/return-items";
 import { ReturnsSummary } from "@/components/returns/returns-summary";
-import { SalesItems } from "@/components/sales/sales-items";
 
 export default function Page({ searchParams }) {
   return (

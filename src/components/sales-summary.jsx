@@ -1,14 +1,14 @@
 "use client";
 import { useSales } from "@/hooks/use-sales";
-import { SalesSummaryCard } from "./sales-summary-card";
-import { Heading } from "../heading";
+import { SalesSummaryCard } from "./cards/sales-summary-card";
+import { Heading } from "./heading";
 import { useState } from "react";
 import { postData } from "@/utils/api-calls";
 import { useRouter } from "next/navigation";
 import { errorNotification, successNotification } from "@/utils/toast";
-import { FormModal } from "../form/form-modal";
+import { FormModal } from "./form/form-modal";
 import { z } from "zod";
-import { FormInput } from "../form/form-input";
+import { FormInput } from "./form/form-input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -16,7 +16,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
+} from "./ui/accordion";
 import { sendTelegramMessage } from "@/utils/send-telegram-message";
 
 const formSchema = z.object({
@@ -66,7 +66,7 @@ export function SalesSummary() {
       await sendTelegramMessage(
         `💵 মোট বিক্রয়: ${total / 100}টাকা.\nবিস্তারিত বিবরণ:\n${productsList}`
       );
-      router.push(`/dashboard/sales-reports/${response.payload._id}`);
+      router.push(`/dashboard/sales/sales-reports/${response.payload._id}`);
       onClear();
       successNotification(response.msg);
     } catch (err) {

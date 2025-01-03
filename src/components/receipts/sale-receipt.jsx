@@ -1,10 +1,10 @@
 "use client";
+import Image from "next/image";
 import { useReactToPrint } from "react-to-print";
 import { Block } from "../block";
 import { useRef } from "react";
 import { Button } from "../ui/button";
 import { Heading } from "../heading";
-import { SalesReceiptCard } from "../sales/sales-receipt-card";
 
 export function SaleReceipt({ data }) {
   const contentRef = useRef(null);
@@ -28,7 +28,7 @@ export function SaleReceipt({ data }) {
           </Heading>
           <div className="space-y-1">
             {data?.products?.map((item, index) => (
-              <SalesReceiptCard key={index} item={item} />
+              <SalesReceiptItem key={index} item={item} />
             ))}
             <div className="py-4 flex justify-between border-b border-b-input">
               <span className="text-sm text-muted-foreground">TOTAL</span>
@@ -49,10 +49,10 @@ export function SaleReceipt({ data }) {
               </span>
             </div>
           </div>
-          <span className="mt-6 hidden print:block text-muted-foreground text-center">
+          <span className="mt-6 block text-muted-foreground text-center">
             Software solution provided by{" "}
             <b>
-              <em>SILVER RAIN Technologies</em>
+              <em>{process.env.NEXT_PUBLIC_COMPANY_NAME}</em>
             </b>
           </span>
         </Block>
@@ -61,5 +61,34 @@ export function SaleReceipt({ data }) {
         <Button onClick={reactToPrintFn}>Print receipt</Button>
       </div>
     </>
+  );
+}
+
+function SalesReceiptItem({ item }) {
+  return (
+    <div className="flex space-x-2 border-b border-input">
+      <figure className="relative h-16 w-16 rounded-md overflow-hidden">
+        <Image
+          src={item.images[0] ? item.images[0] : ""}
+          alt={item?.title}
+          className="object-contain"
+          fill
+        />
+      </figure>
+      <div className="w-full flex flex-col justify-between">
+        <div className="flex justify-between items-center">
+          <h6 className="text-sm font-bold capitalize">{item?.title}</h6>
+          <h6 className="text-sm font-bold">
+            ৳{((item?.price * item?.quantity) / 100).toFixed(2)}
+          </h6>
+        </div>
+        <span className="text-sm text-muted-foreground">
+          ৳{(item?.price / 100).toFixed(2)} x {item?.quantity}
+        </span>
+        <span className="capitalize text-sm text-muted-foreground">
+          {item?.brand}
+        </span>
+      </div>
+    </div>
   );
 }
