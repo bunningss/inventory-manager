@@ -6,11 +6,11 @@ import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function Users() {
-  const res = await getData("users", 0);
+  const { response } = await getData("users", 0);
 
   return (
     <CardView>
-      {res.response.payload?.map((user, index) => (
+      {response.payload?.map((user, index) => (
         <UserCard key={index} user={user} />
       ))}
     </CardView>
@@ -19,10 +19,11 @@ async function Users() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<Loading />}>
-      <Block title="users">
+    <div className="space-y-4">
+      <Block title="users" />
+      <Suspense fallback={<Loading className="py-8" />}>
         <Users />
-      </Block>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }
