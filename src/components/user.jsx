@@ -17,6 +17,10 @@ import { permissions } from "@/lib/static";
 export function User({ userData }) {
   const router = useRouter();
 
+  const isAllowed =
+    permissions[userData?.payload?.role]?.can?.includes("view:dashboard") ||
+    permissions[userData?.payload?.role]?.can?.includes("manage:all");
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -49,9 +53,7 @@ export function User({ userData }) {
             </Link>
           </>
         )}
-        {permissions[userData?.payload?.role]?.can?.includes(
-          "view:dashboard"
-        ) && (
+        {isAllowed && (
           <Link href="/dashboard" passHref prefetch={true}>
             <DropdownMenuItem>
               <span>dashboard</span>

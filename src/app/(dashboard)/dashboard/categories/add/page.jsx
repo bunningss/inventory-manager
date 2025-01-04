@@ -3,11 +3,9 @@ import { AddCategory } from "@/components/dashboard/forms/add-category";
 
 export default function Page() {
   return (
-    <>
-      <Block title="add category"></Block>
-      <div className="mt-8">
-        <AddCategory />
-      </div>
-    </>
+    <div className="space-y-4">
+      <Block title="add category" />
+      <AddCategory />
+    </div>
   );
 }

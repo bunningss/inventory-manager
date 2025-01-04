@@ -1,4 +1,5 @@
 import { Block } from "@/components/block";
+import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
 import { OrdersTable } from "@/components/tables/orders-table";
 import { getData } from "@/utils/api-calls";
@@ -6,6 +7,7 @@ import { Suspense } from "react";
 
 async function Orders() {
   const { response } = await getData("orders", 0);
+  if (response.payload?.length <= 0) return <Empty message="No data found." />;
 
   return <OrdersTable orders={response.payload} />;
 }

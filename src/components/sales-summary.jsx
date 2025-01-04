@@ -76,6 +76,8 @@ export function SalesSummary() {
     }
   };
 
+  if (total <= 0) return null;
+
   return (
     <div className="space-y-4 bg-background p-2 rounded-md sticky top-4">
       <Heading>Summary</Heading>
@@ -91,8 +93,7 @@ export function SalesSummary() {
         loading={isLoading}
         disabled={isLoading || total <= 0}
       >
-        {total > 0 && <Heading>Total: ৳{total / 100}</Heading>}
-
+        <Heading>Total: ৳{total / 100}</Heading>
         {salesItems?.length > 0 && (
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">

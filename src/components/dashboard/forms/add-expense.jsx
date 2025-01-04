@@ -9,12 +9,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { sendTelegramMessage } from "@/utils/send-telegram-message";
-import { CustomEditor } from "../custom-editor";
+import { FormEditor } from "@/components/form/form-editor";
+import { FormCalendar } from "@/components/form/form-calendar";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   amount: z.string().min(1, "Amount is required"),
-  date: z.string().min(1, "Date is required"),
+  date: z.date({
+    message: "Please select date.",
+  }),
   details: z.string().min(10, {
     message: "Details is required.",
   }),
@@ -29,7 +32,7 @@ export function AddExpense() {
     defaultValues: {
       title: "",
       amount: "",
-      date: "",
+      date: new Date(),
       details: "",
     },
   });
@@ -71,12 +74,11 @@ export function AddExpense() {
           required
           name="title"
         />
-        <div className="flex gap-2 md:gap-4">
-          <FormInput
+        <div className="grid md:grid-cols-2 gap-2 md:gap-4">
+          <FormCalendar
             form={form}
             label="date"
             placeholder="select date"
-            type="date"
             required
             name="date"
           />
@@ -85,12 +87,11 @@ export function AddExpense() {
             label="amount"
             placeholder="e.g. 999"
             type="number"
-            min={0}
             required
             name="amount"
           />
         </div>
-        <CustomEditor name="details" form={form} />
+        <FormEditor name="details" label="Details" form={form} />
       </FormModal>
     </div>
   );

@@ -6,12 +6,9 @@ export default async function Page() {
   const res = await getData("categories", 0);
 
   return (
-    <>
+    <div className="space-y-4">
       <Block title="add sub category"></Block>
-
-      <div className="mt-8">
-        <AddSubCategory categories={res.response.payload} />
-      </div>
-    </>
+      <AddSubCategory categories={res.response.payload} />
+    </div>
   );
 }

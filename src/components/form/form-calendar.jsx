@@ -64,7 +64,7 @@ export function FormCalendar({
             <FormLabel
               className={`capitalize relative ${
                 required
-                  ? "after:content-['*'] after:absolute after:text-destructive after:text-lg"
+                  ? "after:content-['*'] after:absolute after:text-destructive after:text-lg after:-bottom-2"
                   : ""
               }`}
             >

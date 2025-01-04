@@ -1,10 +1,7 @@
 "use client";
-import Image from "next/image";
 import { useState } from "react";
-import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/api-calls";
-import { Icon } from "@/components/icon";
 import { FormInput } from "@/components/form/form-input";
 import { FormSelect } from "@/components/form/form-select";
 import { useForm } from "react-hook-form";
@@ -12,7 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
-import { CustomEditor } from "../custom-editor";
+import { ImageDropzone } from "@/components/dropzone";
+import { FormEditor } from "../../form/form-editor";
 
 const formSchema = z.object({
   title: z.string().min(1, "Product title is required"),
@@ -71,9 +69,6 @@ export function AddProduct({ categories }) {
   const handleSubmit = async (data) => {
     setIsLoading(true);
     try {
-      if (images.length <= 0) {
-        return errorNotification("Please upload at least one image.");
-      }
       const tags_trimmed = data.tags?.split(",").map((tag) => tag.trim());
       const seo_tags_trimmed = data.seoTags
         ?.split(",")
@@ -82,7 +77,6 @@ export function AddProduct({ categories }) {
         ...data,
         tags: tags_trimmed,
         seoTags: seo_tags_trimmed,
-        images,
       });
       if (res.error) {
         return errorNotification(res.response.msg);
@@ -96,56 +90,14 @@ export function AddProduct({ categories }) {
     }
   };
 
-  const handleImages = (currentImage) => {
-    const filteredImages = images.filter((image) => image !== currentImage);
-    setImages(filteredImages);
-  };
-
   return (
-    <div className="bg-background p-2 rounded-md">
+    <div className="bg-background p-2 rounded-md space-y-4">
       {/* Upload Pictures */}
-      <CldUploadWidget
-        uploadPreset="ilham-com"
-        onSuccess={(result) =>
-          setImages((prev) => [...prev, result.info.secure_url])
-        }
-      >
-        {({ open }) => {
-          return (
-            <div
-              className="p-16 rounded-md border border-dashed border-shade text-center"
-              onClick={() => open()}
-            >
-              Click to upload images
-            </div>
-          );
-        }}
-      </CldUploadWidget>
-      {/* Uploaded images preview */}
-      {images.length > 0 && (
-        <div className="flex gap-4">
-          {images?.map((image, index) => (
-            <div key={index} className="relative">
-              <figure className="relative h-28 w-28 border border-shade rounded-md mt-4 overflow-hidden">
-                <Image
-                  src={image}
-                  alt=""
-                  fill
-                  sizes="112px"
-                  className="object-contain"
-                />
-              </figure>
-              {/* Delele image button */}
-              <div
-                className="absolute top-1 -right-2 p-1 bg-muted rounded-full cursor-pointer"
-                onClick={() => handleImages(image)}
-              >
-                <Icon icon="close" size={18} />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <ImageDropzone
+        label="Drag and Drop Images"
+        file={images}
+        setFile={setImages}
+      />
 
       {/* Product information form */}
       <FormModal
@@ -301,7 +253,7 @@ export function AddProduct({ categories }) {
           type="textarea"
           name="seoTags"
         />
-        <CustomEditor
+        <FormEditor
           name="description"
           label="product description"
           required

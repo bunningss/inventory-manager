@@ -2,6 +2,7 @@ import "./globals.css";
 import { font } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 export const metadata = {
   title: "Springbird",
@@ -19,7 +20,7 @@ export default async function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <EdgeStoreProvider>{children}</EdgeStoreProvider>
           <Toaster richColors position="top-right" />
         </ThemeProvider>
       </body>

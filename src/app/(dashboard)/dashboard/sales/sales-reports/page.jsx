@@ -25,11 +25,9 @@ async function Reports({ searchParams }) {
   if (response.payload?.sales?.length > 0) {
     return <SaleReportsTable reports={response?.payload?.sales} />;
   }
+
   return (
-    <Empty
-      message="No data found. / কোন তথ্য পাওয়া যায়নি"
-      className="bg-background mt-4"
-    />
+    <Empty message="No data found. / কোন তথ্য পাওয়া যায়নি" className="mt-4" />
   );
 }
 

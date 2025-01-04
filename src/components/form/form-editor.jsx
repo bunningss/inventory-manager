@@ -1,12 +1,11 @@
 "use client";
-
 import dynamic from "next/dynamic";
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
 import { Controller } from "react-hook-form";
 import { useMemo } from "react";
 import { FormControl, FormItem, FormLabel } from "../ui/form";
 
-export function CustomEditor({ name, form, placeholder, label, required }) {
+export function FormEditor({ name, form, placeholder, label, required }) {
   const config = useMemo(
     () => ({
       readonly: false,
@@ -26,7 +25,7 @@ export function CustomEditor({ name, form, placeholder, label, required }) {
             <FormLabel
               className={`capitalize relative ${
                 required
-                  ? "after:content-['*'] after:absolute after:text-destructive after:text-lg"
+                  ? "after:content-['*'] after:absolute after:text-destructive after:text-lg after:-bottom-2"
                   : ""
               }`}
             >

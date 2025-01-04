@@ -1,16 +1,20 @@
 import { Block } from "@/components/block";
 import { CardView } from "@/components/card-view";
 import { CategoryCard } from "@/components/cards/category-card";
+import { Empty } from "@/components/empty";
 import { Loading } from "@/components/loading";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 async function Categories() {
-  const res = await getData("categories", 0);
+  const { response } = await getData("categories", 0);
+
+  if (response.payload?.length <= 0)
+    return <Empty message="No data to found." />;
 
   return (
     <CardView>
-      {res.response.payload?.map((category, index) => (
+      {response.payload?.map((category, index) => (
         <CategoryCard key={index} category={category} />
       ))}
     </CardView>

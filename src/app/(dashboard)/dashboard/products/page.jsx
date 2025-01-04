@@ -21,10 +21,7 @@ async function Products({ searchParams }) {
         </CardView>
       )}
       {res.response.payload?.length <= 0 && (
-        <Empty
-          message="No products found. / কোন পণ্য পাওয়া যায় নি"
-          className="bg-background"
-        />
+        <Empty message="No products found. / কোন পণ্য পাওয়া যায় নি" />
       )}
     </>
   );

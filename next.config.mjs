@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        hostname: "files.edgestore.dev",
+      },
+      {
         hostname: "res.cloudinary.com",
       },
       {

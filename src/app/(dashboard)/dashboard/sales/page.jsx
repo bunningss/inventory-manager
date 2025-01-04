@@ -5,16 +5,23 @@ import { SalesProductCard } from "@/components/cards/sales-product-card";
 import { SalesSummary } from "@/components/sales-summary";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
+import { Empty } from "@/components/empty";
 
 async function Products({ searchParams }) {
   const queryString = new URLSearchParams(searchParams).toString();
-  const res = await getData(`products?${queryString ? queryString : ""}`, 0);
+  const { response } = await getData(
+    `products?${queryString ? queryString : ""}`,
+    0
+  );
 
   return (
     <>
-      {res.response?.payload?.map((product, index) => (
+      {response?.payload?.map((product, index) => (
         <SalesProductCard key={index} product={product} />
       ))}
+      {response?.payload?.length <= 0 && (
+        <Empty message="No products to display." />
+      )}
     </>
   );
 }

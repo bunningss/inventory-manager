@@ -3,11 +3,9 @@ import { AddExpense } from "@/components/dashboard/forms/add-expense";
 
 export default function Page() {
   return (
-    <>
+    <div className="space-y-4">
       <Block title="add expense" />
-      <div className="mt-8">
-        <AddExpense />
-      </div>
-    </>
+      <AddExpense />
+    </div>
   );
 }
