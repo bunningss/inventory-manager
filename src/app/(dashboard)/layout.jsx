@@ -10,7 +10,7 @@ export default async function DashboardLayout({ children }) {
       <DashboardNavbar userData={session} />
       <div className="flex gap-2">
         <DashboardSidebar />
-        <main className="w-full pr-2">{children}</main>
+        <main className="w-full pr-2 mb-1.5">{children}</main>
       </div>
     </div>
   );
