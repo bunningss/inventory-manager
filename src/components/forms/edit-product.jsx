@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@/components/icon";
 import { FormInput } from "@/components/form/form-input";
 import { FormSelect } from "@/components/form/form-select";
-import { Editor } from "../../form/form-editor";
 import { putData } from "@/utils/api-calls";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
+import { FormEditor } from "../form/form-editor";
 
 const formSchema = z.object({
   title: z.string().optional(),
@@ -267,10 +267,10 @@ export function EditProduct({ categories, currentProduct }) {
           name="seoTags"
         />
 
-        <Editor
+        <FormEditor
+          form={form}
           label="product description"
-          content={description}
-          setContent={setDescription}
+          name="description"
         />
         <FormInput
           form={form}

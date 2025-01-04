@@ -1,4 +1,4 @@
-import { AddProduct } from "@/components/dashboard/forms/add-product";
+import { AddProduct } from "@/components/forms/add-product";
 import { getData } from "@/utils/api-calls";
 
 export default async function Page() {

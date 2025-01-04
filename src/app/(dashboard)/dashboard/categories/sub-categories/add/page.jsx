@@ -1,5 +1,5 @@
 import { Block } from "@/components/block";
-import { AddSubCategory } from "@/components/dashboard/forms/add-sub-category";
+import { AddSubCategory } from "@/components/forms/add-sub-category";
 import { getData } from "@/utils/api-calls";
 
 export default async function Page() {

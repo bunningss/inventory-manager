@@ -10,7 +10,7 @@ import { z } from "zod";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
 import { ImageDropzone } from "@/components/dropzone";
-import { FormEditor } from "../../form/form-editor";
+import { FormEditor } from "../form/form-editor";
 
 const formSchema = z.object({
   title: z.string().min(1, "Product title is required"),

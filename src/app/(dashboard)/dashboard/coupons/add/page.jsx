@@ -1,5 +1,5 @@
 import { Block } from "@/components/block";
-import { AddCoupon } from "@/components/dashboard/forms/add-coupon";
+import { AddCoupon } from "@/components/forms/add-coupon";
 
 export default async function Page() {
   return (

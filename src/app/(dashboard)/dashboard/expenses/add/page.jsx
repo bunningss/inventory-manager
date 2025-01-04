@@ -1,5 +1,5 @@
 import { Block } from "@/components/block";
-import { AddExpense } from "@/components/dashboard/forms/add-expense";
+import { AddExpense } from "@/components/forms/add-expense";
 
 export default function Page() {
   return (

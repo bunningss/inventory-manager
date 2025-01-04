@@ -1,5 +1,5 @@
 import { Block } from "@/components/block";
-import { EditProduct } from "@/components/dashboard/forms/edit-product";
+import { EditProduct } from "@/components/forms/edit-product";
 import { Loading } from "@/components/loading";
 import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
