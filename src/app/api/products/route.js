@@ -12,16 +12,67 @@ const getCachedCategory = cache(async (label) => {
 
 export async function GET(request) {
   const reqUrl = new URL(request.url);
-  const searchKey = reqUrl.searchParams.get("searchKey");
-  const category = reqUrl.searchParams.get("category");
-  const subCategory = reqUrl.searchParams.get("sub");
-  const featured = reqUrl.searchParams.get("featured");
-  const limit = parseInt(reqUrl.searchParams.get("limit") || "10");
-  const page = parseInt(reqUrl.searchParams.get("page") || "1");
-  const sortBy = reqUrl.searchParams.get("sortBy") || "createdAt";
+  const related = reqUrl.searchParams.get("related");
 
   try {
     await connectDb();
+
+    if (related) {
+      const relatedCategory = await getCachedCategory(related);
+      if (relatedCategory) {
+        const relatedProducts = await Product.aggregate([
+          { $match: { category: relatedCategory._id } },
+          { $sample: { size: 4 } },
+          {
+            $lookup: {
+              from: "categories",
+              localField: "category",
+              foreignField: "_id",
+              as: "category",
+            },
+          },
+          { $unwind: "$category" },
+          {
+            $project: {
+              _id: 1,
+              images: 1,
+              "category.label": 1,
+              slug: 1,
+              brand: 1,
+              title: 1,
+              price: 1,
+              discountedPrice: 1,
+              stock: 1,
+              sold: 1,
+              featured: 1,
+              tags: 1,
+            },
+          },
+        ]);
+
+        return NextResponse.json(
+          {
+            msg: "Related products fetched successfully.",
+            payload: relatedProducts,
+          },
+          { status: 200 }
+        );
+      } else {
+        return NextResponse.json(
+          { msg: "Category not found." },
+          { status: 404 }
+        );
+      }
+    }
+
+    // If no related param
+    const searchKey = reqUrl.searchParams.get("searchKey");
+    const category = reqUrl.searchParams.get("category");
+    const subCategory = reqUrl.searchParams.get("sub");
+    const featured = reqUrl.searchParams.get("featured");
+    const limit = parseInt(reqUrl.searchParams.get("limit") || "10");
+    const page = parseInt(reqUrl.searchParams.get("page") || "1");
+    const sortBy = reqUrl.searchParams.get("sortBy") || "createdAt";
 
     const query = {};
     let sort = { createdAt: -1 };

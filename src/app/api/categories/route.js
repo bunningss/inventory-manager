@@ -7,15 +7,15 @@ import { NextResponse } from "next/server";
 // Add new category
 export async function POST(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "add:category");
+
     const body = await request.json();
+    const slug = body.label.replace(/\s+/g, "-").toLowerCase();
+
     const newCategory = new Category({
       ...body,
-      slug: `/category/${body.slug}`,
+      slug: `/category/${slug}`,
     });
 
     await newCategory.save();
@@ -34,8 +34,9 @@ export async function GET() {
   try {
     await connectDb();
     const categories = await Category.find()
-      .select("label slug icon description updatedAt")
-      .sort({ createdAt: -1 });
+      .select("label slug icon description")
+      .sort({ createdAt: -1 })
+      .lean();
 
     return NextResponse.json(
       { msg: "Data found", payload: categories },

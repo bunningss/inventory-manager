@@ -13,16 +13,19 @@ import { getData } from "@/utils/api-calls";
 import { Suspense } from "react";
 
 export async function generateMetadata({ params }) {
-  const res = await getData(`products/${params.slug}`);
+  const { response } = await getData(`products/${params.slug}`);
 
   return {
-    title: res.response.payload?.title,
-    description: res.response.payload?.seoDescription,
+    title: response.payload?.title,
+    description: response.payload?.seoDescription,
   };
 }
 
-async function ProductData({ slug }) {
-  const res = await getData(`products/${slug}`);
+async function ProductData({ slug, category }) {
+  const [res, relatedRes] = await Promise.all([
+    getData(`products/${slug}`, 0),
+    getData(`products?related=${category}`, 0),
+  ]);
 
   return (
     <>
@@ -61,9 +64,9 @@ async function ProductData({ slug }) {
             Related products
           </Heading>
           <ProductView className="grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1 mt-0">
-            <ProductSmall />
-            <ProductSmall />
-            <ProductSmall />
+            {relatedRes?.response?.payload?.map((relatedProduct, index) => (
+              <ProductSmall key={index} product={relatedProduct} />
+            ))}
           </ProductView>
         </section>
       </div>
@@ -71,11 +74,11 @@ async function ProductData({ slug }) {
   );
 }
 
-export default async function Page({ params }) {
+export default async function Page({ params, searchParams }) {
   return (
     <Container>
       <Suspense fallback={<ProductPageSkeleton />}>
-        <ProductData slug={params.slug} />
+        <ProductData slug={params.slug} category={searchParams.cat} />
       </Suspense>
     </Container>
   );

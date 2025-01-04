@@ -1,6 +1,7 @@
 "use client";
 import { FormInput } from "@/components/form/form-input";
 import { FormModal } from "@/components/form/form-modal";
+import { FormTextarea } from "@/components/form/form-textarea";
 import { postData } from "@/utils/api-calls";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,10 +11,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  label: z.string().min(1, "Category name is required"),
-  slug: z.string().min(1, "category slug is required"),
-  icon: z.string().min(1, "icon is required"),
-  description: z.string().min(1, "description is required"),
+  label: z.string().min(3, "Category name is required"),
+  icon: z.string().min(3, "Icon is required"),
+  description: z.string().min(3, "Description is required"),
 });
 
 export function AddCategory() {
@@ -24,13 +24,13 @@ export function AddCategory() {
     setIsLoading(true);
 
     try {
-      const res = await postData("categories", data);
+      const { error, response } = await postData("categories", data);
 
-      if (res.error) {
-        return errorNotification(res.response.msg);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
-      successNotification(res.response.msg);
+      successNotification(response.msg);
       router.push("/dashboard/categories");
     } catch (err) {
       errorNotification(err.message);
@@ -43,7 +43,6 @@ export function AddCategory() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       label: "",
-      slug: "",
       icon: "",
       description: "",
     },
@@ -68,22 +67,14 @@ export function AddCategory() {
           />
           <FormInput
             form={form}
-            label="category slug"
-            placeholder="e.g. jute-bags"
-            name="slug"
-            required
-          />
-          <FormInput
-            form={form}
             label="category icon [ choose from lucide.dev/icons ]"
             placeholder="e.g. briefcase"
             name="icon"
             required
           />
         </div>
-        <FormInput
+        <FormTextarea
           form={form}
-          type="textarea"
           label="category short description"
           placeholder="e.g. beautifully designed bags for everyone."
           name="description"

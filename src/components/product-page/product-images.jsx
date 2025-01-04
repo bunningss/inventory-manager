@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export function ProductImages({ currentProduct, referrer }) {
+export function ProductImages({ currentProduct }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
@@ -11,7 +11,7 @@ export function ProductImages({ currentProduct, referrer }) {
         <Image
           fill
           src={currentProduct?.images && currentProduct?.images[currentIndex]}
-          alt=""
+          alt={currentProduct?.title}
           className="object-contain p-2 transition-opacity duration-300"
           priority
           sizes="(max-width: 768px) 80vw, 40vw"
@@ -28,7 +28,8 @@ export function ProductImages({ currentProduct, referrer }) {
             <Image
               fill
               src={image}
-              alt=""
+              alt={currentProduct?.title}
+              sizes="100px"
               className="object-contain p-2"
               onClick={() => setCurrentIndex(index)}
             />

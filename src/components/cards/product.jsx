@@ -22,7 +22,11 @@ export const Product = ({ product }) => {
   const { addToCart, addToWishlist, removeFromWishlist } = useEcommerce();
 
   return (
-    <Link href={`/product/${product.slug}`} passHref prefetch={true}>
+    <Link
+      href={`/product/${product.slug}?cat=${product?.category?.label}`}
+      passHref
+      prefetch={true}
+    >
       <Card className="group border-transparent dark:border-secondary cursor-pointer">
         <CardContent className="relative pb-2">
           <div className="absolute top-2 left-0 flex items-center justify-between w-full px-2 z-[1]">

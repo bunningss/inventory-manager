@@ -28,7 +28,7 @@ export const pagesData = [
 
 export const permissions = {
   admin: {
-    can: ["manage:all", "view:dashboard"],
+    can: ["manage:all"],
   },
   salesman: {
     can: [
@@ -60,3 +60,4 @@ export const permissions = {
 // update:sale-details
 // update:product
 // view:expenses
+// add:category
