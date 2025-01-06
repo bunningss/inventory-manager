@@ -20,7 +20,7 @@ export function FormSelect({
   form,
   name,
   label,
-  placeholder,
+  placeholder = "Select option",
   description,
   options,
   required,
