@@ -66,44 +66,51 @@ export async function getData(url, revalidate = 600) {
 export async function putData(url, data) {
   const token = await getAuthToken();
 
-  try {
-    const res = await axios.put(apiUrl + url, data, {
-      headers: {
-        "auth-token": `Bearer ${token}`,
-      },
-    });
+  const res = await fetch(apiUrl + url, {
+    method: "PUT",
+    headers: {
+      "auth-token": `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
 
-    return {
-      error: false,
-      response: res.data,
-    };
-  } catch (error) {
+  const resData = await res.json();
+
+  if (!res.ok) {
     return {
       error: true,
-      response: error.response?.data || error.message,
+      response: resData,
     };
   }
+
+  return {
+    error: false,
+    response: resData,
+  };
 }
 
 export async function deleteData(url, data) {
   const token = await getAuthToken();
 
-  try {
-    const res = await axios.delete(apiUrl + url, {
-      headers: {
-        "auth-token": `Bearer ${token}`,
-      },
-      data, // axios allows the data to be passed here
-    });
+  const res = await fetch(apiUrl + url, {
+    method: "DELETE",
+    headers: {
+      "auth-token": `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
 
-    return {
-      error: false,
-      response: res.data,
-    };
-  } catch (error) {
+  const resData = await res.json();
+
+  if (!res.ok) {
     return {
       error: true,
-      response: error.response?.data || error.message,
+      response: resData,
     };
   }
+
+  return {
+    error: false,
+    response: resData,
+  };
 }
