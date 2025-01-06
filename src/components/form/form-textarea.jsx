@@ -23,7 +23,7 @@ export function FormTextarea({
       control={form.control}
       name={name || ""}
       render={({ field }) => (
-        <FormItem className="grid gap-3">
+        <FormItem>
           {label && (
             <FormLabel
               className={`capitalize relative ${

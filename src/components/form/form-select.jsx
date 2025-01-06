@@ -44,7 +44,10 @@ export function FormSelect({
               {label}
             </FormLabel>
           )}
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select
+            onValueChange={field.onChange}
+            defaultValue={field.value?.toString()}
+          >
             <FormControl>
               <SelectTrigger className="capitalize">
                 <SelectValue placeholder={placeholder || ""} />
@@ -54,7 +57,7 @@ export function FormSelect({
               {options?.map((option, index) => {
                 return (
                   <SelectItem
-                    value={option[keyValue]}
+                    value={option[keyValue]?.toString()}
                     key={index}
                     className="capitalize"
                   >

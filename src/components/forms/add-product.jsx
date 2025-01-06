@@ -11,6 +11,7 @@ import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
 import { ImageDropzone } from "@/components/dropzone";
 import { FormEditor } from "../form/form-editor";
+import { FormTextarea } from "../form/form-textarea";
 
 const formSchema = z.object({
   title: z.string().min(1, "Product title is required"),
@@ -27,7 +28,7 @@ const formSchema = z.object({
   boxType: z.string().optional(),
   color: z.string().optional(),
   material: z.string().optional(),
-  featured: z.string().optional(),
+  featured: z.enum(["true", "false"]).optional(),
   brand: z.string().min(1, "Brand is required"),
   tags: z.string().optional(),
   seoTags: z.string().optional(),
@@ -237,20 +238,18 @@ export function AddProduct({ categories }) {
             name="brand"
           />
         </div>
-        <FormInput
+        <FormTextarea
           form={form}
           placeholder=""
           label="tags (Separate tags using comma)"
           required
-          type="textarea"
           name="tags"
         />
-        <FormInput
+        <FormTextarea
           form={form}
           label="SEO tags"
           placeholder=""
           required
-          type="textarea"
           name="seoTags"
         />
         <FormEditor
@@ -259,13 +258,11 @@ export function AddProduct({ categories }) {
           required
           form={form}
         />
-        <FormInput
+        <FormTextarea
           form={form}
-          placeholder=""
           label="SEO description"
-          required
-          type="textarea"
           name="seoDescription"
+          required
         />
       </FormModal>
     </div>
