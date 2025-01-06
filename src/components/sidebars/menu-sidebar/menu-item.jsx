@@ -7,7 +7,7 @@ export function MenuItem({ item, onClick }) {
     <Link href={item?.slug ? item?.slug : "#"} passHref>
       <Button
         variant="outline"
-        className="w-full justify-between"
+        className="w-full justify-between focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0"
         onClick={onClick}
       >
         {item?.label && <span>{item?.label}</span>}

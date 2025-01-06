@@ -18,11 +18,6 @@ const loggedInUser = [
     icon: "box",
     slug: "/user/orders",
   },
-  {
-    label: "my addresses",
-    icon: "map-pin-house",
-    slug: "/user/address",
-  },
 ];
 
 const loggedOutUser = [

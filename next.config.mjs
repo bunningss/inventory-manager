@@ -3,7 +3,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "files.edgestore.dev",
+        hostname: "springbird.s3.eu-north-1.amazonaws.com",
       },
       {
         hostname: "res.cloudinary.com",
