@@ -20,32 +20,36 @@ export async function getSignedURL(files, userId) {
   if (!userId) throw new Error("You are not authorized.");
   const uploadedUrls = [];
 
-  for (const file of files) {
-    const base64Data = Buffer.from(file.baseData?.split(",")[1], "base64");
-    const key = generateFilename();
+  try {
+    for (const file of files) {
+      const base64Data = Buffer.from(file.baseData?.split(",")[1], "base64");
+      const key = generateFilename();
 
-    const putObjectCommand = new PutObjectCommand({
-      Bucket: getEnv("AWS_BUCKET_NAME"),
-      Key: key,
-      ContentType: file.type,
-    });
-
-    const url = await getSignedUrl(s3, putObjectCommand, {
-      expiresIn: 120,
-    });
-
-    if (url) {
-      await fetch(url, {
-        method: "PUT",
-        body: base64Data,
-        "Content-Type": file.type,
+      const putObjectCommand = new PutObjectCommand({
+        Bucket: getEnv("AWS_BUCKET_NAME"),
+        Key: key,
+        ContentType: file.type,
       });
-    }
 
-    const publicUrl = `https://${getEnv("AWS_BUCKET_NAME")}.s3.${getEnv(
-      "AWS_BUCKET_REGION"
-    )}.amazonaws.com/${key}`;
-    uploadedUrls.push(publicUrl);
+      const url = await getSignedUrl(s3, putObjectCommand, {
+        expiresIn: 120,
+      });
+
+      if (url) {
+        await fetch(url, {
+          method: "PUT",
+          body: base64Data,
+          "Content-Type": file.type,
+        });
+      }
+
+      const publicUrl = `https://${getEnv("AWS_BUCKET_NAME")}.s3.${getEnv(
+        "AWS_BUCKET_REGION"
+      )}.amazonaws.com/${key}`;
+      uploadedUrls.push(publicUrl);
+    }
+  } catch (error) {
+    throw new Error("File upload failed.");
   }
 
   return uploadedUrls;
