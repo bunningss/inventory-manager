@@ -11,7 +11,7 @@ const generateFilename = (bytes = 32) =>
 const s3 = new S3Client({
   region: getEnv("AWS_BUCKET_REGION"),
   credentials: {
-    accessKeyId: getEnv("AWS_ACCESS_KEY"),
+    accessKeyId: getEnv("AWS_S3_ACCESS_KEY"),
     secretAccessKey: getEnv("AWS_SECRET_ACCESS_KEY"),
   },
 });
