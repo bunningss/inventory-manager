@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { getEnv } from "./get-env";
+import { getSession, hasPermission } from "./auth";
 
 // Random filename
 const generateFilename = (bytes = 32) =>
@@ -20,6 +21,14 @@ export async function uploadToS3(files) {
   const uploadedUrls = [];
 
   try {
+    const session = await getSession();
+    const isAllowed = await hasPermission(
+      "upload:files",
+      session.payload?.role
+    );
+
+    if (!isAllowed) throw new Error("You are not authorized.");
+
     for (const file of files) {
       const base64Data = Buffer.from(file.baseData?.split(",")[1], "base64");
       const key = generateFilename();
@@ -50,6 +59,6 @@ export async function uploadToS3(files) {
 
     return uploadedUrls;
   } catch (error) {
-    throw new Error("File upload failed.");
+    throw new Error(error.message);
   }
 }

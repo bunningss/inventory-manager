@@ -62,3 +62,5 @@ export const permissions = {
 // view:expenses
 // add:category
 // add:product
+// upload:files
+// delete:product

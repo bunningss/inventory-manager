@@ -211,15 +211,10 @@ export async function POST(request) {
 // Delete product
 export async function DELETE(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+    await connectDb();
+    await verifyToken(request, "delete:product");
 
     const body = await request.json();
-
-    const existingProduct = await Product.findOne({ _id: body._id });
-    if (!existingProduct)
-      return NextResponse.json({ msg: "Product not found." }, { status: 404 });
 
     await Product.findByIdAndDelete(body._id);
 
