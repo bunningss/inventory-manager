@@ -64,6 +64,7 @@ export function AddCoupon({ users }) {
           placeholder="EXAMPLE24"
           name="code"
           required
+          className="uppercase"
         />
 
         <FormInput
