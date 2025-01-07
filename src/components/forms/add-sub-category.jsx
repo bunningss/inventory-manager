@@ -1,17 +1,15 @@
 "use client";
-import Image from "next/image";
-import { CldUploadWidget } from "next-cloudinary";
 import { useState } from "react";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormInput } from "@/components/form/form-input";
 import { FormSelect } from "@/components/form/form-select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Icon } from "@/components/icon";
 import { z } from "zod";
 import { postData } from "@/utils/api-calls";
 import { useRouter } from "next/navigation";
 import { FormModal } from "@/components/form/form-modal";
+import { ImageDropzone } from "../image-dropzone";
 
 const formSchema = z.object({
   category: z.string().min(1, "Category name is required"),
@@ -28,16 +26,16 @@ export function AddSubCategory({ categories }) {
     setIsLoading(true);
 
     try {
-      const res = await postData("categories/sub-categories", {
+      const { error, response } = await postData("categories/sub-categories", {
         ...data,
         icon: images[0],
       });
 
-      if (res.error) {
-        return errorNotification(res.response.msg);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
-      successNotification(res.response.msg);
+      successNotification(response.msg);
       router.push("/dashboard/categories/sub-categories");
     } catch (err) {
       errorNotification(err.message);
@@ -64,6 +62,12 @@ export function AddSubCategory({ categories }) {
         disabled={isLoading}
         onSubmit={handleSubmit}
       >
+        <ImageDropzone
+          uploadedFiles={images}
+          setUploadedFiles={setImages}
+          disabled={isLoading}
+          label="Drag and drop or click to upload image."
+        />
         <div className="grid grid-cols-2 gap-2 md:gap-4">
           <FormSelect
             form={form}
@@ -90,48 +94,6 @@ export function AddSubCategory({ categories }) {
             name="color"
           />
         </div>
-        <CldUploadWidget
-          uploadPreset="ilham-com"
-          onSuccess={(result) =>
-            setImages((prev) => [...prev, result.info.secure_url])
-          }
-        >
-          {({ open }) => {
-            return (
-              <div
-                className="p-16 rounded-md border border-dashed border-shade text-center"
-                onClick={() => open()}
-              >
-                Click to upload image
-              </div>
-            );
-          }}
-        </CldUploadWidget>
-        {/* Uploaded images preview */}
-        {images.length > 0 && (
-          <div className="flex gap-4">
-            {images?.map((image, index) => (
-              <div key={index} className="relative">
-                <figure className="relative h-28 w-28 border border-shade rounded-md mt-4 overflow-hidden">
-                  <Image
-                    src={image}
-                    alt=""
-                    fill
-                    sizes="112px"
-                    className="object-contain"
-                  />
-                </figure>
-                {/* Delele image button */}
-                <div
-                  className="absolute top-1 -right-2 p-1 bg-theme_variant rounded-full cursor-pointer"
-                  onClick={() => handleImages(image)}
-                >
-                  <Icon icon="close" size={18} />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </FormModal>
     </div>
   );

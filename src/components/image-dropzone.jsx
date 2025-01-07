@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { Button } from "./ui/button";
 import { uploadToS3 } from "@/utils/file-upload";
 import { errorNotification } from "@/utils/toast";
+import { Loading } from "./loading";
 
 const readFileAsBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -15,42 +16,52 @@ const readFileAsBase64 = (file) => {
   });
 };
 
-export function ImageDropzone({ uploadedFiles, setUploadedFiles }) {
-  const [files, setFiles] = useState([]);
+export function ImageDropzone({
+  uploadedFiles,
+  setUploadedFiles,
+  allowMultiple,
+  disabled,
+  label = "Drag and drop images here, or click to select files.",
+}) {
+  const [isLoading, setIsLoading] = useState(false);
 
   const onDrop = useCallback(
     async (acceptedFiles) => {
+      if (disabled || isLoading) return;
+
       try {
+        setIsLoading(true);
         const base64Files = await Promise.all(
           acceptedFiles.map((file) => readFileAsBase64(file))
         );
 
-        setFiles(base64Files);
-
         const urls = await uploadToS3(base64Files);
         setUploadedFiles((prev) => [...prev, ...urls]);
-        setFiles([]);
       } catch (err) {
         errorNotification(err.message);
+      } finally {
+        setIsLoading(false);
       }
     },
-    [setUploadedFiles]
+    [disabled, setUploadedFiles, isLoading]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    multiple: true,
+    multiple: allowMultiple,
   });
 
   const handleRemoveFile = useCallback(
     (currentFile) => {
+      if (disabled || isLoading) return;
+
       if (uploadedFiles?.length > 0) {
         const newFiles = uploadedFiles?.filter((file) => file !== currentFile);
 
         setUploadedFiles(newFiles);
       }
     },
-    [setUploadedFiles, uploadedFiles]
+    [setUploadedFiles, uploadedFiles, disabled, isLoading]
   );
 
   return (
@@ -59,11 +70,13 @@ export function ImageDropzone({ uploadedFiles, setUploadedFiles }) {
         {...getRootProps()}
         className="border-2 border-dashed rounded-lg p-12 text-center cursor-pointer"
       >
-        <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop files here...</p>
+        {isLoading ? (
+          <Loading />
         ) : (
-          <p>Drag and drop images here, or click to select files.</p>
+          <>
+            <input {...getInputProps()} />
+            {isDragActive ? <p>Drop files here...</p> : <p>{label}</p>}
+          </>
         )}
       </div>
       <div className="flex gap-4 flex-wrap">
@@ -83,7 +96,7 @@ export function ImageDropzone({ uploadedFiles, setUploadedFiles }) {
                     alt="Upload image"
                     fill
                     className="object-cover"
-                    sizes="100px"
+                    sizes="250px"
                   />
                 </figure>
               </div>

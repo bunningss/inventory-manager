@@ -98,7 +98,13 @@ export function AddProduct({ categories }) {
   return (
     <div className="bg-background p-2 rounded-md space-y-4">
       {/* Upload Pictures */}
-      <ImageDropzone setUploadedFiles={setImages} uploadedFiles={images} />
+      <ImageDropzone
+        setUploadedFiles={setImages}
+        uploadedFiles={images}
+        allowMultiple
+        disabled={isLoading}
+        label="Drag and drop or click to upload product images."
+      />
 
       {/* Product information form */}
       <FormModal
