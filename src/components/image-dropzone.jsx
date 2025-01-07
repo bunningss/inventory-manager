@@ -1,26 +1,40 @@
 "use client";
 import Image from "next/image";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "./ui/button";
+import { uploadToS3 } from "@/utils/file-upload";
+import { errorNotification } from "@/utils/toast";
 
-export function ImageDropzone({ files, setFiles }) {
+const readFileAsBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve({ type: file.type, baseData: reader.result });
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+};
+
+export function ImageDropzone({ uploadedFiles, setUploadedFiles }) {
+  const [files, setFiles] = useState([]);
+
   const onDrop = useCallback(
     async (acceptedFiles) => {
-      for (const file of acceptedFiles) {
-        const reader = new FileReader();
+      try {
+        const base64Files = await Promise.all(
+          acceptedFiles.map((file) => readFileAsBase64(file))
+        );
 
-        reader.onload = () => {
-          setFiles((prev) => [
-            ...prev,
-            { type: file.type, baseData: reader.result },
-          ]);
-        };
+        setFiles(base64Files);
 
-        reader.readAsDataURL(file);
+        const urls = await uploadToS3(base64Files);
+        setUploadedFiles((prev) => [...prev, ...urls]);
+        setFiles([]);
+      } catch (err) {
+        errorNotification(err.message);
       }
     },
-    [setFiles]
+    [setUploadedFiles]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -30,13 +44,13 @@ export function ImageDropzone({ files, setFiles }) {
 
   const handleRemoveFile = useCallback(
     (currentFile) => {
-      if (files?.length > 0) {
-        const newFiles = files?.filter((file) => file.baseData !== currentFile);
+      if (uploadedFiles?.length > 0) {
+        const newFiles = uploadedFiles?.filter((file) => file !== currentFile);
 
-        setFiles(newFiles);
+        setUploadedFiles(newFiles);
       }
     },
-    [files, setFiles]
+    [setUploadedFiles, uploadedFiles]
   );
 
   return (
@@ -53,22 +67,23 @@ export function ImageDropzone({ files, setFiles }) {
         )}
       </div>
       <div className="flex gap-4 flex-wrap">
-        {files?.length > 0 &&
-          files?.map((file, index) => {
+        {uploadedFiles?.length > 0 &&
+          uploadedFiles?.map((file, index) => {
             return (
               <div key={index} className="relative">
                 <Button
                   icon="close"
                   variant="ghost"
                   className="h-auto p-1 z-10 absolute top-1 right-1 bg-destructive rounded-full text-background"
-                  onClick={() => handleRemoveFile(file.baseData)}
+                  onClick={() => handleRemoveFile(file)}
                 />
                 <figure className="relative h-36 w-36 border rounded-md overflow-hidden">
                   <Image
-                    src={file.baseData}
+                    src={file}
                     alt="Upload image"
                     fill
                     className="object-cover"
+                    sizes="100px"
                   />
                 </figure>
               </div>

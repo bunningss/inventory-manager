@@ -10,8 +10,8 @@ import { z } from "zod";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
 import { ImageDropzone } from "@/components/image-dropzone";
-import { FormEditor } from "../form/form-editor";
-import { FormTextarea } from "../form/form-textarea";
+import { FormEditor } from "@/components/form/form-editor";
+import { FormTextarea } from "@/components/form/form-textarea";
 
 const formSchema = z.object({
   title: z.string().min(1, "Product title is required"),
@@ -98,7 +98,7 @@ export function AddProduct({ categories }) {
   return (
     <div className="bg-background p-2 rounded-md space-y-4">
       {/* Upload Pictures */}
-      <ImageDropzone setFiles={setImages} files={images} />
+      <ImageDropzone setUploadedFiles={setImages} uploadedFiles={images} />
 
       {/* Product information form */}
       <FormModal

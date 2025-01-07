@@ -16,8 +16,7 @@ const s3 = new S3Client({
   },
 });
 
-export async function getSignedURL(files, userId) {
-  if (!userId) throw new Error("You are not authorized.");
+export async function uploadToS3(files) {
   const uploadedUrls = [];
 
   try {
@@ -48,9 +47,9 @@ export async function getSignedURL(files, userId) {
       )}.amazonaws.com/${key}`;
       uploadedUrls.push(publicUrl);
     }
+
+    return uploadedUrls;
   } catch (error) {
     throw new Error("File upload failed.");
   }
-
-  return uploadedUrls;
 }

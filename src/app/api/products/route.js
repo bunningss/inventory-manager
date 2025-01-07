@@ -5,7 +5,6 @@ import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
 import { verifyToken } from "@/utils/auth";
 import { cache } from "react";
-import { getSignedURL } from "@/utils/file-upload";
 
 // Get all products
 const getCachedCategory = cache(async (label) => {
@@ -172,8 +171,8 @@ export async function POST(request) {
   const session = await mongoose.startSession();
   try {
     await connectDb();
+    await verifyToken(request, "add:product");
     session.startTransaction();
-    const { id } = await verifyToken(request, "add:product");
 
     const body = await request.json();
 
@@ -189,7 +188,6 @@ export async function POST(request) {
 
     const newProduct = new Product({
       ...body,
-      images: [],
       price: productPrice,
       discountedPrice: productDiscountedPrice,
       slug:
@@ -200,10 +198,6 @@ export async function POST(request) {
 
     await newProduct.save({ session });
 
-    const urls = await getSignedURL(body.images, id);
-    newProduct.images = urls;
-
-    await newProduct.save({ session });
     await session.commitTransaction();
     return NextResponse.json({ msg: "Product added." }, { status: 200 });
   } catch (err) {
