@@ -64,3 +64,5 @@ export const permissions = {
 // add:product
 // upload:files
 // delete:product
+// add:category
+// delete:category

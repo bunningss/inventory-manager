@@ -1,17 +1,18 @@
-import { connectDb } from "@/lib/db/connectDb";
 import Category from "@/lib/models/Category";
+import mongoose from "mongoose";
 import SubCategory from "@/lib/models/Sub-Category";
+import { connectDb } from "@/lib/db/connectDb";
 import { verifyToken } from "@/utils/auth";
 import { NextResponse } from "next/server";
 
 // Add new sub-category
 export async function POST(request) {
+  const session = await mongoose.startSession();
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "add:category");
+    session.startTransaction();
+
     const body = await request.json();
 
     const category = await Category.findById(body.category);
@@ -35,17 +36,22 @@ export async function POST(request) {
       },
       {
         new: true,
+        session,
       }
     );
 
-    await newSubCategory.save();
+    await newSubCategory.save({ session });
 
+    await session.commitTransaction();
     return NextResponse.json(
       { msg: "Data saved successfully." },
       { status: 200 }
     );
   } catch (err) {
+    await session.abortTransaction();
     return NextResponse.json({ msg: err.message }, { status: 401 });
+  } finally {
+    session.endSession();
   }
 }
 
@@ -59,7 +65,8 @@ export async function GET() {
         path: "category",
         select: "label -_id",
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     return NextResponse.json(
       { msg: "Data found.", payload: subCategory },
@@ -73,9 +80,7 @@ export async function GET() {
 // Delete sub category
 export async function DELETE(request) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
+    await verifyToken(request, "delete:category");
 
     await connectDb();
 
