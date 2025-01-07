@@ -61,3 +61,4 @@ export const permissions = {
 // update:product
 // view:expenses
 // add:category
+// add:product

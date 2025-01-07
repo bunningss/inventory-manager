@@ -1,9 +1,11 @@
 import Product from "@/lib/models/Product";
 import Category from "@/lib/models/Category";
+import mongoose from "mongoose";
 import { connectDb } from "@/lib/db/connectDb";
 import { NextResponse } from "next/server";
 import { verifyToken } from "@/utils/auth";
 import { cache } from "react";
+import { getSignedURL } from "@/utils/file-upload";
 
 // Get all products
 const getCachedCategory = cache(async (label) => {
@@ -167,28 +169,27 @@ export async function GET(request) {
 
 // Add new product
 export async function POST(request) {
+  const session = await mongoose.startSession();
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    session.startTransaction();
+    const { id } = await verifyToken(request, "add:product");
 
     const body = await request.json();
 
-    const filteredData = {};
-
-    for (const [key, val] of Object.entries(body)) {
-      if (val) {
-        filteredData[key] = val;
-      }
+    if (Number(body.price) <= 0) throw new Error("Invalid price.");
+    if (body.discountedPrice) {
+      if (Number(body.discountedPrice) < 0)
+        throw new Error("Invalid discounted price.");
     }
+    if (Number(body.stock) < 0) throw new Error("Invalid stock amount.");
 
     const productPrice = body.price * 100;
     const productDiscountedPrice = body.discountedPrice * 100;
 
     const newProduct = new Product({
-      ...filteredData,
+      ...body,
+      images: [],
       price: productPrice,
       discountedPrice: productDiscountedPrice,
       slug:
@@ -196,12 +197,20 @@ export async function POST(request) {
         "-" +
         Math.floor(Math.random() + 1000 * 23),
     });
-    await newProduct.save();
 
+    await newProduct.save({ session });
+
+    const urls = await getSignedURL(body.images, id);
+    newProduct.images = urls;
+
+    await newProduct.save({ session });
+    await session.commitTransaction();
     return NextResponse.json({ msg: "Product added." }, { status: 200 });
   } catch (err) {
-    console.log(err);
+    await session.abortTransaction();
     return NextResponse.json({ msg: err.message }, { status: 500 });
+  } finally {
+    session.endSession();
   }
 }
 
