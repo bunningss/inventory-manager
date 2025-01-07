@@ -1,5 +1,4 @@
 "use server";
-import axios from "axios";
 
 export async function sendTelegramMessage(message) {
   const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -12,7 +11,10 @@ export async function sendTelegramMessage(message) {
   };
 
   try {
-    await axios.post(url, payload);
+    await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
   } catch (error) {
     console.error("Error sending message to Telegram:", error.message);
   }

@@ -1,10 +1,10 @@
 "use server";
 import crypto from "crypto";
-import { getSession } from "./auth";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { getEnv } from "./get-env";
 
+// Random filename
 const generateFilename = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
 
@@ -16,17 +16,13 @@ const s3 = new S3Client({
   },
 });
 
-export async function getSignedURL(files) {
-  const { error, payload } = await getSession();
-  //   if (error) throw new Error("You are not authorized.");
-
+export async function getSignedURL(files, userId) {
+  if (!userId) throw new Error("You are not authorized.");
   const uploadedUrls = [];
 
   for (const file of files) {
-    const base64Data = Buffer.from(file.baseData, "base64");
+    const base64Data = Buffer.from(file.baseData?.split(",")[1], "base64");
     const key = generateFilename();
-
-    console.log(`Uploading file with type: ${file.type}`);
 
     const putObjectCommand = new PutObjectCommand({
       Bucket: getEnv("AWS_BUCKET_NAME"),

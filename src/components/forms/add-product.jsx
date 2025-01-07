@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
-import { ImageDropzone } from "@/components/dropzone";
+import { ImageDropzone } from "@/components/image-dropzone";
 import { FormEditor } from "../form/form-editor";
 import { FormTextarea } from "../form/form-textarea";
 
@@ -70,6 +70,9 @@ export function AddProduct({ categories }) {
   const handleSubmit = async (data) => {
     setIsLoading(true);
     try {
+      if (images.length <= 0)
+        return errorNotification("Please add product images.");
+
       const tags_trimmed = data.tags?.split(",").map((tag) => tag.trim());
       const seo_tags_trimmed = data.seoTags
         ?.split(",")
@@ -78,6 +81,7 @@ export function AddProduct({ categories }) {
         ...data,
         tags: tags_trimmed,
         seoTags: seo_tags_trimmed,
+        images,
       });
       if (res.error) {
         return errorNotification(res.response.msg);
@@ -94,11 +98,7 @@ export function AddProduct({ categories }) {
   return (
     <div className="bg-background p-2 rounded-md space-y-4">
       {/* Upload Pictures */}
-      <ImageDropzone
-        label="Drag and Drop Images"
-        file={images}
-        setFile={setImages}
-      />
+      <ImageDropzone setFiles={setImages} files={images} />
 
       {/* Product information form */}
       <FormModal

@@ -5,7 +5,7 @@ import logo from "@/assets/springbird.svg";
 export function Logo() {
   return (
     <Link href="/">
-      <figure className="relative h-[50px] w-[150px]">
+      {/* <figure className="relative h-[50px] w-[150px]">
         <Image
           src={logo}
           alt="springbird logo"
@@ -13,7 +13,7 @@ export function Logo() {
           sizes="120px"
           fill
         />
-      </figure>
+      </figure> */}
     </Link>
   );
 }

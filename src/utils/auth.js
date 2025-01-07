@@ -3,9 +3,10 @@ import { jwtVerify, SignJWT } from "jose";
 import { getCookie, setCookie } from "./cookie";
 import { getData } from "./api-calls";
 import { permissions } from "@/lib/static";
+import { getEnv } from "./get-env";
 
 export async function getSession() {
-  const session = await getCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE);
+  const session = await getCookie(getEnv("NEXT_PUBLIC_SESSION_COOKIE"));
 
   if (!session)
     return {
@@ -16,7 +17,7 @@ export async function getSession() {
   try {
     const verifiedToken = await jwtVerify(
       session,
-      new TextEncoder().encode(process.env.TOKEN_SECRET),
+      new TextEncoder().encode(getEnv("TOKEN_SECRET")),
       {
         algorithms: ["HS256"],
       }
@@ -45,7 +46,7 @@ export async function verifyToken(request, action) {
 
     const verifiedToken = await jwtVerify(
       sessionKey,
-      new TextEncoder().encode(process.env.TOKEN_SECRET),
+      new TextEncoder().encode(getEnv("TOKEN_SECRET")),
       {
         algorithms: ["HS256"],
       }
@@ -65,7 +66,7 @@ export async function verifyToken(request, action) {
 }
 
 export async function logout() {
-  await setCookie(process.env.NEXT_PUBLIC_SESSION_COOKIE, "", 0);
+  await setCookie(getEnv("NEXT_PUBLIC_SESSION_COOKIE"), "", 0);
 }
 
 export const checkPermission = async (action, id) => {
@@ -96,8 +97,8 @@ export async function hasPermission(action, role) {
 export async function signToken(data) {
   if (!data) throw new Error("Login process failed.");
 
-  const expiry = process.env.TOKEN_EXPIRY_TIME;
-  const secretKey = new TextEncoder().encode(process.env.TOKEN_SECRET);
+  const expiry = getEnv("TOKEN_EXPIRY_TIME");
+  const secretKey = new TextEncoder().encode(getEnv("TOKEN_SECRET"));
 
   return await new SignJWT(data)
     .setProtectedHeader({ alg: "HS256" })

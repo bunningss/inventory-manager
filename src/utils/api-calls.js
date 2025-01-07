@@ -1,6 +1,4 @@
 "use server";
-
-import axios from "axios";
 import { getCookie } from "./cookie";
 
 const apiUrl = process.env.API_URL;
