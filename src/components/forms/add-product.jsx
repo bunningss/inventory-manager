@@ -96,7 +96,7 @@ export function AddProduct({ categories }) {
   };
 
   return (
-    <div className="bg-background p-2 rounded-md space-y-4">
+    <div className="space-y-4">
       {/* Upload Pictures */}
       <ImageDropzone
         setUploadedFiles={setImages}

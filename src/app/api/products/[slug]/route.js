@@ -32,11 +32,8 @@ export async function GET(request, { params }) {
 // Update product
 export async function PUT(request, { params }) {
   try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
     await connectDb();
+    await verifyToken(request, "edit:product");
 
     const body = await request.json();
 

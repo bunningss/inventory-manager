@@ -66,3 +66,4 @@ export const permissions = {
 // delete:product
 // add:category
 // delete:category
+// edit:product

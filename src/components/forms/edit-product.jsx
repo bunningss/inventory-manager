@@ -13,6 +13,8 @@ import { z } from "zod";
 import { errorNotification, successNotification } from "@/utils/toast";
 import { FormModal } from "@/components/form/form-modal";
 import { FormEditor } from "../form/form-editor";
+import { FormTextarea } from "../form/form-textarea";
+import { ImageDropzone } from "../image-dropzone";
 
 const formSchema = z.object({
   title: z.string().optional(),
@@ -38,7 +40,6 @@ const formSchema = z.object({
 });
 
 export function EditProduct({ categories, currentProduct }) {
-  const [description, setDescription] = useState(currentProduct?.description);
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState(currentProduct?.images);
   const router = useRouter();
@@ -59,7 +60,6 @@ export function EditProduct({ categories, currentProduct }) {
         stock: parseInt(data.stock),
         tags: tags_trimmed,
         seoTags: seo_tags_trimmed,
-        description,
         images,
       });
 
@@ -76,12 +76,6 @@ export function EditProduct({ categories, currentProduct }) {
     }
   };
 
-  // Filter out images
-  const handleImages = (currentImage) => {
-    const filteredImages = images.filter((image) => image !== currentImage);
-    setImages(filteredImages);
-  };
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -95,51 +89,14 @@ export function EditProduct({ categories, currentProduct }) {
   });
 
   return (
-    <div className="bg-background p-2 rounded-md">
+    <div className="space-y-4">
       {/* Upload Pictures */}
-      <CldUploadWidget
-        uploadPreset="ilham-com"
-        onSuccess={(result) =>
-          setImages((prev) => [...prev, result.info.secure_url])
-        }
-      >
-        {({ open }) => {
-          return (
-            <div
-              className="p-16 rounded-md border border-dashed border-shade text-center"
-              onClick={() => open()}
-            >
-              Click to upload images
-            </div>
-          );
-        }}
-      </CldUploadWidget>
-
-      {/* Available images preview */}
-      {images?.length > 0 && (
-        <div className="flex gap-4">
-          {images?.map((image, index) => (
-            <div key={index} className="relative">
-              <figure className="relative h-28 w-28 border border-shade rounded-md mt-4 overflow-hidden">
-                <Image
-                  src={image}
-                  alt=""
-                  fill
-                  sizes="112px"
-                  className="object-contain"
-                />
-              </figure>
-              {/* Delete button */}
-              <div
-                className="absolute top-1 -right-2 p-1 bg-theme_variant rounded-full cursor-pointer"
-                onClick={() => handleImages(image)}
-              >
-                <Icon icon="close" size={18} />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <ImageDropzone
+        uploadedFiles={images}
+        setUploadedFiles={setImages}
+        disabled={isLoading}
+        allowMultiple
+      />
 
       {/* Product information form */}
       <FormModal
@@ -150,29 +107,13 @@ export function EditProduct({ categories, currentProduct }) {
         disabled={isLoading}
       >
         <div className="grid grid-cols-2 gap-2 md:gap-4">
-          <FormInput
-            form={form}
-            placeholder=""
-            label="product title"
-            name="title"
-          />
-          <FormInput
-            form={form}
-            label="SEO title"
-            placeholder=""
-            name="seoTitle"
-          />
+          <FormInput form={form} label="product title" name="title" />
+          <FormInput form={form} label="SEO title" name="seoTitle" />
         </div>
         <div className="grid grid-cols-2 gap-2 md:gap-4">
+          <FormInput form={form} label="product price" name="price" />
           <FormInput
             form={form}
-            placeholder=""
-            label="product price"
-            name="price"
-          />
-          <FormInput
-            form={form}
-            placeholder=""
             label="discounted price"
             name="discountedPrice"
           />
@@ -220,19 +161,9 @@ export function EditProduct({ categories, currentProduct }) {
           />
         </div>
         <div className="grid grid-cols-2 gap-2 md:gap-4">
-          <FormInput
-            form={form}
-            name="warranty"
-            placeholder=""
-            label="warranty"
-          />
-          <FormInput
-            form={form}
-            name="boxType"
-            placeholder=""
-            label="box type"
-          />
-          <FormInput form={form} name="color" placeholder="" label="color" />
+          <FormInput form={form} name="warranty" label="warranty" />
+          <FormInput form={form} name="boxType" label="box type" />
+          <FormInput form={form} name="color" label="color" />
           <FormInput
             form={form}
             name="material"
@@ -250,33 +181,23 @@ export function EditProduct({ categories, currentProduct }) {
             ]}
             name="featured"
           />
-          <FormInput form={form} placeholder="" label="brand" name="brand" />
+          <FormInput form={form} label="brand" name="brand" />
         </div>
-        <FormInput
+        <FormTextarea
           form={form}
-          placeholder=""
           label="tags (Separate tags using comma)"
-          type="textarea"
           name="tags"
         />
-        <FormInput
-          form={form}
-          label="SEO tags"
-          placeholder=""
-          type="textarea"
-          name="seoTags"
-        />
+        <FormTextarea form={form} label="SEO tags" name="seoTags" />
 
         <FormEditor
           form={form}
           label="product description"
           name="description"
         />
-        <FormInput
+        <FormTextarea
           form={form}
-          placeholder=""
           label="SEO description"
-          type="textarea"
           name="seoDescription"
         />
       </FormModal>
