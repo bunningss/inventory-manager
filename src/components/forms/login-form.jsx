@@ -82,20 +82,14 @@ export function LoginForm() {
         />
       </FormModal>
       <div className="flex flex-col md:flex-row justify-between gap-2 mt-2">
-        <Link
-          href="/forgot-password"
-          className="text-font font-bold hover:underline decoration-1"
-        >
+        <Link href="/forgot-password" className="font-bold hover:underline">
           {" "}
           Forgot password?
         </Link>
 
         <span className="block text-mute">
           Don&apos;t have an account?{" "}
-          <Link
-            href="/sign-up"
-            className="text-font font-bold hover:underline decoration-1"
-          >
+          <Link href="/sign-up" className="font-bold hover:underline">
             Sign up.
           </Link>
         </span>
