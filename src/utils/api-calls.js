@@ -87,7 +87,7 @@ export async function putData(url, data) {
   };
 }
 
-export async function deleteData(url, data) {
+export async function deleteData(url) {
   const token = await getAuthToken();
 
   const res = await fetch(apiUrl + url, {
@@ -95,7 +95,6 @@ export async function deleteData(url, data) {
     headers: {
       "auth-token": `Bearer ${token}`,
     },
-    body: JSON.stringify(data),
   });
 
   const resData = await res.json();

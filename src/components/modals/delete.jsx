@@ -22,16 +22,17 @@ export function DeleteItem({ _id, requestUrl, message }) {
     setIsLoading(true);
 
     try {
-      const res = await deleteData(requestUrl, { _id: _id });
+      const { error, response } = await deleteData(`${requestUrl}/${_id}`);
 
-      if (res.error) {
-        return errorNotification(res.response.msg);
+      if (error) {
+        return errorNotification(response.msg);
       }
 
       if (message) {
         await sendTelegramMessage(message);
       }
-      successNotification(res.response.msg);
+
+      successNotification(response.msg);
       router.refresh();
       handleModalClose();
     } catch (err) {

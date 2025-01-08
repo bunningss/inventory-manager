@@ -14,7 +14,7 @@ import { Container } from "../container";
 import { getData } from "@/utils/api-calls";
 
 export async function Navigation() {
-  const res = await getData("categories", 3600);
+  const res = await getData("categories");
   const categories = res.response.payload;
 
   return (

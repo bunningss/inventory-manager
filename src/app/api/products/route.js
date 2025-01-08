@@ -32,12 +32,18 @@ export async function GET(request) {
               as: "category",
             },
           },
-          { $unwind: "$category" },
+          {
+            $unwind: {
+              path: "$category",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
           {
             $project: {
               _id: 1,
               images: 1,
               "category.label": 1,
+              "category.slug": 1,
               slug: 1,
               brand: 1,
               title: 1,
@@ -123,7 +129,12 @@ export async function GET(request) {
           as: "category",
         },
       },
-      { $unwind: "$category" },
+      {
+        $unwind: {
+          path: "$category",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
       {
         $project: {
           _id: 1,
@@ -138,6 +149,7 @@ export async function GET(request) {
           featured: 1,
           tags: 1,
           "category.label": 1,
+          "category.slug": 1,
         },
       },
     ];

@@ -46,26 +46,3 @@ export async function GET() {
     return NextResponse.json({ msg: err.message }, { status: 401 });
   }
 }
-
-// Delete category
-export async function DELETE(request) {
-  try {
-    const user = await verifyToken(request);
-    if (user.payload?.role?.toLowerCase() !== "admin")
-      return NextResponse.json({ msg: "Unauthorized." }, { status: 400 });
-
-    const body = await request.json();
-
-    const category = await Category.findById(body._id);
-    if (!category) {
-      return NextResponse.json({ msg: "Category not found." }, { status: 404 });
-    }
-
-    await SubCategory.deleteMany({ _id: { $in: category.subCategories } });
-    await Category.findByIdAndDelete(body._id);
-
-    return NextResponse.json({ msg: "Category deleted." }, { status: 200 });
-  } catch (err) {
-    return NextResponse.json({ msg: err.message }, { status: 400 });
-  }
-}
