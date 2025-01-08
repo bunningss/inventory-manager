@@ -23,7 +23,7 @@ export const Product = ({ product }) => {
 
   return (
     <Link
-      href={`/product/${product.slug}?cat=${product?.category?.label}`}
+      href={`/product/${product.slug}?cat=${product?.category?.slug}`}
       passHref
       prefetch={true}
     >

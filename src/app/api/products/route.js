@@ -7,8 +7,8 @@ import { verifyToken } from "@/utils/auth";
 import { cache } from "react";
 
 // Get all products
-const getCachedCategory = cache(async (label) => {
-  return await Category.findOne({ label }).lean();
+const getCachedCategory = cache(async (slug) => {
+  return await Category.findOne({ slug }).lean();
 });
 
 export async function GET(request) {

@@ -11,7 +11,7 @@ export async function POST(request) {
     await verifyToken(request, "add:category");
 
     const body = await request.json();
-    const slug = body.label.replace(/\s+/g, "-").toLowerCase();
+    const slug = body.label.replace(/[\s&]+/g, "-").toLowerCase();
 
     const newCategory = new Category({
       ...body,

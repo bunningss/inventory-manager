@@ -9,7 +9,7 @@ import { Card, CardContent, CardTitle } from "../ui/card";
 export function ProductSmall({ product }) {
   return (
     <Link
-      href={`/product/${product?.slug}?cat=${product?.category?.label}`}
+      href={`/product/${product?.slug}?cat=${product?.category?.slug}`}
       passHref
     >
       <Card title={product?.title}>
