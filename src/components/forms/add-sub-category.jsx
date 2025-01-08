@@ -14,7 +14,9 @@ import { ImageDropzone } from "../image-dropzone";
 const formSchema = z.object({
   category: z.string().min(1, "Category name is required"),
   name: z.string().min(1, "category slug is required"),
-  color: z.string().min(1, "icon is required"),
+  color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, {
+    message: "Please select a valid color.",
+  }),
 });
 
 export function AddSubCategory({ categories }) {
@@ -49,7 +51,7 @@ export function AddSubCategory({ categories }) {
     defaultValues: {
       category: "",
       name: "",
-      color: "",
+      color: "#000000",
     },
   });
 
@@ -88,8 +90,8 @@ export function AddSubCategory({ categories }) {
           />
           <FormInput
             form={form}
-            label="color code"
-            placeholder="#000000"
+            type="color"
+            label="select color"
             required
             name="color"
           />
