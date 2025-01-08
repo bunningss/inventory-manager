@@ -21,10 +21,11 @@ export function SaleReceipt({ data }) {
 
   return (
     <>
-      <div className="print:px-6 print:pt-6" ref={contentRef}>
-        <Block title="Purchase receipt" headerContent={headerContent}>
+      <div className="print:px-6 print:pt-6 space-y-4" ref={contentRef}>
+        <Block title="Purchase receipt" headerContent={headerContent} />
+        <div>
           <Heading className="text-center mb-8 underline hidden print:block">
-            My Shop
+            {process.env.NEXT_PUBLIC_SHOP_NAME}
           </Heading>
           <div className="space-y-1">
             {data?.products?.map((item, index) => (
@@ -55,9 +56,9 @@ export function SaleReceipt({ data }) {
               <em>{process.env.NEXT_PUBLIC_COMPANY_NAME}</em>
             </b>
           </span>
-        </Block>
+        </div>
       </div>
-      <div className="flex justify-end mt-4">
+      <div className="flex justify-end">
         <Button onClick={reactToPrintFn}>Print receipt</Button>
       </div>
     </>
