@@ -7,31 +7,32 @@ import { Suspense } from "react";
 import { ProductviewSkeleton } from "@/components/skeletons/product-view-skeleton";
 import { CategoryviewSkeleton } from "@/components/skeletons/category-view-skeleton";
 import { formatParams } from "@/utils/helpers";
+import { Empty } from "@/components/empty";
 
 // generate metadata
 export async function generateMetadata({ params }) {
-  const res = await getData(`categories/${formatParams(params.category)}`);
+  const { response } = await getData(`categories/${params.category}`);
 
   return {
     title: formatParams(params.category),
     openGraph: {
       title: `${formatParams(params.category)} | iLHAM`,
     },
-    description: res.response.payload?.description,
+    description: response.payload?.description,
   };
 }
 
 // Get sub categories based on category
 async function Categories({ category }) {
-  const res = await getData(`categories/${category}`);
+  const { response } = await getData(`categories/${category}`);
 
-  return <CategoryView categories={res.response.payload?.subCategories} />;
+  return <CategoryView categories={response.payload?.subCategories} />;
 }
 
 // get products based on category
 async function Products({ category, subCategory }) {
-  const res = await getData(
-    `products?category=${formatParams(category)}${
+  const { response, error } = await getData(
+    `products?category=/category/${category}${
       subCategory ? `&sub=${subCategory}` : ""
     }`,
     0
@@ -39,9 +40,13 @@ async function Products({ category, subCategory }) {
 
   return (
     <>
-      {res.response.payload?.map((product, index) => (
-        <Product key={index} product={product} />
-      ))}
+      {(error || response?.payload?.length <= 0) && (
+        <Empty message="No data found." />
+      )}
+      {response?.payload?.length > 0 &&
+        response.payload?.map((product, index) => (
+          <Product key={index} product={product} />
+        ))}
     </>
   );
 }

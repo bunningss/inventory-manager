@@ -9,7 +9,7 @@ export async function GET(request, { params }) {
   try {
     await connectDb();
     const category = await Category.findOne({
-      label: params.category,
+      slug: `/category/${params.category}`,
     })
       .populate("subCategories")
       .collation({ locale: "en", strength: 2 })
