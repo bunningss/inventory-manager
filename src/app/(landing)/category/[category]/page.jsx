@@ -54,16 +54,21 @@ async function Products({ category, subCategory }) {
 export default async function Page({ params, searchParams }) {
   return (
     <Container>
-      {/* <PromoSlider /> */}
-      <Suspense fallback={<CategoryviewSkeleton />}>
-        <Categories category={params.category} />
-      </Suspense>
-
-      <ProductView title={formatParams(params.category)}>
-        <Suspense fallback={<ProductviewSkeleton />}>
-          <Products category={params.category} subCategory={searchParams.sub} />
+      <div className="space-y-8">
+        {/* <PromoSlider /> */}
+        <Suspense fallback={<CategoryviewSkeleton />}>
+          <Categories category={params.category} />
         </Suspense>
-      </ProductView>
+
+        <ProductView title={formatParams(params.category)}>
+          <Suspense fallback={<ProductviewSkeleton />}>
+            <Products
+              category={params.category}
+              subCategory={searchParams.sub}
+            />
+          </Suspense>
+        </ProductView>
+      </div>
     </Container>
   );
 }

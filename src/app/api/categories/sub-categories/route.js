@@ -10,8 +10,8 @@ export async function POST(request) {
   const session = await mongoose.startSession();
   try {
     await connectDb();
-    await verifyToken(request, "add:category");
     session.startTransaction();
+    await verifyToken(request, "add:category");
 
     const body = await request.json();
 

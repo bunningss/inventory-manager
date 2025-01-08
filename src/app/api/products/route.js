@@ -219,19 +219,3 @@ export async function POST(request) {
     session.endSession();
   }
 }
-
-// Delete product
-export async function DELETE(request) {
-  try {
-    await connectDb();
-    await verifyToken(request, "delete:product");
-
-    const body = await request.json();
-
-    await Product.findByIdAndDelete(body._id);
-
-    return NextResponse.json({ msg: "Product deleted." }, { status: 200 });
-  } catch (err) {
-    return NextResponse.json({ msg: err.message }, { status: 400 });
-  }
-}

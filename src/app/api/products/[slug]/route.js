@@ -64,3 +64,17 @@ export async function PUT(request, { params }) {
     return NextResponse.json({ msg: err.message }, { status: 400 });
   }
 }
+
+// Delete product
+export async function DELETE(request, { params }) {
+  try {
+    await connectDb();
+    await verifyToken(request, "delete:product");
+
+    await Product.findByIdAndDelete(params.slug);
+
+    return NextResponse.json({ msg: "Product deleted." }, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ msg: err.message }, { status: 400 });
+  }
+}
